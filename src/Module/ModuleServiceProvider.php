@@ -3,6 +3,7 @@
 namespace LCFramework\Framework\Module;
 
 use Illuminate\Support\ServiceProvider;
+use LCFramework\Framework\Module\Facade\Modules;
 use LCFramework\Framework\Module\Loader\ModuleLoader;
 use LCFramework\Framework\Module\Loader\ModuleLoaderInterface;
 use LCFramework\Framework\Module\Repository\ModuleRepository;
@@ -25,5 +26,10 @@ class ModuleServiceProvider extends ServiceProvider
             ModuleRepositoryInterface::class,
             ModuleRepository::class
         );
+    }
+
+    public function boot(): void
+    {
+        Modules::boot();
     }
 }
