@@ -26,7 +26,7 @@ return [
 
     'modules' => [
         'paths' => [
-            'modules',
+            env('LCFRAMEWORK_MODULES_PATH', base_path('modules')),
         ],
 
         'cache' => [
