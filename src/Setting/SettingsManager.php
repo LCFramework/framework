@@ -13,12 +13,12 @@ class SettingsManager extends Manager
         return $this->config->get('lcframework.settings.driver');
     }
 
-    public function getFileDriver(): SettingsFileDriver
+    public function createFileDriver(): SettingsFileDriver
     {
         return $this->container->make(SettingsFileDriver::class);
     }
 
-    public function getDatabaseDriver(): SettingsDatabaseDriver
+    public function createDatabaseDriver(): SettingsDatabaseDriver
     {
         return $this->container->make(SettingsDatabaseDriver::class);
     }
