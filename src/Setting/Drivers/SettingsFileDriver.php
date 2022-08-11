@@ -2,7 +2,7 @@
 
 namespace LCFramework\Framework\Setting\Drivers;
 
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 
 class SettingsFileDriver extends SettingsDriverBase
