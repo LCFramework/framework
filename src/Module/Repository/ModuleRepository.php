@@ -170,7 +170,12 @@ class ModuleRepository implements ModuleRepositoryInterface
                 return false;
             }
 
-            if (version_compare($dependencyModule->getVersion(), $version, '<')) {
+            $dependencyVersion = $dependencyModule->getVersion();
+
+            if (
+                $dependencyVersion !== '*' &&
+                version_compare($dependencyVersion, $version, '<')
+            ) {
                 return false;
             }
 
