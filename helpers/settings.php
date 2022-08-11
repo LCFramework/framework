@@ -18,10 +18,10 @@ if (! function_exists('settings_get')) {
     }
 }
 
-if (! function_exists('settings_set')) {
-    function settings_set(string $key, $value): void
+if (! function_exists('settings_put')) {
+    function settings_put(string $key, $value): void
     {
-        settings()->set($key, $value);
+        settings()->put($key, $value);
     }
 }
 
