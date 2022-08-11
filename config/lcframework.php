@@ -22,5 +22,5 @@ return [
                 'value' => env('LCFRAMEWORK_SETTINGS_DATABASE_VALUE_COLUMNS', 'value'),
             ],
         ],
-    ]
+    ],
 ];

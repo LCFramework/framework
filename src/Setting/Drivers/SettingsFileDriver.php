@@ -48,7 +48,7 @@ class SettingsFileDriver extends SettingsDriverBase
 
         $this->booted = true;
 
-        if (!($value = $this->loadCache($key))) {
+        if (! ($value = $this->loadCache($key))) {
             $value = $this->load($key) ?? [];
         }
 
@@ -59,7 +59,7 @@ class SettingsFileDriver extends SettingsDriverBase
     {
         $path = $this->getPath();
 
-        if (!$this->files->exists($path)) {
+        if (! $this->files->exists($path)) {
             return [];
         }
 

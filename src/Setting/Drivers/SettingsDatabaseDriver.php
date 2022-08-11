@@ -10,13 +10,13 @@ class SettingsDatabaseDriver extends SettingsDriverBase
     {
         ['key' => $keyColumn, 'value' => $valueColumn] = $this->getColumns();
 
-        if (!empty($this->updated)) {
+        if (! empty($this->updated)) {
             Setting::query()
                 ->upsert(
                     collect($this->updated)
-                        ->map(fn(string $key): array => [
+                        ->map(fn (string $key): array => [
                             $keyColumn => $key,
-                            $valueColumn => $this->encode($this->get($key))
+                            $valueColumn => $this->encode($this->get($key)),
                         ])
                         ->all(),
                     $keyColumn
@@ -27,7 +27,7 @@ class SettingsDatabaseDriver extends SettingsDriverBase
             }
         }
 
-        if (!empty($this->deleted)) {
+        if (! empty($this->deleted)) {
             Setting::query()
                 ->whereIn($keyColumn, $this->deleted)
                 ->delete();
