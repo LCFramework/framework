@@ -132,7 +132,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
         $module->setStatus($status);
 
-        settings_set(
+        settings_put(
             'lcframework.modules.' . $module->getName(),
             $status
         );
