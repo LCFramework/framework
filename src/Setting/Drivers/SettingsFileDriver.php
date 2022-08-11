@@ -41,9 +41,9 @@ class SettingsFileDriver extends SettingsDriverBase
     protected function boot(string $key, $default)
     {
         // If boot has been called twice then the setting doesn't exist
-        // so let's just return the default
+        // so let's just return the data
         if ($this->booted) {
-            return $default;
+            return $this->data;
         }
 
         $this->booted = true;
