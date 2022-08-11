@@ -44,7 +44,7 @@ abstract class SettingsDriverBase implements SettingsDriverInterface
 
     protected function boot(string $key, $default)
     {
-        if (!($value = $this->loadCache($key))) {
+        if (! ($value = $this->loadCache($key))) {
             $value = $this->load($key) ?? $default;
             $this->setCache($key, $value);
         }
@@ -54,7 +54,7 @@ abstract class SettingsDriverBase implements SettingsDriverInterface
 
     protected function loadCache(string $key)
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return null;
         }
 
@@ -65,7 +65,7 @@ abstract class SettingsDriverBase implements SettingsDriverInterface
 
     protected function setCache(string $key, $value): void
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return;
         }
 
@@ -77,7 +77,7 @@ abstract class SettingsDriverBase implements SettingsDriverInterface
 
     protected function clearCache(string $key): void
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return;
         }
 
@@ -88,12 +88,12 @@ abstract class SettingsDriverBase implements SettingsDriverInterface
 
     protected function isCacheEnabled(): bool
     {
-        return (bool)config('lcframework.settings.cache.enabled', true);
+        return (bool) config('lcframework.settings.cache.enabled', true);
     }
 
     protected function getCacheKey(string $key): string
     {
-        return config('lcframework.settings.cache.key') . '.' . $key;
+        return config('lcframework.settings.cache.key').'.'.$key;
     }
 
     protected function getCacheTtl(): ?int

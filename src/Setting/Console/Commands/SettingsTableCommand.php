@@ -35,7 +35,7 @@ class SettingsTableCommand extends Command
         $this->files->put(
             $fullPath,
             $this->files->get(
-                __DIR__ . '/../stubs/database/create_settings_table.php'
+                __DIR__.'/../stubs/database/create_settings_table.php'
             )
         );
 
