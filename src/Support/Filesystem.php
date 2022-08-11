@@ -17,11 +17,11 @@ class Filesystem extends FilesystemBase
         $files = [];
 
         $directories = glob(
-            dirname($pattern) . DIRECTORY_SEPARATOR . '*',
+            dirname($pattern).DIRECTORY_SEPARATOR.'*',
             GLOB_ONLYDIR | GLOB_NOSORT
         );
 
-        if (!$directories) {
+        if (! $directories) {
             $directories = [];
         }
 
@@ -29,7 +29,7 @@ class Filesystem extends FilesystemBase
             $files = array_merge(
                 $files,
                 static::find(
-                    $directory . DIRECTORY_SEPARATOR . basename($pattern),
+                    $directory.DIRECTORY_SEPARATOR.basename($pattern),
                     $flags
                 )
             );

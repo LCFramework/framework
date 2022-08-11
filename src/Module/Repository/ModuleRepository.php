@@ -30,7 +30,7 @@ class ModuleRepository implements ModuleRepositoryInterface
             return $this->modules;
         }
 
-        if (!$this->loadCache()) {
+        if (! $this->loadCache()) {
             $this->load();
         }
 
@@ -43,7 +43,7 @@ class ModuleRepository implements ModuleRepositoryInterface
             return $this->ordered;
         }
 
-        if (!$this->loadCache()) {
+        if (! $this->loadCache()) {
             $this->load();
         }
 
@@ -53,21 +53,21 @@ class ModuleRepository implements ModuleRepositoryInterface
     public function enabled(): array
     {
         return collect($this->all())
-            ->filter(fn(Module $module): bool => $module->enabled())
+            ->filter(fn (Module $module): bool => $module->enabled())
             ->all();
     }
 
     public function disabled(): array
     {
         return collect($this->all())
-            ->filter(fn(Module $module): bool => $module->disabled())
+            ->filter(fn (Module $module): bool => $module->disabled())
             ->all();
     }
 
     public function status(string $status): array
     {
         return collect($this->all())
-            ->filter(fn(Module $module): bool => $module->getStatus() === $status)
+            ->filter(fn (Module $module): bool => $module->getStatus() === $status)
             ->all();
     }
 
@@ -83,7 +83,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     public function setStatus(string|Module $module, string $status): void
     {
-        if (!($module instanceof Module)) {
+        if (! ($module instanceof Module)) {
             $module = $this->findOrFail($module);
         }
 
@@ -107,7 +107,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected function loadCache(): bool
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return false;
         }
 
@@ -150,8 +150,8 @@ class ModuleRepository implements ModuleRepositoryInterface
             Cache::forever(
                 $allCacheKey,
                 collect($this->all())
-                    ->mapWithKeys(fn(Module $module, string $name): array => [
-                        $name => $module->toArray()
+                    ->mapWithKeys(fn (Module $module, string $name): array => [
+                        $name => $module->toArray(),
                     ])
                     ->all()
             );
@@ -175,7 +175,7 @@ class ModuleRepository implements ModuleRepositoryInterface
             Cache::forever(
                 $orderedCacheKey,
                 collect($this->ordered())
-                    ->map(fn(Module $module): string => $module->getName())
+                    ->map(fn (Module $module): string => $module->getName())
                     ->all()
             );
         }
@@ -212,7 +212,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected function discover(string $path): array
     {
-        $search = rtrim($path, '/\\') . DIRECTORY_SEPARATOR . 'composer.json';
+        $search = rtrim($path, '/\\').DIRECTORY_SEPARATOR.'composer.json';
 
         return str_replace('composer.json', '', File::find($search));
     }
@@ -238,11 +238,11 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected function isCacheEnabled(): bool
     {
-        return (bool)config('lcframework.modules.cache.enabled', true);
+        return (bool) config('lcframework.modules.cache.enabled', true);
     }
 
     protected function getPaths(): array
     {
-        return (array)config('lcframework.modules.paths');
+        return (array) config('lcframework.modules.paths');
     }
 }

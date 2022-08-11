@@ -26,10 +26,9 @@ class Module implements Arrayable
         string $version,
         string $path,
         string $status,
-        array  $dependencies = [],
-        array  $providers = []
-    )
-    {
+        array $dependencies = [],
+        array $providers = []
+    ) {
         $this->name = $name;
         $this->description = $description;
         $this->version = $version;
@@ -45,10 +44,9 @@ class Module implements Arrayable
         string $version,
         string $path,
         string $status,
-        array  $dependencies = [],
-        array  $providers = []
-    ): static
-    {
+        array $dependencies = [],
+        array $providers = []
+    ): static {
         return new static(
             $name,
             $description,
@@ -81,7 +79,7 @@ class Module implements Arrayable
             return $this->path;
         }
 
-        return $this->path . '/' . ltrim($path, '/\\');
+        return $this->path.'/'.ltrim($path, '/\\');
     }
 
     public function getStatus(): string
@@ -123,7 +121,7 @@ class Module implements Arrayable
             'path' => $this->getPath(),
             'status' => $this->getStatus(),
             'dependencies' => $this->getDependencies(),
-            'providers' => $this->getProviders()
+            'providers' => $this->getProviders(),
         ];
     }
 }
