@@ -10,7 +10,7 @@ class LCFrameworkServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/lcframework.php',
+            __DIR__.'/../config/lcframework.php',
             'lcframework'
         );
     }
