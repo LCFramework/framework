@@ -26,15 +26,15 @@ return [
 
     'modules' => [
         'paths' => [
-            'modules'
+            'modules',
         ],
 
         'cache' => [
             'enabled' => true,
             'keys' => [
                 'all' => config('LCFRAMEWORK_MODULES_CACHE_KEY', 'lcframework.modules.all'),
-                'ordered' => config('LCFRAMEWORK_MODULES_CACHE_KEY', 'lcframework.modules.ordered')
-            ]
-        ]
-    ]
+                'ordered' => config('LCFRAMEWORK_MODULES_CACHE_KEY', 'lcframework.modules.ordered'),
+            ],
+        ],
+    ],
 ];

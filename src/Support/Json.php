@@ -33,7 +33,7 @@ class Json implements Arrayable
             return $this->json;
         }
 
-        if (!File::exists($this->path)) {
+        if (! File::exists($this->path)) {
             throw new FileNotFoundException(
                 sprintf('Json file path cannot be found at %s', $this->path)
             );
