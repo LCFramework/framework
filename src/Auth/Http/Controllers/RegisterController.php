@@ -25,13 +25,13 @@ class RegisterController extends Controller
         $inputs = $request->validate([
             'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::defaults()]
+            'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
         $user = User::create([
             'username' => $inputs['username'],
             'email' => $inputs['email'],
-            'password' => Hash::make($inputs['password'])
+            'password' => Hash::make($inputs['password']),
         ]);
 
         event(new Registered($user));

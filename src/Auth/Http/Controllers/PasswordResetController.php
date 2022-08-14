@@ -18,7 +18,7 @@ class PasswordResetController extends Controller
     public function create(Request $request)
     {
         return view('lcframework::auth.reset-password', [
-            'request' => $request
+            'request' => $request,
         ]);
     }
 
@@ -27,7 +27,7 @@ class PasswordResetController extends Controller
         $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()]
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $status = Password::reset(
