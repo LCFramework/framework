@@ -19,7 +19,7 @@ class PasswordRequestController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->validate([
-            'email' => ['required', 'email']
+            'email' => ['required', 'email'],
         ]);
 
         $status = Password::sendResetLink($inputs);

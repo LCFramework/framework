@@ -15,7 +15,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string']
+            'password' => ['required', 'string'],
         ];
     }
 
@@ -28,11 +28,11 @@ class LoginRequest extends FormRequest
         $credentials = $this->only('email', 'password');
         $remember = $this->boolean('remember');
 
-        if (!Auth::attempt($credentials, $remember)) {
+        if (! Auth::attempt($credentials, $remember)) {
             RateLimiter::hit($throttleKey);
 
             throw ValidationException::withMessages([
-                'email' => __('auth.failed')
+                'email' => __('auth.failed'),
             ]);
         }
 
@@ -41,7 +41,7 @@ class LoginRequest extends FormRequest
 
     protected function checkIfRateLimited(string $throttleKey): void
     {
-        if (!RateLimiter::tooManyAttempts($throttleKey, 5)) {
+        if (! RateLimiter::tooManyAttempts($throttleKey, 5)) {
             return;
         }
 
@@ -52,15 +52,15 @@ class LoginRequest extends FormRequest
         throw ValidationException::withMessages([
             'email' => __('auth.throttle', [
                 'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60)
-            ])
+                'minutes' => ceil($seconds / 60),
+            ]),
         ]);
     }
 
     public function throttleKey(): string
     {
         return Str::transliterate(
-            Str::lower($this->input('email')) . '|' . $this->ip()
+            Str::lower($this->input('email')).'|'.$this->ip()
         );
     }
 }
