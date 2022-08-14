@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>{{config('app.name')}}</title>
 
-        <link rel="stylesheet" href="{{mix('css/lcframework.css', __DIR__ . '/../../../dist')}}"/>
+        <link rel="stylesheet" href="{{mix('css/lcframework.css', 'lcframework')}}"/>
     </head>
     <body>
         @yield('content')
