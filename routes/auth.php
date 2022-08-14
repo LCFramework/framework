@@ -15,7 +15,7 @@ if ($routes === null) {
 Route::middleware('web')->group(function () use ($routes) {
     $passwordRoutes = $routes['password'] ?? [];
 
-    Route::middleware('guest')->group(function () use ($passwordRoutes) {
+    Route::middleware('guest')->group(function () use ($routes, $passwordRoutes) {
         $loginRoute = $routes['login'] ?? null;
         $registerRoute = $routes['register'] ?? null;
         $passwordRequestRoute = $passwordRoutes['request'] ?? null;
@@ -49,7 +49,7 @@ Route::middleware('web')->group(function () use ($routes) {
         }
     });
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () use ($routes) {
         $logoutRoute = $routes['logout'] ?? null;
 
         if ($logoutRoute !== null) {
