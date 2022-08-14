@@ -8,6 +8,6 @@ class Themes extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return 'lcframework.modules';
+        return 'lcframework.themes';
     }
 }
