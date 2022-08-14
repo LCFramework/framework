@@ -11,6 +11,6 @@ class PasswordRequestController extends Controller
 
     public function create()
     {
-        return view('lcframework::auth.forgot-password');
+        return view('lcframework::auth.password-request');
     }
 }
