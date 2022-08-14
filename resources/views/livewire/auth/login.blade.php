@@ -1,4 +1,4 @@
-<form wire:submit.prevent="submit">
+<form wire:submit.prevent="authenticate">
     {{$this->form}}
 
     <button type="submit">
