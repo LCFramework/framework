@@ -1,4 +1,4 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+const defaultConfig = require('tailwindcss/defualtConfig');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                gray: defaultTheme.colors.neutral
+                gray: defaultConfig.colors.neutral
             }
         }
     },
