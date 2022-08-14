@@ -12,7 +12,7 @@ module.exports = {
             colors: {
                 gray: colors.neutral,
                 danger: colors.rose,
-                primary: colors.blue,
+                primary: colors.yellow,
                 success: colors.green,
                 warning: colors.yellow
             }
