@@ -37,4 +37,15 @@ return [
             ],
         ],
     ],
+
+    'themes' => [
+        'paths' => [
+            env('LCFRAMEWORK_THEMES_PATH', base_path('themes')),
+        ],
+
+        'cache' => [
+            'enabled' => true,
+            'key' => env('LCFRAMEWORK_THEMES_CACHE_KEY', 'lcframework.themes'),
+        ],
+    ]
 ];

@@ -7,18 +7,20 @@ use Illuminate\Support\Facades\Log;
 use LCFramework\Framework\Module\ModuleServiceProvider;
 use LCFramework\Framework\Setting\SettingsServiceProvider;
 use LCFramework\Framework\Support\Filesystem;
+use LCFramework\Framework\Theme\ThemeServiceProvider;
 
 class LCFrameworkServiceProvider extends AggregateServiceProvider
 {
     protected $providers = [
         SettingsServiceProvider::class,
         ModuleServiceProvider::class,
+        ThemeServiceProvider::class
     ];
 
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/lcframework.php',
+            __DIR__ . '/../config/lcframework.php',
             'lcframework'
         );
 
@@ -26,10 +28,5 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
         $this->app->singleton(Filesystem::class);
 
         parent::register();
-    }
-
-    public function boot(): void
-    {
-        Log::info('LCFramework has booted!');
     }
 }
