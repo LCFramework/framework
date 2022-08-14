@@ -382,7 +382,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected function getCacheKeys(): array
     {
-        return (array)config('lcframework.modules.cache.keys');
+        return (array) config('lcframework.modules.cache.keys');
     }
 
     protected function isCacheEnabled(): bool

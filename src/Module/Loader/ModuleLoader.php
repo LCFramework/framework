@@ -9,7 +9,7 @@ class ModuleLoader implements ModuleLoaderInterface
 {
     public function fromPath(string $path): Module
     {
-        $fullPath = realpath($path . '/composer.json');
+        $fullPath = realpath($path.'/composer.json');
 
         $json = Json::make($fullPath);
 
