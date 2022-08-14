@@ -3325,6 +3325,9 @@ select{
 .-mt-16{
   margin-top: -4rem;
 }
+.mt-6{
+  margin-top: 1.5rem;
+}
 .mb-2{
   margin-bottom: 0.5rem;
 }
