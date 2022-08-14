@@ -1,7 +1,11 @@
-@extends('lcframework::layouts.page')
+@extends('lcframework::layouts.auth')
+
+@section('title')
+    Login
+@endsection
 
 @section('content')
-    <h1>
-        Login page
-    </h1>
+    <div>
+        @livewire('lcframework::login')
+    </div>
 @endsection

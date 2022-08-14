@@ -4,16 +4,22 @@ const colors = require('tailwindcss/colors');
 module.exports = {
     content: [
         './resources/**/*.blade.php',
-        './resources/**/*.js'
+        './resources/**/*.js',
+        './vendor/filament/**/*.blade.php'
     ],
     theme: {
         extend: {
             colors: {
-                gray: colors.neutral
+                gray: colors.neutral,
+                danger: colors.rose,
+                primary: colors.blue,
+                success: colors.green,
+                warning: colors.yellow
             }
         }
     },
     plugins: [
-        require('@tailwindcss/forms')
+        require('@tailwindcss/forms'),
+        require('@tailwindcss/typography')
     ]
 };
