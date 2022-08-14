@@ -7,20 +7,18 @@ use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Illuminate\Auth\Events\Registered;
+use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use LCFramework\Framework\Auth\Models\User;
 use Livewire\Component;
 
-class Register extends Component implements HasForms
+class PasswordReset extends Component implements HasForms
 {
     use InteractsWithForms;
     use WithRateLimiting;
-
-    public $username = '';
 
     public $email = '';
 
@@ -39,7 +37,7 @@ class Register extends Component implements HasForms
 
     public function render(): View
     {
-        return view('lcframework::livewire.auth.register');
+        return view('lcframework::livewire.auth.password-reset');
     }
 
     public function submit()
@@ -57,34 +55,43 @@ class Register extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        $user = User::create([
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        $status = Password::reset(
+            [
+                ...$data,
+                'token' => request()->token
+            ],
+            function ($user) use ($data) {
+                $user->forceFill([
+                    'password' => Hash::make($data['password']),
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+                event(new \Illuminate\Auth\Events\PasswordReset($user));
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            Notification::make()
+                ->title(__($status))
+                ->send();
+
+            return redirect()
+                ->route('login');
+        }
+
+        throw ValidationException::withMessages([
+            'email' => __($status),
         ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect('/');
     }
 
     protected function getFormSchema(): array
     {
         return [
-            TextInput::make('username')
-                ->label('Username')
-                ->required()
-                ->unique('users')
-                ->maxLength(255),
             TextInput::make('email')
                 ->label('Email address')
                 ->email()
                 ->required()
-                ->autocomplete()
-                ->unique('users')
-                ->maxLength(255),
+                ->autocomplete(),
             TextInput::make('password')
                 ->label('Password')
                 ->password()

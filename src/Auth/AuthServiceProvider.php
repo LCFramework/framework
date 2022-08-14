@@ -4,6 +4,8 @@ namespace LCFramework\Framework\Auth;
 
 use Illuminate\Support\ServiceProvider;
 use LCFramework\Framework\Auth\Http\Livewire\Login;
+use LCFramework\Framework\Auth\Http\Livewire\PasswordRequest;
+use LCFramework\Framework\Auth\Http\Livewire\PasswordReset;
 use LCFramework\Framework\Auth\Http\Livewire\Register;
 use Livewire\Livewire;
 
@@ -15,5 +17,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Livewire::component('lcframework::login', Login::class);
         Livewire::component('lcframework::register', Register::class);
+        Livewire::component('lcframework::password-reset', PasswordReset::class);
+        Livewire::component('lcframework::password-request', PasswordRequest::class);
     }
 }
