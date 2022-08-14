@@ -58,7 +58,7 @@ class PasswordReset extends Component implements HasForms
         $status = Password::reset(
             [
                 ...$data,
-                'token' => request()->token
+                'token' => request()->token,
             ],
             function ($user) use ($data) {
                 $user->forceFill([

@@ -71,7 +71,7 @@ class PasswordRequest extends Component implements HasForms
                 ->label('Email address')
                 ->email()
                 ->required()
-                ->autocomplete()
+                ->autocomplete(),
         ];
     }
 }
