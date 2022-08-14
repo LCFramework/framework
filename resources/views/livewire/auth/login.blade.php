@@ -1,7 +1,7 @@
 <form wire:submit.prevent="authenticate">
     {{$this->form}}
 
-    <button type="submit">
-        Submit
-    </button>
+    <x-filament-support::button>
+        Sign in
+    </x-filament-support::button>
 </form>
