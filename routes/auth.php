@@ -38,7 +38,7 @@ Route::middleware('web')->group(function () use ($routes) {
 
         if ($resetPasswordRoute !== null) {
             Route::get(
-                $resetPasswordRoute . '/{token}',
+                $resetPasswordRoute.'/{token}',
                 [PasswordResetController::class, 'create']
             )->name('password.reset');
         }
