@@ -18,7 +18,7 @@
                 <div
                     class="p-8 space-y-4 bg-white/50 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-2xl relative dark:bg-gray-900/50 dark:border-gray-700">
                     <div class="flex justify-center w-full">
-                        <h2 class="text-white text-bold text-2xl">
+                        <h2 class="text-white font-bold text-2xl">
                             LCFramework
                         </h2>
                     </div>
