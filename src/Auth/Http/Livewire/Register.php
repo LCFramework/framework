@@ -4,7 +4,6 @@ namespace LCFramework\Framework\Auth\Http\Livewire;
 
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -12,16 +11,18 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
-class Login extends Component implements HasForms
+class Register extends Component implements HasForms
 {
     use InteractsWithForms;
     use WithRateLimiting;
+
+    public $username = '';
 
     public $email = '';
 
     public $password = '';
 
-    public $remember = false;
+    public $password_confirmation = '';
 
     public function mount(): void
     {
@@ -34,7 +35,7 @@ class Login extends Component implements HasForms
 
     public function render(): View
     {
-        return view('lcframework::livewire.auth.login');
+        return view('lcframework::livewire.auth.register');
     }
 
     public function submit()
@@ -43,7 +44,7 @@ class Login extends Component implements HasForms
             $this->rateLimit(5);
         } catch (TooManyRequestsException $exception) {
             throw ValidationException::withMessages([
-                'email' => __('filament::login.messages.throttled', [
+                'email' => __('filament::register.messages.throttled', [
                     'seconds' => $exception->secondsUntilAvailable,
                     'minutes' => ceil($exception->secondsUntilAvailable / 60),
                 ]),
@@ -52,32 +53,30 @@ class Login extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (! auth()->attempt([
-            'email' => $data['email'],
-            'password' => $data['password'],
-        ], $data['remember'])) {
-            throw ValidationException::withMessages([
-                'email' => 'Invalid email address or password',
-            ]);
-        }
-
-        return redirect('/');
+        dd($data);
     }
 
     protected function getFormSchema(): array
     {
         return [
+            TextInput::make('username')
+                ->label('Username')
+                ->required()
+                ->unique('users'),
             TextInput::make('email')
                 ->label('Email address')
                 ->email()
                 ->required()
-                ->autocomplete(),
+                ->autocomplete()
+                ->unique('users'),
             TextInput::make('password')
                 ->label('Password')
                 ->password()
                 ->required(),
-            Checkbox::make('remember')
-                ->label('Remember me'),
+            TextInput::make('password_confirmation')
+                ->label('Confirm password')
+                ->password()
+                ->required(),
         ];
     }
 }

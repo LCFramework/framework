@@ -4,6 +4,7 @@ namespace LCFramework\Framework\Auth;
 
 use Illuminate\Support\ServiceProvider;
 use LCFramework\Framework\Auth\Http\Livewire\Login;
+use LCFramework\Framework\Auth\Http\Livewire\Register;
 use Livewire\Livewire;
 
 class AuthServiceProvider extends ServiceProvider
@@ -13,5 +14,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../../routes/auth.php');
 
         Livewire::component('lcframework::login', Login::class);
+        Livewire::component('lcframework::register', Register::class);
     }
 }

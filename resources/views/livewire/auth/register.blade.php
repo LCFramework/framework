@@ -2,6 +2,6 @@
     {{$this->form}}
 
     <x-filament-support::button class="w-full mt-6">
-        Sign in
+        Sign up
     </x-filament-support::button>
 </form>
