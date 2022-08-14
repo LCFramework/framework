@@ -19,8 +19,8 @@ class ModuleLoader implements ModuleLoaderInterface
             $json->get('version'),
             $path,
             'disabled',
-            $json->get('extra.lcframework.dependencies', []),
-            $json->get('extra.lcframework.providers', [])
+            $json->get('extra.lcframework.module.dependencies', []),
+            $json->get('extra.lcframework.module.providers', [])
         );
     }
 

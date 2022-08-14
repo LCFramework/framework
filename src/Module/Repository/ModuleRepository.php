@@ -349,7 +349,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected function discover(string $path): array
     {
-        $search = rtrim($path, '/\\').DIRECTORY_SEPARATOR.'composer.json';
+        $search = rtrim($path, '/\\').'/'.'composer.json';
 
         return str_replace('composer.json', '', File::find($search));
     }
@@ -382,7 +382,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected function getCacheKeys(): array
     {
-        return config('lcframework.modules.cache.keys');
+        return (array) config('lcframework.modules.cache.keys');
     }
 
     protected function isCacheEnabled(): bool
