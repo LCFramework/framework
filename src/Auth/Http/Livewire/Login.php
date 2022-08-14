@@ -5,6 +5,8 @@ namespace LCFramework\Framework\Auth\Http\Livewire;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -52,7 +54,7 @@ class Login extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (! auth()->attempt([
+        if (!auth()->attempt([
             'email' => $data['email'],
             'password' => $data['password'],
         ], $data['remember'])) {
@@ -76,8 +78,16 @@ class Login extends Component implements HasForms
                 ->label('Password')
                 ->password()
                 ->required(),
-            Checkbox::make('remember')
-                ->label('Remember me'),
+            Grid::make()
+                ->schema([
+                    Checkbox::make('remember')
+                        ->label('Remember me'),
+                    Placeholder::make('forgot_password')
+                        ->view('lcframework::components.auth.forgot-password-link'),
+                ])
+                ->columns([
+                    'default' => 2,
+                ]),
         ];
     }
 }
