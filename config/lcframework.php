@@ -47,5 +47,5 @@ return [
             'enabled' => true,
             'key' => env('LCFRAMEWORK_THEMES_CACHE_KEY', 'lcframework.themes'),
         ],
-    ]
+    ],
 ];
