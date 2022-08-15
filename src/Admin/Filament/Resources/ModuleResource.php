@@ -2,10 +2,10 @@
 
 namespace LCFramework\Framework\Admin\Filament\Resources;
 
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Pages\ListModules;
 use LCFramework\Framework\Module\Models\Module;
@@ -30,19 +30,26 @@ class ModuleResource extends Resource
                     ->label('Name')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('version')
+                TagsColumn::make('version')
                     ->label('Version')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->separator(),
                 TextColumn::make('description')
                     ->label('Description')
                     ->sortable()
                     ->searchable()
-                    ->limit(),
+                    ->wrap(),
                 BadgeColumn::make('status')
                     ->label('Status')
                     ->sortable()
                     ->searchable()
+                    ->formatStateUsing(fn(string $status): string => __(ucfirst($status)))
+                    ->icons([
+                        'heroicon-o-minus-sm',
+                        'heroicon-o-x' => 'disabled',
+                        'heroicon-o-check' => 'success'
+                    ])
                     ->colors([
                         'warning',
                         'danger' => 'disabled',
