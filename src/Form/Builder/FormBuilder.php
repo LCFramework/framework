@@ -131,11 +131,10 @@ class FormBuilder
     }
 
     protected function &findParent(
-        array      &$schema,
-        string     $name,
+        array &$schema,
+        string $name,
         ?Component &$parent = null
-    ): array|Component|null
-    {
+    ): array|Component|null {
         foreach ($schema as $component) {
             if ($component instanceof Field && $component->getName() === $name) {
                 if ($parent === null) {
