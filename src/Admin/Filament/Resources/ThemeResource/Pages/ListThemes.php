@@ -23,7 +23,7 @@ class ListThemes extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Theme "%s" has been successfully enabled', $record->name))
-            ->body(fn() => $record !== null ? 'This includes the parent theme' : null)
+            ->body(fn() => $record->parent !== null ? 'This includes the parent theme' : null)
             ->send();
     }
 
@@ -36,7 +36,7 @@ class ListThemes extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Theme "%s" has been successfully disabled', $record->name))
-            ->body(fn() => $record !== null ? 'This includes the parent theme' : null)
+            ->body(fn() => $record->parent !== null ? 'This includes the parent theme' : null)
             ->send();
     }
 
