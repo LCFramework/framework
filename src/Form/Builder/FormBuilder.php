@@ -24,7 +24,7 @@ class FormBuilder
     {
         $callback = $callback instanceof Closure
             ? $callback
-            : fn(Component $component): bool => $component instanceof Field && $component->getStatePath() === $callback;
+            : fn (Component $component): bool => $component instanceof Field && $component->getStatePath() === $callback;
 
         return collect($this->getFlatSchema($this->schema))
             ->first($callback);
