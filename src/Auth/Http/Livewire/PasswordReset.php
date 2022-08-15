@@ -36,7 +36,7 @@ class PasswordReset extends Component implements HasForms
         }
 
         $this->form->fill([
-            'email' => request()->input('email')
+            'email' => request()->input('email'),
         ]);
     }
 
