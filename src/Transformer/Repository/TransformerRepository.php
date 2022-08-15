@@ -16,9 +16,12 @@ class TransformerRepository implements TransformerRepositoryInterface
         $this->app = $app;
     }
 
-    public function add(string $name, array|string|Closure $callback): void
+    public function register(
+        string               $name,
+        array|string|Closure $callback
+    ): void
     {
-        if (! isset($this->callbacks[$name])) {
+        if (!isset($this->callbacks[$name])) {
             $this->callbacks[$name] = [];
         }
 

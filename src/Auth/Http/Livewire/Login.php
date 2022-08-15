@@ -94,7 +94,6 @@ class Login extends Component implements HasForms
                             'default' => 2,
                         ]),
                 ])
-                ->build()
-        );
+        )->build();
     }
 }

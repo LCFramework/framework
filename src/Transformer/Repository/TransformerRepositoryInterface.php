@@ -6,7 +6,10 @@ use Closure;
 
 interface TransformerRepositoryInterface
 {
-    public function add(string $name, array|string|Closure $callback): void;
+    public function register(
+        string $name,
+        array|string|Closure $callback
+    ): void;
 
     public function transform(string $name, $value);
 }
