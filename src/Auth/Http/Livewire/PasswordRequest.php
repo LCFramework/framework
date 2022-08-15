@@ -77,6 +77,8 @@ class PasswordRequest extends Component implements HasForms
                 ->schema([
                     Placeholder::make('register_link')
                         ->view('lcframework::components.auth.remember-password-link'),
+                    Placeholder::make('introduction')
+                        ->view('lcframework::components.auth.password-request-introduction'),
                     TextInput::make('email')
                         ->label('Email address')
                         ->email()
