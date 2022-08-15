@@ -14,11 +14,11 @@ class EnsureEmailIsVerifiedIfRequired
         $user = $request->user();
 
         if (
-            !$user ||
+            ! $user ||
             (
                 $user instanceof ShouldVerifyEmail &&
                 $user->shouldVerifyEmail() &&
-                !$user->hasVerifiedEmail()
+                ! $user->hasVerifiedEmail()
             )
         ) {
             return $request->expectsJson()
