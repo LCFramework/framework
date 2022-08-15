@@ -7,6 +7,7 @@ use Filament\Resources\Table;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\MultiSelectFilter;
 use Illuminate\Database\Eloquent\Model;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Pages\ListModules;
 use LCFramework\Framework\Module\Models\Module;
@@ -45,7 +46,7 @@ class ModuleResource extends Resource
                     ->label('Status')
                     ->sortable()
                     ->searchable()
-                    ->formatStateUsing(fn (string $state): string => __(ucfirst($state)))
+                    ->formatStateUsing(fn(string $state): string => __(ucfirst($state)))
                     ->icons([
                         'heroicon-o-minus-sm',
                         'heroicon-o-x' => 'disabled',
@@ -56,6 +57,13 @@ class ModuleResource extends Resource
                         'danger' => 'disabled',
                         'success' => 'enabled',
                     ]),
+            ])
+            ->filters([
+                MultiSelectFilter::make('status')
+                    ->options([
+                        'enabled' => 'Enabled',
+                        'disabled' => 'Disabled'
+                    ])
             ]);
     }
 
@@ -74,5 +82,10 @@ class ModuleResource extends Resource
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    protected static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }
