@@ -11,6 +11,10 @@ class PasswordRequestController extends Controller
 
     public function create()
     {
+        if (auth()->check()) {
+            return redirect()->intended();
+        }
+
         return view('lcframework::auth.password-request');
     }
 }

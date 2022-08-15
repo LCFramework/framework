@@ -11,6 +11,10 @@ class RegisterController extends Controller
 
     public function create()
     {
+        if (auth()->check()) {
+            return redirect()->intended();
+        }
+
         return view('lcframework::auth.register');
     }
 }

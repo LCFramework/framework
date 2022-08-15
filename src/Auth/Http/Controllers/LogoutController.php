@@ -11,6 +11,10 @@ class LogoutController extends Controller
 {
     public function destroy(Request $request)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();

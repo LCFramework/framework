@@ -8,6 +8,10 @@ class PasswordConfirmationController extends Controller
 {
     public function create()
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
         return view('lcframework::auth.password-confirmation');
     }
 }

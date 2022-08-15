@@ -5,12 +5,26 @@ namespace LCFramework\Framework\Auth\Http\Controllers;
 use Filament\Notifications\Notification;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use LCFramework\Framework\Auth\Contracts\ShouldVerifyEmail;
 
 class EmailVerificationController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $user = $request->user();
+        if (
+            $user->hasVerifiedEmail() ||
+            ($user instanceof ShouldVerifyEmail && !$user->shouldVerifyEmail())
+        ) {
+            return redirect()->intended();
+        }
+
         return view('lcframework::auth.email-verification');
     }
 
