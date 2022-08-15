@@ -7,6 +7,7 @@ use Filament\Resources\Table;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Pages\ListModules;
 use LCFramework\Framework\Module\Models\Module;
 
@@ -63,5 +64,15 @@ class ModuleResource extends Resource
         return [
             'index' => ListModules::route('/'),
         ];
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
     }
 }

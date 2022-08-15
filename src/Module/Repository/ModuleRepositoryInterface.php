@@ -29,4 +29,6 @@ interface ModuleRepositoryInterface
     public function validate(string|Module $module): bool;
 
     public function boot(): void;
+
+    public function clearCache(): void;
 }
