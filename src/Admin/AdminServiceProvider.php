@@ -12,7 +12,7 @@ use Spatie\LaravelPackageTools\Package;
 class AdminServiceProvider extends PluginServiceProvider
 {
     protected array $pages = [
-        SiteSettings::class
+        SiteSettings::class,
     ];
 
     protected array $resources = [
