@@ -4,6 +4,7 @@ namespace LCFramework\Framework\Auth\Http\Livewire;
 
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -62,6 +63,7 @@ class PasswordReset extends Component implements HasForms
         $status = Password::reset(
             [
                 ...$data,
+                'email' => request()->input('email'),
                 'token' => request()->token,
             ],
             function ($user) use ($data) {
@@ -95,11 +97,9 @@ class PasswordReset extends Component implements HasForms
             'password-reset.form',
             FormBuilder::make()
                 ->schema([
-                    TextInput::make('email')
+                    Placeholder::make('email')
                         ->label('Email address')
-                        ->email()
-                        ->required()
-                        ->autocomplete(),
+                        ->content(request()->input('email')),
                     TextInput::make('password')
                         ->label('Password')
                         ->password()
