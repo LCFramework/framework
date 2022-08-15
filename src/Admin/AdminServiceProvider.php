@@ -4,12 +4,17 @@ namespace LCFramework\Framework\Admin;
 
 use Filament\Facades\Filament;
 use Filament\PluginServiceProvider;
+use LCFramework\Framework\Admin\Filament\Pages\SiteSettings;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
 use LCFramework\Framework\Admin\Filament\Resources\ThemeResource;
 use Spatie\LaravelPackageTools\Package;
 
 class AdminServiceProvider extends PluginServiceProvider
 {
+    protected array $pages = [
+        SiteSettings::class
+    ];
+
     protected array $resources = [
         ModuleResource::class,
         ThemeResource::class,
