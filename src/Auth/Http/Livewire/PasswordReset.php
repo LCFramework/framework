@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use LCFramework\Framework\Form\Builder\FormBuilder;
+use LCFramework\Framework\Transformer\Facade\Transformer;
 use Livewire\Component;
 
 class PasswordReset extends Component implements HasForms
@@ -86,21 +88,25 @@ class PasswordReset extends Component implements HasForms
 
     protected function getFormSchema(): array
     {
-        return [
-            TextInput::make('email')
-                ->label('Email address')
-                ->email()
-                ->required()
-                ->autocomplete(),
-            TextInput::make('password')
-                ->label('Password')
-                ->password()
-                ->required()
-                ->rules('confirmed'),
-            TextInput::make('password_confirmation')
-                ->label('Confirm password')
-                ->password()
-                ->required(),
-        ];
+        return Transformer::transform(
+            'password-reset.form',
+            FormBuilder::make()
+                ->schema([
+                    TextInput::make('email')
+                        ->label('Email address')
+                        ->email()
+                        ->required()
+                        ->autocomplete(),
+                    TextInput::make('password')
+                        ->label('Password')
+                        ->password()
+                        ->required()
+                        ->rules('confirmed'),
+                    TextInput::make('password_confirmation')
+                        ->label('Confirm password')
+                        ->password()
+                        ->required(),
+                ])
+        )->build();
     }
 }

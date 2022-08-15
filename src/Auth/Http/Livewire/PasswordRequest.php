@@ -11,6 +11,8 @@ use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
+use LCFramework\Framework\Form\Builder\FormBuilder;
+use LCFramework\Framework\Transformer\Facade\Transformer;
 use Livewire\Component;
 
 class PasswordRequest extends Component implements HasForms
@@ -66,12 +68,16 @@ class PasswordRequest extends Component implements HasForms
 
     protected function getFormSchema(): array
     {
-        return [
-            TextInput::make('email')
-                ->label('Email address')
-                ->email()
-                ->required()
-                ->autocomplete(),
-        ];
+        return Transformer::transform(
+            'password-request.form',
+            FormBuilder::make()
+                ->schema([
+                    TextInput::make('email')
+                        ->label('Email address')
+                        ->email()
+                        ->required()
+                        ->autocomplete(),
+                ])
+        )->build();
     }
 }

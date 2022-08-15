@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use LCFramework\Framework\Auth\Models\User;
+use LCFramework\Framework\Form\Builder\FormBuilder;
+use LCFramework\Framework\Transformer\Facade\Transformer;
 use Livewire\Component;
 
 class Register extends Component implements HasForms
@@ -72,28 +74,32 @@ class Register extends Component implements HasForms
 
     protected function getFormSchema(): array
     {
-        return [
-            TextInput::make('username')
-                ->label('Username')
-                ->required()
-                ->unique('users')
-                ->maxLength(255),
-            TextInput::make('email')
-                ->label('Email address')
-                ->email()
-                ->required()
-                ->autocomplete()
-                ->unique('users')
-                ->maxLength(255),
-            TextInput::make('password')
-                ->label('Password')
-                ->password()
-                ->required()
-                ->rules('confirmed'),
-            TextInput::make('password_confirmation')
-                ->label('Confirm password')
-                ->password()
-                ->required(),
-        ];
+        return Transformer::transform(
+            'register.form',
+            FormBuilder::make()
+                ->schema([
+                    TextInput::make('username')
+                        ->label('Username')
+                        ->required()
+                        ->unique('users')
+                        ->maxLength(255),
+                    TextInput::make('email')
+                        ->label('Email address')
+                        ->email()
+                        ->required()
+                        ->autocomplete()
+                        ->unique('users')
+                        ->maxLength(255),
+                    TextInput::make('password')
+                        ->label('Password')
+                        ->password()
+                        ->required()
+                        ->rules('confirmed'),
+                    TextInput::make('password_confirmation')
+                        ->label('Confirm password')
+                        ->password()
+                        ->required(),
+                ])
+        )->build();
     }
 }
