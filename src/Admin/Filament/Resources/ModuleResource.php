@@ -44,11 +44,11 @@ class ModuleResource extends Resource
                     ->label('Status')
                     ->sortable()
                     ->searchable()
-                    ->formatStateUsing(fn(string $status): string => __(ucfirst($status)))
+                    ->formatStateUsing(fn (string $status): string => __(ucfirst($status)))
                     ->icons([
                         'heroicon-o-minus-sm',
                         'heroicon-o-x' => 'disabled',
-                        'heroicon-o-check' => 'success'
+                        'heroicon-o-check' => 'success',
                     ])
                     ->colors([
                         'warning',
