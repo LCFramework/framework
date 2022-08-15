@@ -35,9 +35,9 @@ class PasswordReset extends Component implements HasForms
             redirect()->intended();
         }
 
-        $this->form->fill([
-            'email' => request()->input('email'),
-        ]);
+        $this->email = request()->input('email');
+
+        $this->form->fill();
     }
 
     public function render(): View
@@ -63,7 +63,7 @@ class PasswordReset extends Component implements HasForms
         $status = Password::reset(
             [
                 ...$data,
-                'email' => request()->input('email'),
+                'email' => $this->email,
                 'token' => request()->token,
             ],
             function ($user) use ($data) {
@@ -82,8 +82,7 @@ class PasswordReset extends Component implements HasForms
                 ->title(__($status))
                 ->send();
 
-            return redirect()
-                ->route('login');
+            return redirect()->route('login');
         }
 
         throw ValidationException::withMessages([
@@ -99,7 +98,7 @@ class PasswordReset extends Component implements HasForms
                 ->schema([
                     Placeholder::make('email')
                         ->label('Email address')
-                        ->content(request()->input('email')),
+                        ->content($this->email),
                     TextInput::make('password')
                         ->label('Password')
                         ->password()
