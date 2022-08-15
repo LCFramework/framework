@@ -17,11 +17,10 @@ class TransformerRepository implements TransformerRepositoryInterface
     }
 
     public function register(
-        string               $name,
+        string $name,
         array|string|Closure $callback
-    ): void
-    {
-        if (!isset($this->callbacks[$name])) {
+    ): void {
+        if (! isset($this->callbacks[$name])) {
             $this->callbacks[$name] = [];
         }
 
