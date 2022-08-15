@@ -9,7 +9,7 @@ module.exports = {
         './vendor/filament/**/*.blade.php'
     ],
     safelist: [
-        'col-start-2'
+        'md:col-start-2'
     ],
     darkMode: 'class',
     theme: {

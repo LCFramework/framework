@@ -30,7 +30,7 @@ class SiteSettings extends Page
                         ->columnSpan([
                             'md' => 2
                         ])
-                        ->extraAttributes(['class' => 'col-start-2'])
+                        ->extraAttributes(['class' => 'md:col-start-2'])
                 ])
                 ->columns([
                     'md' => 3,
