@@ -23,7 +23,7 @@ class ListThemes extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Theme "%s" has been successfully enabled', $record->name))
-            ->body(fn() => $record !== null ? 'This includes the parent theme' : null)
+            ->body(fn () => $record !== null ? 'This includes the parent theme' : null)
             ->send();
     }
 
@@ -36,7 +36,7 @@ class ListThemes extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Theme "%s" has been successfully disabled', $record->name))
-            ->body(fn() => $record !== null ? 'This includes the parent theme' : null)
+            ->body(fn () => $record !== null ? 'This includes the parent theme' : null)
             ->send();
     }
 
@@ -62,7 +62,7 @@ class ListThemes extends ListRecords
     {
         $count = 0;
         foreach ($records as $theme) {
-            if (!Themes::delete($theme->name)) {
+            if (! Themes::delete($theme->name)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -99,14 +99,14 @@ class ListThemes extends ListRecords
             Action::make('enable')
                 ->label('Enable')
                 ->button()
-                ->hidden(fn(Theme $record): bool => $record->enabled)
+                ->hidden(fn (Theme $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableTheme'),
             Action::make('disable')
                 ->label('Disable')
                 ->button()
-                ->hidden(fn(Theme $record): bool => !$record->enabled)
+                ->hidden(fn (Theme $record): bool => ! $record->enabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableTheme'),
