@@ -14,4 +14,6 @@ mix.js('resources/js/lcframework.js', 'dist/js');
 
 mix.postCss('resources/css/lcframework.css', 'dist/css', [
     require('tailwindcss')
+]).postCss('resources/css/filament.css', 'dist/css', [
+    require('tailwindcss')
 ]);

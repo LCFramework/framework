@@ -3,6 +3,7 @@
 namespace LCFramework\Framework;
 
 use Illuminate\Support\AggregateServiceProvider;
+use LCFramework\Framework\Admin\AdminServiceProvider;
 use LCFramework\Framework\Auth\AuthServiceProvider;
 use LCFramework\Framework\Module\ModuleServiceProvider;
 use LCFramework\Framework\Setting\SettingsServiceProvider;
@@ -18,12 +19,13 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
         AuthServiceProvider::class,
         ModuleServiceProvider::class,
         ThemeServiceProvider::class,
+        AdminServiceProvider::class
     ];
 
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/lcframework.php',
+            __DIR__ . '/../config/lcframework.php',
             'lcframework'
         );
 
@@ -36,13 +38,13 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(
-            __DIR__.'/../resources/views',
+            __DIR__ . '/../resources/views',
             'lcframework'
         );
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../dist' => public_path('lcframework'),
+                __DIR__ . '/../dist' => public_path('lcframework'),
             ], 'assets');
         }
     }
