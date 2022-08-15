@@ -13,31 +13,7 @@ class ListModules extends ListRecords
 {
     protected static string $resource = ModuleResource::class;
 
-    protected function getTableActions(): array
-    {
-        return [
-            Action::make('enable')
-                ->label('Enable')
-                ->button()
-                ->hidden(fn (Module $record): bool => $record->enabled)
-                ->requiresConfirmation()
-                ->action('enableModule'),
-            Action::make('disable')
-                ->label('Disable')
-                ->button()
-                ->hidden(fn (Module $record): bool => $record->disabled)
-                ->requiresConfirmation()
-                ->action('disableModule'),
-            Action::make('delete')
-                ->label('Delete')
-                ->button()
-                ->color('danger')
-                ->requiresConfirmation()
-                ->action('deleteModule'),
-        ];
-    }
-
-    protected function enableModule(Module $record): void
+    public function enableModule(Module $record): void
     {
         Modules::enable($record->name);
 
@@ -48,7 +24,7 @@ class ListModules extends ListRecords
             ->send();
     }
 
-    protected function disableModule(Module $record): void
+    public function disableModule(Module $record): void
     {
         Modules::disable($record->name);
 
@@ -59,12 +35,36 @@ class ListModules extends ListRecords
             ->send();
     }
 
-    protected function deleteModule(Module $record): void
+    public function deleteModule(Module $record): void
     {
         if ($record->enabled) {
             Modules::disable($record);
         }
 
         Modules::clearCache();
+    }
+
+    protected function getTableActions(): array
+    {
+        return [
+            Action::make('enable')
+                ->label('Enable')
+                ->button()
+                ->hidden(fn(Module $record): bool => $record->enabled)
+                ->requiresConfirmation()
+                ->action('enableModule'),
+            Action::make('disable')
+                ->label('Disable')
+                ->button()
+                ->hidden(fn(Module $record): bool => $record->disabled)
+                ->requiresConfirmation()
+                ->action('disableModule'),
+            Action::make('delete')
+                ->label('Delete')
+                ->button()
+                ->color('danger')
+                ->requiresConfirmation()
+                ->action('deleteModule'),
+        ];
     }
 }
