@@ -14,16 +14,16 @@ class EnsureEmailIsVerifiedIfRequired
         $user = $request->user();
 
         if (
-            ! $user ||
+            !$user ||
             (
                 $user instanceof ShouldVerifyEmail &&
                 $user->shouldVerifyEmail() &&
-                ! $user->hasVerifiedEmail()
+                !$user->hasVerifiedEmail()
             )
         ) {
             return $request->expectsJson()
                 ? abort(403, 'Your email address is not verified.')
-                : Redirect::guest(URL::route($redirectToRoute ?: 'verification.notice'));
+                : Redirect::guest(URL::route($redirectToRoute ?: 'email-verification.notice'));
         }
 
         return $next($request);
