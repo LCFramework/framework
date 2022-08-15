@@ -59,10 +59,10 @@ class ListModules extends ListRecords
         }
     }
 
-    public function enableBulk(Collection $modules): void
+    public function enableBulk(Collection $records): void
     {
         $count = 0;
-        foreach ($modules as $module) {
+        foreach ($records as $module) {
             if ($module->enabled()) {
                 continue;
             }
@@ -97,10 +97,10 @@ class ListModules extends ListRecords
             ->send();
     }
 
-    public function disableBulk(Collection $modules): void
+    public function disableBulk(Collection $records): void
     {
         $count = 0;
-        foreach ($modules as $module) {
+        foreach ($records as $module) {
             if ($module->disabled()) {
                 continue;
             }
@@ -124,10 +124,10 @@ class ListModules extends ListRecords
             ->send();
     }
 
-    public function deleteBulk(Collection $modules): void
+    public function deleteBulk(Collection $records): void
     {
         $count = 0;
-        foreach ($modules as $module) {
+        foreach ($records as $module) {
             if (!Modules::delete($module)) {
                 Notification::make()
                     ->danger()
@@ -165,14 +165,14 @@ class ListModules extends ListRecords
             Action::make('enable')
                 ->label('Enable')
                 ->button()
-                ->hidden(fn (Module $record): bool => $record->enabled)
+                ->hidden(fn(Module $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableModule'),
             Action::make('disable')
                 ->label('Disable')
                 ->button()
-                ->hidden(fn (Module $record): bool => $record->disabled)
+                ->hidden(fn(Module $record): bool => $record->disabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableModule'),
