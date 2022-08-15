@@ -3,31 +3,33 @@
 namespace LCFramework\Framework\Admin;
 
 use Filament\Facades\Filament;
-use Illuminate\Support\ServiceProvider;
+use Filament\PluginServiceProvider;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
+use Spatie\LaravelPackageTools\Package;
 
-class AdminServiceProvider extends ServiceProvider
+class AdminServiceProvider extends PluginServiceProvider
 {
-    public function register(): void
+    protected array $pages = [
+        ModuleResource\Pages\ListModules::class
+    ];
+
+    protected array $resources = [
+        ModuleResource::class
+    ];
+
+    public function configurePackage(Package $package): void
     {
-        $this->registerFilament();
+        $package->name('lcframework-admin');
     }
 
-    public function boot(): void
+    public function packageBooted(): void
     {
+        parent::packageBooted();
+
         Filament::serving(function () {
             Filament::registerTheme(
                 mix('css/filament.css', 'lcframework'),
             );
-        });
-    }
-
-    protected function registerFilament(): void
-    {
-        $this->app->resolving('filament', function () {
-            Filament::registerResources([
-                ModuleResource::class,
-            ]);
         });
     }
 }
