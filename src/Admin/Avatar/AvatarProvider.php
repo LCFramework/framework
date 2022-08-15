@@ -17,6 +17,6 @@ class AvatarProvider implements AvatarProviderInterface
             ->map(fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
             ->join(' ');
 
-        return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=171717';
+        return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=FFFFFF&background=171717';
     }
 }
