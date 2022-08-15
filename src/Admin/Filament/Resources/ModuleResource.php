@@ -33,7 +33,7 @@ class ModuleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListModules::route('/')
+            'index' => ListModules::route('/'),
         ];
     }
 }

@@ -26,7 +26,7 @@ class AdminServiceProvider extends ServiceProvider
     {
         $this->app->resolving('filament', function () {
             Filament::registerResources([
-                ModuleResource::class
+                ModuleResource::class,
             ]);
         });
     }
