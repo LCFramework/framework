@@ -40,7 +40,7 @@ Route::middleware('web')->group(function () use ($routes) {
 
         if ($resetPasswordRoute !== null) {
             Route::get(
-                $resetPasswordRoute . '/{token}',
+                $resetPasswordRoute.'/{token}',
                 [PasswordResetController::class, 'create']
             )->name('password.reset');
         }
@@ -81,7 +81,7 @@ Route::middleware('web')->group(function () use ($routes) {
                 $passwordConfirmationRoute,
                 [
                     PasswordConfirmationController::class,
-                    'create'
+                    'create',
                 ]
             )->name('password.confirm');
         }
