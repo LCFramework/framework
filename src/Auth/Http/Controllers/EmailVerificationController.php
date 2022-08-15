@@ -5,8 +5,9 @@ namespace LCFramework\Framework\Auth\Http\Controllers;
 use Filament\Notifications\Notification;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Routing\Controller;
 
-class EmailVerificationController
+class EmailVerificationController extends Controller
 {
     public function create()
     {
