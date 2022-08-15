@@ -53,8 +53,8 @@ class ModuleResource extends Resource
                     ->colors([
                         'warning',
                         'danger' => 'disabled',
-                        'success' => 'enabled'
-                    ])
+                        'success' => 'enabled',
+                    ]),
             ]);
     }
 
