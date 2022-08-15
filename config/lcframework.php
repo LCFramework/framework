@@ -2,11 +2,11 @@
 
 return [
     'last_chaos' => [
-        'version' => (int)env('LCFRAMEWORK_LAST_CHAOS_VERSION', 4)
+        'version' => (int) env('LCFRAMEWORK_LAST_CHAOS_VERSION', 4),
     ],
 
     'auth' => [
-        'require_email_verification' => (bool)env('LCFRAMEWORK_AUTH_REQUIRE_EMAIL_VERIFICATION', true),
+        'require_email_verification' => (bool) env('LCFRAMEWORK_AUTH_REQUIRE_EMAIL_VERIFICATION', true),
 
         'routes' => [
             'login' => env('LCFRAMEWORK_AUTH_LOGIN_ROUTE', '/login'),

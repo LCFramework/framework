@@ -28,7 +28,7 @@ class SiteSettings extends Page
                         ->schema([
                             TextInput::make('name')
                                 ->required()
-                                ->maxLength(255)
+                                ->maxLength(255),
                         ])
                         ->columns([
                             'sm' => 2,
@@ -44,7 +44,7 @@ class SiteSettings extends Page
                 ->columns([
                     'sm' => 3,
                     'lg' => null,
-                ])
+                ]),
         ];
     }
 }
