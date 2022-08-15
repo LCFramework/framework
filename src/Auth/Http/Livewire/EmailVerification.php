@@ -22,14 +22,14 @@ class EmailVerification extends Component implements HasForms
 
     public function mount(): void
     {
-        if (! auth()->check()) {
+        if (!auth()->check()) {
             redirect()->intended(route('login'));
         }
 
         $user = auth()->user();
         if (
             $user->hasVerifiedEmail() ||
-            ($user instanceof ShouldVerifyEmail && ! $user->shouldVerifyEmail())
+            ($user instanceof ShouldVerifyEmail && !$user->shouldVerifyEmail())
         ) {
             redirect()->intended();
         }
@@ -60,6 +60,7 @@ class EmailVerification extends Component implements HasForms
         auth()->user()->sendEmailVerificationNotification();
 
         Notification::make()
+            ->success()
             ->title('Email has been successfully sent')
             ->send();
     }

@@ -56,6 +56,7 @@ class PasswordRequest extends Component implements HasForms
 
         if ($status === Password::RESET_LINK_SENT) {
             Notification::make()
+                ->success()
                 ->title(__($status))
                 ->send();
 

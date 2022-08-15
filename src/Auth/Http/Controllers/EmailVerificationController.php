@@ -24,6 +24,7 @@ class EmailVerificationController
         }
 
         Notification::make()
+            ->success()
             ->title('Email has been successfully verified')
             ->send();
 

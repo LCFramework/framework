@@ -74,6 +74,7 @@ class PasswordReset extends Component implements HasForms
 
         if ($status === Password::PASSWORD_RESET) {
             Notification::make()
+                ->success()
                 ->title(__($status))
                 ->send();
 
