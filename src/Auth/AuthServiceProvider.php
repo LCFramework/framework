@@ -24,7 +24,11 @@ class AuthServiceProvider extends EventServiceProvider
     public function boot(): void
     {
         $this->loadRoutesFrom(__DIR__ . '/../../routes/auth.php');
+        $this->registerLivewireComponents();
+    }
 
+    protected function registerLivewireComponents(): void
+    {
         Livewire::component('lcframework::login', Login::class);
         Livewire::component('lcframework::register', Register::class);
         Livewire::component('lcframework::password-reset', PasswordReset::class);
