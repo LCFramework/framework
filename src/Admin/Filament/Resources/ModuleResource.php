@@ -47,7 +47,7 @@ class ModuleResource extends Resource
                     ->label('Status')
                     ->sortable()
                     ->searchable()
-                    ->formatStateUsing(fn (string $state): string => __(ucfirst($state)))
+                    ->formatStateUsing(fn(string $state): string => __(ucfirst($state)))
                     ->icons([
                         'heroicon-o-minus-sm',
                         'heroicon-o-x' => 'disabled',
@@ -61,6 +61,7 @@ class ModuleResource extends Resource
             ])
             ->filters([
                 MultiSelectFilter::make('status')
+                    ->label('Status')
                     ->options([
                         'enabled' => 'Enabled',
                         'disabled' => 'Disabled',
