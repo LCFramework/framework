@@ -21,7 +21,7 @@ class ListModules extends ListRecords
 
         Notification::make()
             ->success()
-            ->title(sprintf('Module "%s" has been enabled', $record->name))
+            ->title(sprintf('Module "%s" has been successfully enabled', $record->name))
             ->body('This includes any dependency modules')
             ->send();
     }
@@ -34,7 +34,7 @@ class ListModules extends ListRecords
 
         Notification::make()
             ->success()
-            ->title(sprintf('Module "%s" has been successfullydisabled', $record->name))
+            ->title(sprintf('Module "%s" has been successfully disabled', $record->name))
             ->body('This includes any dependent modules')
             ->send();
     }
