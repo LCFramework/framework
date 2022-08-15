@@ -30,9 +30,7 @@ class PasswordReset extends Component implements HasForms
     public $password_confirmation = '';
 
     protected $queryString = [
-        'email' => [
-            'except' => ''
-        ]
+        'email' => ['except' => '']
     ];
 
     public function mount(): void
@@ -41,7 +39,9 @@ class PasswordReset extends Component implements HasForms
             redirect()->intended();
         }
 
-        $this->form->fill();
+        $this->form->fill([
+            'email' => $this->email
+        ]);
     }
 
     public function render(): View
