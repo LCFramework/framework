@@ -4,6 +4,7 @@ namespace LCFramework\Framework\Auth\Http\Livewire;
 
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -22,14 +23,14 @@ class EmailVerification extends Component implements HasForms
 
     public function mount(): void
     {
-        if (! auth()->check()) {
+        if (!auth()->check()) {
             redirect()->intended(route('login'));
         }
 
         $user = auth()->user();
         if (
             $user->hasVerifiedEmail() ||
-            ($user instanceof ShouldVerifyEmail && ! $user->shouldVerifyEmail())
+            ($user instanceof ShouldVerifyEmail && !$user->shouldVerifyEmail())
         ) {
             redirect()->intended();
         }
@@ -62,6 +63,7 @@ class EmailVerification extends Component implements HasForms
         Notification::make()
             ->success()
             ->title('Email has been successfully sent')
+            ->body('Please check your inbox (or your trash)')
             ->send();
     }
 
@@ -71,6 +73,8 @@ class EmailVerification extends Component implements HasForms
             'email-verification.form',
             FormBuilder::make()
                 ->schema([
+                    Placeholder::make('introduction')
+                        ->view('lcframework::components.auth.email-verification-info'),
                     TextInput::make('email')
                         ->label('Email address')
                         ->disabled(),

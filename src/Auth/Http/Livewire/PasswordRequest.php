@@ -58,6 +58,7 @@ class PasswordRequest extends Component implements HasForms
             Notification::make()
                 ->success()
                 ->title(__($status))
+                ->body('Please check your inbox (or your trash)')
                 ->send();
 
             return;
