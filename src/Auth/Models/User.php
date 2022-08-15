@@ -2,11 +2,12 @@
 
 namespace LCFramework\Framework\Auth\Models;
 
+use Filament\Models\Contracts\HasName;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use LCFramework\Framework\Auth\Contracts\OptionallyVerifyEmail;
 
-class User extends Authenticatable implements OptionallyVerifyEmail
+class User extends Authenticatable implements OptionallyVerifyEmail, HasName
 {
     use Notifiable;
 
@@ -28,5 +29,10 @@ class User extends Authenticatable implements OptionallyVerifyEmail
     public function shouldVerifyEmail(): bool
     {
         return config('lcframework.auth.require_email_verification');
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->username;
     }
 }
