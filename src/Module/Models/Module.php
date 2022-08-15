@@ -20,19 +20,19 @@ class Module extends Model
         'description' => 'string',
         'version' => 'string',
         'path' => 'string',
-        'status' => 'string'
+        'status' => 'string',
     ];
 
     public function getRows()
     {
         return collect(Modules::all())
-            ->map(fn($module): array => [
+            ->map(fn ($module): array => [
                 'id' => $module->getName(),
                 'name' => $module->getName(),
                 'description' => $module->getDescription(),
                 'version' => $module->getVersion(),
                 'path' => $module->getPath(),
-                'status' => $module->getStatus()
+                'status' => $module->getStatus(),
             ])
             ->values()
             ->all();
