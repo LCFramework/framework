@@ -63,12 +63,12 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if ($module->enabled()) {
-                continue;
+            if ($module->enabled) {
+                return;
             }
 
             try {
-                Modules::enable($module);
+                Modules::enable($module->name);
                 $module->forceFill(['status' => 'enabled'])->save();
 
                 $count++;
@@ -101,11 +101,11 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if ($module->disabled()) {
+            if ($module->disabled) {
                 continue;
             }
 
-            Modules::disable($module);
+            Modules::disable($module->name);
             $module->forceFill(['status' => 'disabled'])->save();
 
             $count++;
@@ -128,7 +128,7 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if (!Modules::delete($module)) {
+            if (!Modules::delete($module->name)) {
                 Notification::make()
                     ->danger()
                     ->title(
