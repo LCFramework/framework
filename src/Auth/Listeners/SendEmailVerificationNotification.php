@@ -12,7 +12,7 @@ class SendEmailVerificationNotification
         if (
             $event->user instanceof ShouldVerifyEmail &&
             $event->user->shouldVerifyEmail() &&
-            !$event->user->hasVerifiedEmail()
+            ! $event->user->hasVerifiedEmail()
         ) {
             $event->user->sendEmailVerificationNotification();
         }
