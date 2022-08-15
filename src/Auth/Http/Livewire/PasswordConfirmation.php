@@ -22,7 +22,7 @@ class PasswordConfirmation extends Component implements HasForms
 
     public function mount(): void
     {
-        if (! auth()->check()) {
+        if (!auth()->check()) {
             redirect()->intended(route('login'));
         }
 
@@ -49,7 +49,7 @@ class PasswordConfirmation extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (! Auth::guard('web')->validate([
+        if (!Auth::guard('web')->validate([
             'email' => auth()->user()->email,
             'password' => $data['password'],
         ])) {
@@ -69,6 +69,8 @@ class PasswordConfirmation extends Component implements HasForms
             'password-confirmation.form',
             FormBuilder::make()
                 ->schema([
+                    Placeholder::make('introduction')
+                        ->view('lcframework::components.auth.password-confirmation-introduction'),
                     Placeholder::make('email')
                         ->label('Email address')
                         ->content(auth()->user()->email),
