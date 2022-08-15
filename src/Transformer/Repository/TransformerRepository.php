@@ -39,7 +39,7 @@ class TransformerRepository implements TransformerRepositoryInterface
     protected function resolve(array|string|Closure $callback, $value)
     {
         return $this->app->call($callback, [
-            'value' => $value
+            'value' => $value,
         ]);
     }
 }
