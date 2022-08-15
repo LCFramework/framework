@@ -55,7 +55,7 @@ class Login extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (!auth()->attempt([
+        if (! auth()->attempt([
             'email' => $data['email'],
             'password' => $data['password'],
         ], $data['remember'])) {
