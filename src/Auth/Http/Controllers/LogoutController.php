@@ -2,6 +2,7 @@
 
 namespace LCFramework\Framework\Auth\Http\Controllers;
 
+use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,11 @@ class LogoutController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        Notification::make()
+            ->success()
+            ->title('You have been successfully logged out')
+            ->send();
+
+        return redirect()->route('login');
     }
 }

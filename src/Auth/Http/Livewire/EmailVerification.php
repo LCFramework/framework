@@ -63,7 +63,7 @@ class EmailVerification extends Component implements HasForms
         Notification::make()
             ->success()
             ->title('Email has been successfully sent')
-            ->body('Please check your inbox (or your trash)')
+            ->body('Please check your inbox (or your spam)')
             ->send();
     }
 
