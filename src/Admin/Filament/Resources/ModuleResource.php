@@ -48,7 +48,7 @@ class ModuleResource extends Resource
                     ->icons([
                         'heroicon-o-minus-sm',
                         'heroicon-o-x' => 'disabled',
-                        'heroicon-o-check' => 'success'
+                        'heroicon-o-check' => 'enabled'
                     ])
                     ->colors([
                         'warning',
