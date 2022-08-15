@@ -25,6 +25,7 @@ class FormBuilder
         dd($schema);
 
         $null = null;
+
         return $null;
     }
 
