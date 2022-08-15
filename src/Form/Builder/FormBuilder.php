@@ -2,6 +2,8 @@
 
 namespace LCFramework\Framework\Form\Builder;
 
+use Closure;
+use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Field;
 
 class FormBuilder
@@ -10,7 +12,7 @@ class FormBuilder
 
     public function __construct(array $schema)
     {
-        $this->schema = $this->build($schema);
+        $this->schema = $schema;
     }
 
     public static function make(array $schema): static
@@ -18,42 +20,25 @@ class FormBuilder
         return new static($schema);
     }
 
-    public function &get(string $name): ?Field
+    public function get(string|Closure $callback): ?Component
     {
-        $schema = $this->find($this->schema, $name);
+        $callback = $callback instanceof Closure
+            ? $callback
+            : fn(Component $component): bool => $component instanceof Field && $component->getStatePath() === $callback;
 
-        dd($schema);
-
-        $null = null;
-        return $null;
+        return collect($this->getFlatSchema($this->schema))
+            ->first($callback);
     }
 
-    protected function &find(array &$target, array|string $key)
+    protected function getFlatSchema($schema): array
     {
-        $parts = is_array($key) ? $key : explode('.', $key);
-
-        $cursor = null;
-        foreach ($parts as $part) {
-            if (in_array($part, $target)) {
-                $cursor = &$target[$part];
-            } else {
-                $cursor = &$this->find($target->getChildComponents(), $part);
-            }
-        }
-
-        return $cursor;
-    }
-
-    protected function build(array $schema): array
-    {
-        $built = [];
+        $components = [];
 
         foreach ($schema as $component) {
-            $built[$component->getName()] = $component->schema(
-                $this->build($component->getChildComponents())
-            );
+            $components[] = $component;
+            $components[] = $this->getFlatSchema($component->getChildComponents());
         }
 
-        return $built;
+        return collect($components)->flatten()->all();
     }
 }
