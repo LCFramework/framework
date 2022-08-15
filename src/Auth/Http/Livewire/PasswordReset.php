@@ -31,8 +31,8 @@ class PasswordReset extends Component implements HasForms
 
     protected $queryString = [
         'email' => [
-            'except' => ''
-        ]
+            'except' => '',
+        ],
     ];
 
     public function mount(): void
