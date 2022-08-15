@@ -9,10 +9,6 @@ use Spatie\LaravelPackageTools\Package;
 
 class AdminServiceProvider extends PluginServiceProvider
 {
-    protected array $pages = [
-        ModuleResource\Pages\ListModules::class,
-    ];
-
     protected array $resources = [
         ModuleResource::class,
     ];
