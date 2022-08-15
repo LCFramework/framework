@@ -87,6 +87,7 @@ class PasswordReset extends Component implements HasForms
             Notification::make()
                 ->success()
                 ->title(__($status))
+                ->body('Please login with your new password')
                 ->send();
 
             return redirect()->route('login');
