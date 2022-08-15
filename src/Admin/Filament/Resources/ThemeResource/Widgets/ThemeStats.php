@@ -26,7 +26,7 @@ class ThemeStats extends StatsOverviewWidget
                     route(
                         'filament.resources.administration/themes',
                         [
-                            $filter => 1
+                            $filter => 1,
                         ]
                     )
                 ),
@@ -38,7 +38,7 @@ class ThemeStats extends StatsOverviewWidget
                     route(
                         'filament.resources.administration/themes',
                         [
-                            $filter => 0
+                            $filter => 0,
                         ]
                     )
                 ),

@@ -26,7 +26,7 @@ class ModuleStats extends StatsOverviewWidget
                     route(
                         'filament.resources.administration/modules',
                         [
-                            $filter => 'enabled'
+                            $filter => 'enabled',
                         ]
                     )
                 ),
@@ -38,7 +38,7 @@ class ModuleStats extends StatsOverviewWidget
                     route(
                         'filament.resources.administration/modules',
                         [
-                            $filter => 'disabled'
+                            $filter => 'disabled',
                         ]
                     )
                 ),
