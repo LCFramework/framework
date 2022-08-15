@@ -128,7 +128,7 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($modules as $module) {
-            if (!Modules::delete($module)) {
+            if (! Modules::delete($module)) {
                 Notification::make()
                     ->danger()
                     ->title(
