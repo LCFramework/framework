@@ -29,13 +29,17 @@ class PasswordReset extends Component implements HasForms
 
     public $password_confirmation = '';
 
+    protected $queryString = [
+        'email' => [
+            'except' => ''
+        ]
+    ];
+
     public function mount(): void
     {
         if (auth()->check()) {
             redirect()->intended();
         }
-
-        $this->email = request()->input('email');
 
         $this->form->fill();
     }
