@@ -63,8 +63,7 @@ class FormBuilder
         $name,
         Component|array|Closure $components,
         string $where
-    ): static
-    {
+    ): static {
         $parent = &$this->findParent($this->schema, $name);
         if ($parent === null) {
             return $this;
