@@ -5,7 +5,7 @@ namespace LCFramework\Framework\Auth\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
-use LCFramework\Framework\Auth\Contracts\OptionallyVerifyEmail;
+use LCFramework\Framework\Auth\Contracts\ShouldVerifyEmail;
 
 class EnsureEmailIsVerifiedIfRequired
 {
@@ -16,7 +16,7 @@ class EnsureEmailIsVerifiedIfRequired
         if (
             ! $user ||
             (
-                $user instanceof OptionallyVerifyEmail &&
+                $user instanceof ShouldVerifyEmail &&
                 $user->shouldVerifyEmail() &&
                 ! $user->hasVerifiedEmail()
             )

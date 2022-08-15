@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use LCFramework\Framework\Auth\Http\Controllers\EmailVerificationController;
 use LCFramework\Framework\Auth\Http\Controllers\LoginController;
 use LCFramework\Framework\Auth\Http\Controllers\LogoutController;
 use LCFramework\Framework\Auth\Http\Controllers\PasswordRequestController;
@@ -38,7 +39,7 @@ Route::middleware('web')->group(function () use ($routes) {
 
         if ($resetPasswordRoute !== null) {
             Route::get(
-                $resetPasswordRoute.'/{token}',
+                $resetPasswordRoute . '/{token}',
                 [PasswordResetController::class, 'create']
             )->name('password.reset');
         }
@@ -46,6 +47,10 @@ Route::middleware('web')->group(function () use ($routes) {
 
     Route::middleware('auth')->group(function () use ($routes) {
         $logoutRoute = $routes['logout'] ?? null;
+
+        $emailRoutes = $routes['email'] ?? [];
+        $emailNoticeRoute = $emailRoutes['notice'] ?? null;
+        $emailVerifyRoute = $emailRoutes['verify'] ?? null;
 
         if ($logoutRoute !== null) {
             Route::post(
@@ -55,6 +60,17 @@ Route::middleware('web')->group(function () use ($routes) {
                     'destroy',
                 ]
             )->name('logout');
+        }
+
+        if ($emailNoticeRoute !== null) {
+            Route::get($emailNoticeRoute, [EmailVerificationController::class, 'create'])
+                ->name('email-verification.notice');
+        }
+
+        if ($emailVerifyRoute !== null) {
+            Route::post($emailVerifyRoute, [EmailVerificationController::class, 'store'])
+                ->middleware(['signed', 'throttle:5,1'])
+                ->name('email-verification.store');
         }
     });
 });
