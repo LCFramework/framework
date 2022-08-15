@@ -2,7 +2,6 @@
 
 namespace LCFramework\Framework\Admin\Filament\Resources;
 
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Columns\BadgeColumn;
@@ -46,8 +45,8 @@ class ModuleResource extends Resource
                     ->colors([
                         'warning',
                         'danger' => 'disabled',
-                        'success' => 'enabled'
-                    ])
+                        'success' => 'enabled',
+                    ]),
             ]);
     }
 
