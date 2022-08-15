@@ -34,7 +34,9 @@ class PasswordReset extends Component implements HasForms
             redirect()->intended();
         }
 
-        $this->form->fill();
+        $this->form->fill([
+            'email' => request()->input('email')
+        ]);
     }
 
     public function render(): View
