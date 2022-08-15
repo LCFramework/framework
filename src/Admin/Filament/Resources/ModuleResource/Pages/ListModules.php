@@ -165,14 +165,14 @@ class ListModules extends ListRecords
             Action::make('enable')
                 ->label('Enable')
                 ->button()
-                ->hidden(fn(Module $record): bool => $record->enabled)
+                ->hidden(fn (Module $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableModule'),
             Action::make('disable')
                 ->label('Disable')
                 ->button()
-                ->hidden(fn(Module $record): bool => $record->disabled)
+                ->hidden(fn (Module $record): bool => $record->disabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableModule'),
