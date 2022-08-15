@@ -10,14 +10,21 @@ class FormBuilder
 {
     protected array $schema;
 
-    public function __construct(array $schema)
+    public function __construct(array $schema = [])
     {
         $this->schema = $schema;
     }
 
-    public static function make(array $schema): static
+    public static function make(array $schema = []): static
     {
         return new static($schema);
+    }
+
+    public function schema(array $schema): static
+    {
+        $this->schema = $schema;
+
+        return $this;
     }
 
     public function before($name, Component|array|Closure $components): static
@@ -56,7 +63,8 @@ class FormBuilder
         $name,
         Component|array|Closure $components,
         string $where
-    ): static {
+    ): static
+    {
         $parent = &$this->findParent($this->schema, $name);
         if ($parent === null) {
             return $this;

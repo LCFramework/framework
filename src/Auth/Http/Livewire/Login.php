@@ -12,6 +12,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\ValidationException;
+use LCFramework\Framework\Form\Builder\FormBuilder;
 use LCFramework\Framework\Transformer\Facade\Transformer;
 use Livewire\Component;
 
@@ -55,7 +56,7 @@ class Login extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (! auth()->attempt([
+        if (!auth()->attempt([
             'email' => $data['email'],
             'password' => $data['password'],
         ], $data['remember'])) {
@@ -71,27 +72,29 @@ class Login extends Component implements HasForms
     {
         return Transformer::transform(
             'login.form',
-            [
-                TextInput::make('email')
-                    ->label('Email address')
-                    ->email()
-                    ->required()
-                    ->autocomplete(),
-                TextInput::make('password')
-                    ->label('Password')
-                    ->password()
-                    ->required(),
-                Grid::make()
-                    ->schema([
-                        Checkbox::make('remember')
-                            ->label('Remember me'),
-                        Placeholder::make('forgot_password')
-                            ->view('lcframework::components.auth.forgot-password-link'),
-                    ])
-                    ->columns([
-                        'default' => 2,
-                    ]),
-            ]
+            FormBuilder::make()
+                ->schema([
+                    TextInput::make('email')
+                        ->label('Email address')
+                        ->email()
+                        ->required()
+                        ->autocomplete(),
+                    TextInput::make('password')
+                        ->label('Password')
+                        ->password()
+                        ->required(),
+                    Grid::make()
+                        ->schema([
+                            Checkbox::make('remember')
+                                ->label('Remember me'),
+                            Placeholder::make('forgot_password')
+                                ->view('lcframework::components.auth.forgot-password-link'),
+                        ])
+                        ->columns([
+                            'default' => 2,
+                        ]),
+                ])
+                ->build()
         );
     }
 }
