@@ -32,14 +32,22 @@ class FormBuilder
 
     public function prepend(Component|array|Closure $components): static
     {
-        array_unshift($this->schema, value($components));
+        $components = value($components);
+        $components = is_array($components) ? $components : [$components];
+
+        array_unshift($this->schema, ...$components);
 
         return $this;
     }
 
     public function append(Component|array|Closure $components): static
     {
-        array_push($this->schema, value($components));
+        $components = value($components);
+        $components = is_array($components) ? $components : [$components];
+
+        foreach ($components as $component) {
+            $this->schema[] = $component;
+        }
 
         return $this;
     }
@@ -56,15 +64,29 @@ class FormBuilder
         }
 
         $components = value($components);
+        $components = is_array($components) ? $components : [$components];
 
         $index = $this->findComponentIndex($parent, $name);
 
-        array_splice(
-            $parent,
-            $where === 'before' ? $index : ++$index,
-            0,
-            $components
-        );
+        if ($parent instanceof Component) {
+            $children = $parent->getChildComponents();
+
+            array_splice(
+                $children,
+                $where === 'before' ? $index : ++$index,
+                0,
+                $components
+            );
+
+            $parent->schema($children);
+        } else {
+            array_splice(
+                $parent,
+                $where === 'before' ? $index : ++$index,
+                0,
+                $components
+            );
+        }
 
         return $this;
     }
@@ -99,7 +121,7 @@ class FormBuilder
 
             $childComponents = $component->getChildComponents();
 
-            if ($child = $this->find($childComponents, $name)) {
+            if ($child = &$this->find($childComponents, $name)) {
                 return $child;
             }
         }
@@ -109,29 +131,43 @@ class FormBuilder
         return $default;
     }
 
-    protected function &findParent(array &$schema, string $name): ?array
+    protected function &findParent(
+        array      &$schema,
+        string     $name,
+        ?Component &$parent = null
+    ): array|Component|null
     {
         foreach ($schema as $component) {
             if ($component instanceof Field && $component->getName() === $name) {
-                return $schema;
+                if ($parent === null) {
+                    return $schema;
+                }
+
+                return $parent;
             }
 
             $childComponents = $component->getChildComponents();
 
-            if ($child = $this->findParent($childComponents, $name)) {
-                return $child;
+            if ($child = &$this->findParent($childComponents, $name, $component)) {
+                if ($parent === null) {
+                    return $child;
+                }
+
+                return $parent;
             }
         }
 
-        $default = [];
+        $default = null;
 
         return $default;
     }
 
-    protected function findComponentIndex(array $parent, string $name): int
+    protected function findComponentIndex(array|Component $parent, string $name): int
     {
+        $values = $parent instanceof Component ? $parent->getChildComponents() : $parent;
+
         $index = 0;
-        foreach ($parent as $component) {
+        foreach ($values as $component) {
             if ($component instanceof Field && $component->getName() === $name) {
                 return $index;
             }
