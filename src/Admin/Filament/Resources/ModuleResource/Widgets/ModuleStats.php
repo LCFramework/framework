@@ -17,14 +17,16 @@ class ModuleStats extends StatsOverviewWidget
                 'Total modules',
                 number_format(count(Modules::all()))
             )
-                ->url(route('filament.resources.administration/modules')),
+                ->url(
+                    route('filament.resources.administration/modules.index')
+                ),
             Card::make(
                 'Enabled modules',
                 number_format(count(Modules::enabled()))
             )
                 ->url(
                     route(
-                        'filament.resources.administration/modules',
+                        'filament.resources.administration/modules.index',
                         [
                             $filter => 'enabled'
                         ]
@@ -36,7 +38,7 @@ class ModuleStats extends StatsOverviewWidget
             )
                 ->url(
                     route(
-                        'filament.resources.administration/modules',
+                        'filament.resources.administration/modules.index',
                         [
                             $filter => 'disabled'
                         ]

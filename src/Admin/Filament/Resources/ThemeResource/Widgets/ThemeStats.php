@@ -17,14 +17,16 @@ class ThemeStats extends StatsOverviewWidget
                 'Total themes',
                 number_format(count(Themes::all()))
             )
-                ->url(route('filament.resources.administration/themes')),
+                ->url(
+                    route('filament.resources.administration/themes.index')
+                ),
             Card::make(
                 'Enabled themes',
                 Themes::enabled() !== null ? 1 : 0
             )
                 ->url(
                     route(
-                        'filament.resources.administration/themes',
+                        'filament.resources.administration/themes.index',
                         [
                             $filter => 1
                         ]
@@ -36,7 +38,7 @@ class ThemeStats extends StatsOverviewWidget
             )
                 ->url(
                     route(
-                        'filament.resources.administration/themes',
+                        'filament.resources.administration/themes.index',
                         [
                             $filter => 0
                         ]
