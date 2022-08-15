@@ -4,7 +4,6 @@ namespace LCFramework\Framework;
 
 use Illuminate\Support\AggregateServiceProvider;
 use LCFramework\Framework\Auth\AuthServiceProvider;
-use LCFramework\Framework\Form\FormServiceProvider;
 use LCFramework\Framework\Module\ModuleServiceProvider;
 use LCFramework\Framework\Setting\SettingsServiceProvider;
 use LCFramework\Framework\Support\Filesystem;
@@ -16,7 +15,6 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
     protected $providers = [
         SettingsServiceProvider::class,
         TransformerServiceProvider::class,
-        FormServiceProvider::class,
         AuthServiceProvider::class,
         ModuleServiceProvider::class,
         ThemeServiceProvider::class,
