@@ -4,6 +4,7 @@ namespace LCFramework\Framework\Auth\Http\Livewire;
 
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -72,6 +73,8 @@ class PasswordRequest extends Component implements HasForms
             'password-request.form',
             FormBuilder::make()
                 ->schema([
+                    Placeholder::make('register_link')
+                        ->view('lcframework::components.auth.remember-password-link'),
                     TextInput::make('email')
                         ->label('Email address')
                         ->email()

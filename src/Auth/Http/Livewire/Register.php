@@ -4,6 +4,7 @@ namespace LCFramework\Framework\Auth\Http\Livewire;
 
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -78,6 +79,8 @@ class Register extends Component implements HasForms
             'register.form',
             FormBuilder::make()
                 ->schema([
+                    Placeholder::make('register_link')
+                        ->view('lcframework::components.auth.login-link'),
                     TextInput::make('username')
                         ->label('Username')
                         ->required()

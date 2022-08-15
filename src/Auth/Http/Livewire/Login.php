@@ -56,7 +56,7 @@ class Login extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (! auth()->attempt([
+        if (!auth()->attempt([
             'email' => $data['email'],
             'password' => $data['password'],
         ], $data['remember'])) {
@@ -74,6 +74,8 @@ class Login extends Component implements HasForms
             'login.form',
             FormBuilder::make()
                 ->schema([
+                    Placeholder::make('register_link')
+                        ->view('lcframework::components.auth.register-link'),
                     TextInput::make('email')
                         ->label('Email address')
                         ->email()
