@@ -24,7 +24,7 @@ class Theme extends Model
     ];
 
     protected $casts = [
-        'enabled' => 'boolean'
+        'enabled' => 'boolean',
     ];
 
     public function getRows()
@@ -32,13 +32,13 @@ class Theme extends Model
         $enabledTheme = Themes::enabled();
 
         return collect(Themes::all())
-            ->map(fn($theme): array => [
+            ->map(fn ($theme): array => [
                 'id' => $theme->getName(),
                 'name' => $theme->getName(),
                 'description' => $theme->getDescription(),
                 'path' => $theme->getPath(),
                 'parent' => $theme->getParent(),
-                'enabled' => $enabledTheme?->getName() === $theme->getName()
+                'enabled' => $enabledTheme?->getName() === $theme->getName(),
             ])
             ->values()
             ->all();

@@ -38,7 +38,7 @@ class ThemeResource extends Resource
                     ->searchable()
                     ->wrap(),
                 BooleanColumn::make('enabled')
-                    ->label('Enabled')
+                    ->label('Enabled'),
             ])
             ->filters([
                 TernaryFilter::make('enabled')

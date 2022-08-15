@@ -23,10 +23,9 @@ class ThemeRepository implements ThemeRepositoryInterface
     protected ?Theme $enabledTheme = null;
 
     public function __construct(
-        Application          $app,
+        Application $app,
         ThemeLoaderInterface $loader
-    )
-    {
+    ) {
         $this->app = $app;
         $this->loader = $loader;
     }
@@ -37,7 +36,7 @@ class ThemeRepository implements ThemeRepositoryInterface
             return $this->themes;
         }
 
-        if (!$this->loadCache()) {
+        if (! $this->loadCache()) {
             $this->load();
         }
 
@@ -57,17 +56,17 @@ class ThemeRepository implements ThemeRepositoryInterface
         }
 
         return collect($this->all())
-            ->filter(fn(Theme $theme): bool => $theme->getName() !== $enabledTheme->getName())
+            ->filter(fn (Theme $theme): bool => $theme->getName() !== $enabledTheme->getName())
             ->all();
     }
 
     public function enable(Theme|string $theme): void
     {
-        if (!($theme instanceof Theme)) {
+        if (! ($theme instanceof Theme)) {
             $theme = $this->find($theme);
         }
 
-        if (!$this->validate($theme)) {
+        if (! $this->validate($theme)) {
             throw InvalidModuleEnabled::module($theme);
         }
 
@@ -108,7 +107,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     public function validate(Theme|string $theme): bool
     {
-        if (!($theme instanceof Theme)) {
+        if (! ($theme instanceof Theme)) {
             $theme = $this->find($theme);
         }
 
@@ -137,7 +136,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
         $this->enabledTheme = $theme;
 
-        if (!$this->validate($theme)) {
+        if (! $this->validate($theme)) {
             $this->disable();
 
             return;
@@ -148,7 +147,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     public function delete(string|Theme $theme): bool
     {
-        if (!($theme instanceof Theme)) {
+        if (! ($theme instanceof Theme)) {
             $theme = $this->find($theme);
         }
 
@@ -156,7 +155,7 @@ class ThemeRepository implements ThemeRepositoryInterface
             return false;
         }
 
-        if (!File::deleteDirectory($theme->getPath())) {
+        if (! File::deleteDirectory($theme->getPath())) {
             return false;
         }
 
@@ -186,21 +185,21 @@ class ThemeRepository implements ThemeRepositoryInterface
         if (env('VAPOR_MAINTENANCE_MODE') === null) {
             return Str::replaceLast(
                 'config.php',
-                $name . '_theme.php',
+                $name.'_theme.php',
                 $this->app->getCachedConfigPath()
             );
         }
 
         return Str::replaceLast(
             'services.php',
-            $name . '_theme.php',
+            $name.'_theme.php',
             $this->app->getCachedServicesPath()
         );
     }
 
     protected function loadCache(): bool
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return false;
         }
 
@@ -236,7 +235,7 @@ class ThemeRepository implements ThemeRepositoryInterface
             Cache::forever(
                 $cacheKey,
                 collect($this->all())
-                    ->mapWithKeys(fn(Theme $module, string $name): array => [
+                    ->mapWithKeys(fn (Theme $module, string $name): array => [
                         $name => $module->toArray(),
                     ])
                     ->all()
@@ -246,7 +245,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected function clearCache(): void
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return;
         }
 
@@ -257,7 +256,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected function discover(string $path): array
     {
-        $search = rtrim($path, '/\\') . '/' . 'composer.json';
+        $search = rtrim($path, '/\\').'/'.'composer.json';
 
         return str_replace('composer.json', '', File::find($search));
     }
@@ -283,11 +282,11 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected function isCacheEnabled(): bool
     {
-        return (bool)config('lcframework.themes.cache.enabled', true);
+        return (bool) config('lcframework.themes.cache.enabled', true);
     }
 
     protected function getPaths(): array
     {
-        return (array)config('lcframework.themes.paths');
+        return (array) config('lcframework.themes.paths');
     }
 }
