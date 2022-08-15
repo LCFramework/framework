@@ -1,6 +1,25 @@
 <?php
 
 return [
+    'auth' => [
+        'require_email_verification' => (bool) env('LCFRAMEWORK_AUTH_REQUIRE_EMAIL_VERIFICATION', true),
+
+        'routes' => [
+            'login' => env('LCFRAMEWORK_AUTH_LOGIN_ROUTE', '/login'),
+            'register' => env('LCFRAMEWORK_AUTH_REGISTER_ROUTE', '/register'),
+            'logout' => env('LCFRAMEWORK_AUTH_LOGOUT_ROUTE', '/logout'),
+            'password' => [
+                'request' => env('LCFRAMEWORK_AUTH_PASSWORD_REQUEST_ROUTE', '/forgot-password'),
+                'reset' => env('LCFRAMEWORK_AUTH_PASSWORD_RESET_ROUTE', '/reset-password'),
+                'confirm' => env('LCFRAMEWORK_AUTH_PASSWORD_CONFIRM_ROUTE', '/confirm-password'),
+            ],
+            'email' => [
+                'notice' => env('LCFRAMEWORK_AUTH_EMAIL_NOTICE_ROUTE', '/email-verification'),
+                'verify' => env('LCFRAMEWORK_AUTH_EMAIL_VERIFY_ROUTE', '/email-verification'),
+            ],
+        ],
+    ],
+
     'settings' => [
         'driver' => 'file',
 
