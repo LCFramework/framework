@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use LCFramework\Framework\Auth\Http\Controllers\EmailVerificationController;
 use LCFramework\Framework\Auth\Http\Controllers\LoginController;
 use LCFramework\Framework\Auth\Http\Controllers\LogoutController;
+use LCFramework\Framework\Auth\Http\Controllers\PasswordConfirmationController;
 use LCFramework\Framework\Auth\Http\Controllers\PasswordRequestController;
 use LCFramework\Framework\Auth\Http\Controllers\PasswordResetController;
 use LCFramework\Framework\Auth\Http\Controllers\RegisterController;
@@ -39,18 +40,20 @@ Route::middleware('web')->group(function () use ($routes) {
 
         if ($resetPasswordRoute !== null) {
             Route::get(
-                $resetPasswordRoute.'/{token}',
+                $resetPasswordRoute . '/{token}',
                 [PasswordResetController::class, 'create']
             )->name('password.reset');
         }
     });
 
-    Route::middleware('auth')->group(function () use ($routes) {
+    Route::middleware('auth')->group(function () use ($routes, $passwordRoutes) {
         $logoutRoute = $routes['logout'] ?? null;
 
         $emailRoutes = $routes['email'] ?? [];
         $emailNoticeRoute = $emailRoutes['notice'] ?? null;
         $emailVerifyRoute = $emailRoutes['verify'] ?? null;
+
+        $passwordConfirmationRoute = $passwordRoutes['confirm'];
 
         if ($logoutRoute !== null) {
             Route::post(
@@ -71,6 +74,16 @@ Route::middleware('web')->group(function () use ($routes) {
             Route::post($emailVerifyRoute, [EmailVerificationController::class, 'store'])
                 ->middleware(['signed', 'throttle:5,1'])
                 ->name('email-verification.store');
+        }
+
+        if ($passwordConfirmationRoute !== null) {
+            Route::get(
+                $passwordConfirmationRoute,
+                [
+                    PasswordConfirmationController::class,
+                    'create'
+                ]
+            )->name('password.confirm');
         }
     });
 });
