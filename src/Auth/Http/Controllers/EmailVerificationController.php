@@ -13,14 +13,14 @@ class EmailVerificationController extends Controller
 {
     public function create(Request $request)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
         }
 
         $user = $request->user();
         if (
             $user->hasVerifiedEmail() ||
-            ($user instanceof ShouldVerifyEmail && !$user->shouldVerifyEmail())
+            ($user instanceof ShouldVerifyEmail && ! $user->shouldVerifyEmail())
         ) {
             return redirect()->intended();
         }
