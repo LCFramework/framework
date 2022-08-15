@@ -22,20 +22,20 @@ class EmailVerification extends Component implements HasForms
 
     public function mount(): void
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             redirect()->intended(route('login'));
         }
 
         $user = auth()->user();
         if (
             $user->hasVerifiedEmail() ||
-            ($user instanceof ShouldVerifyEmail && !$user->shouldVerifyEmail())
+            ($user instanceof ShouldVerifyEmail && ! $user->shouldVerifyEmail())
         ) {
             redirect()->intended();
         }
 
         $this->form->fill([
-            'email' => $user->email
+            'email' => $user->email,
         ]);
     }
 
@@ -72,7 +72,7 @@ class EmailVerification extends Component implements HasForms
                 ->schema([
                     TextInput::make('email')
                         ->label('Email address')
-                        ->disabled()
+                        ->disabled(),
                 ])
         )->build();
     }
