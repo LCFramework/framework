@@ -10,6 +10,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Database\Eloquent\Model;
 use LCFramework\Framework\Admin\Filament\Resources\ThemeResource\Pages\ListThemes;
+use LCFramework\Framework\Admin\Filament\Resources\ThemeResource\Widgets\ThemeStats;
 use LCFramework\Framework\Theme\Models\Theme;
 
 class ThemeResource extends Resource
@@ -74,5 +75,12 @@ class ThemeResource extends Resource
     protected static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            ThemeStats::class,
+        ];
     }
 }

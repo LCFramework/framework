@@ -11,6 +11,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\MultiSelectFilter;
 use Illuminate\Database\Eloquent\Model;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Pages\ListModules;
+use LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Widgets\ModuleStats;
 use LCFramework\Framework\Module\Models\Module;
 
 class ModuleResource extends Resource
@@ -47,7 +48,7 @@ class ModuleResource extends Resource
                     ->label('Status')
                     ->sortable()
                     ->searchable()
-                    ->formatStateUsing(fn (string $state): string => __(ucfirst($state)))
+                    ->formatStateUsing(fn(string $state): string => __(ucfirst($state)))
                     ->icons([
                         'heroicon-o-minus-sm',
                         'heroicon-o-x' => 'disabled',
@@ -107,5 +108,12 @@ class ModuleResource extends Resource
     protected static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            ModuleStats::class,
+        ];
     }
 }
