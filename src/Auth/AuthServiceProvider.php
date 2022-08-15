@@ -23,7 +23,7 @@ class AuthServiceProvider extends EventServiceProvider
 
     public function boot(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/../../routes/auth.php');
+        $this->loadRoutesFrom(__DIR__.'/../../routes/auth.php');
 
         $this->registerLivewireComponents();
     }
