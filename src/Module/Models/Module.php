@@ -34,6 +34,7 @@ class Module extends Model
                 'path' => $module->getPath(),
                 'status' => $module->getStatus()
             ])
+            ->values()
             ->all();
     }
 }
