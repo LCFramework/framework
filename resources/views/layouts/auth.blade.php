@@ -15,7 +15,10 @@
         <style>[x-cloak] {
                 display: none !important;
             }</style>
+
         <link rel="stylesheet" href="{{mix('css/lcframework.css', 'lcframework')}}"/>
+        <script src="{{mix('js/lcframework.js', 'lcframework')}}" defer></script>
+
         @livewireStyles
         @livewireScripts
         @stack('scripts')
