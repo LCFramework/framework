@@ -17,7 +17,7 @@ class ListModules extends ListRecords
     {
         Modules::enable($record->name);
 
-        $record->forceFill(['status' => 'enabled']);
+        $record->forceFill(['status' => 'enabled'])->save();
 
         Notification::make()
             ->success()
@@ -30,7 +30,7 @@ class ListModules extends ListRecords
     {
         Modules::disable($record->name);
 
-        $record->forceFill(['status' => 'disabled']);
+        $record->forceFill(['status' => 'disabled'])->save();
 
         Notification::make()
             ->success()
