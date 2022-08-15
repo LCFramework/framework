@@ -4,7 +4,6 @@ namespace LCFramework\Framework\Admin\Filament\Pages;
 
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\TextInput;
 use Filament\Pages\Page;
 
 class SiteSettings extends Page
@@ -24,26 +23,18 @@ class SiteSettings extends Page
         return [
             Grid::make()
                 ->schema([
-                    Card::make()
+                    Grid::make()
                         ->schema([
-                            TextInput::make('name')
-                                ->required()
-                                ->maxLength(255)
-                        ])
-                        ->columns([
-                            'sm' => 2,
+                            Card::make()
                         ])
                         ->columnSpan([
-                            'sm' => 2,
-                        ]),
-
-                    Card::make()
-                        ->schema([])
-                        ->columnSpan(1),
+                            'md' => 2
+                        ])
+                        ->extraAttributes(['class' => 'col-start-2'])
                 ])
                 ->columns([
-                    'sm' => 3,
-                    'lg' => null,
+                    'md' => 3,
+                    'lg' => null
                 ])
         ];
     }

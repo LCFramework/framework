@@ -8,6 +8,9 @@ module.exports = {
         './resources/**/*.js',
         './vendor/filament/**/*.blade.php'
     ],
+    safelist: [
+        'col-start-2'
+    ],
     darkMode: 'class',
     theme: {
         extend: {

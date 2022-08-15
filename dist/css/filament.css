@@ -3357,6 +3357,9 @@ html {
 .col-span-full{
   grid-column: 1 / -1;
 }
+.col-start-2{
+  grid-column-start: 2;
+}
 .\!m-0{
   margin: 0px !important;
 }
