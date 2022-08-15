@@ -11,7 +11,7 @@ class LogoutController extends Controller
 {
     public function destroy(Request $request)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
         }
 

@@ -8,7 +8,7 @@ class PasswordConfirmationController extends Controller
 {
     public function create()
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
         }
 
