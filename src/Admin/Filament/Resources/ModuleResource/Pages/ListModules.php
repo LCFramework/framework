@@ -19,13 +19,13 @@ class ListModules extends ListRecords
             Action::make('enable')
                 ->label('Enable')
                 ->button()
-                ->hidden(fn(Module $record): bool => $record->enabled)
+                ->hidden(fn (Module $record): bool => $record->enabled)
                 ->requiresConfirmation()
                 ->action('enableModule'),
             Action::make('disable')
                 ->label('Disable')
                 ->button()
-                ->hidden(fn(Module $record): bool => $record->disabled)
+                ->hidden(fn (Module $record): bool => $record->disabled)
                 ->requiresConfirmation()
                 ->action('disableModule'),
             Action::make('delete')
@@ -33,7 +33,7 @@ class ListModules extends ListRecords
                 ->button()
                 ->color('danger')
                 ->requiresConfirmation()
-                ->action('deleteModule')
+                ->action('deleteModule'),
         ];
     }
 

@@ -27,7 +27,7 @@ class Module extends Model
     public function getRows()
     {
         return collect(Modules::all())
-            ->map(fn($module): array => [
+            ->map(fn ($module): array => [
                 'id' => $module->getName(),
                 'name' => $module->getName(),
                 'description' => $module->getDescription(),
@@ -42,14 +42,14 @@ class Module extends Model
     public function enabled(): Attribute
     {
         return Attribute::make(
-            get: fn(): bool => $this->status === 'enabled'
+            get: fn (): bool => $this->status === 'enabled'
         );
     }
 
     public function disabled(): Attribute
     {
         return Attribute::make(
-            get: fn(): bool => $this->status === 'disabled'
+            get: fn (): bool => $this->status === 'disabled'
         );
     }
 }
