@@ -22,7 +22,7 @@ class ModuleStats extends StatsOverviewWidget
             Card::make(
                 'Disabled modules',
                 number_format(count(Modules::disabled()))
-            )
+            ),
         ];
     }
 }

@@ -22,7 +22,7 @@ class ThemeStats extends StatsOverviewWidget
             Card::make(
                 'Disabled themes',
                 number_format(count(Themes::disabled()))
-            )
+            ),
         ];
     }
 }
