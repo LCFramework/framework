@@ -23,6 +23,8 @@ class PasswordReset extends Component implements HasForms
     use InteractsWithForms;
     use WithRateLimiting;
 
+    public $token = '';
+
     public $email = '';
 
     public $password = '';
@@ -40,7 +42,8 @@ class PasswordReset extends Component implements HasForms
         }
 
         $this->form->fill([
-            'email' => $this->email
+            'email' => $this->email,
+            'token' => request()->token
         ]);
     }
 
@@ -68,7 +71,7 @@ class PasswordReset extends Component implements HasForms
             [
                 ...$data,
                 'email' => $this->email,
-                'token' => request()->token,
+                'token' => $this->token,
             ],
             function ($user) use ($data) {
                 $user->forceFill([
