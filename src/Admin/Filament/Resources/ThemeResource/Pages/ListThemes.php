@@ -119,4 +119,9 @@ class ListThemes extends ListRecords
                 ->action('deleteTheme'),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return static::$resource::getWidgets();
+    }
 }
