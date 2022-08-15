@@ -30,5 +30,5 @@ interface ModuleRepositoryInterface
 
     public function boot(): void;
 
-    public function clearCache(): void;
+    public function delete(string|Module $module): bool;
 }

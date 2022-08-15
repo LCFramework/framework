@@ -17,6 +17,8 @@ class ListModules extends ListRecords
     {
         Modules::enable($record->name);
 
+        $record->forceFill(['status' => 'enabled']);
+
         Notification::make()
             ->success()
             ->title(sprintf('Module "%s" has been enabled', $record->name))
@@ -28,20 +30,31 @@ class ListModules extends ListRecords
     {
         Modules::disable($record->name);
 
+        $record->forceFill(['status' => 'disabled']);
+
         Notification::make()
             ->success()
-            ->title(sprintf('Module "%s" has been disabled', $record->name))
+            ->title(sprintf('Module "%s" has been successfullydisabled', $record->name))
             ->body('This includes any dependent modules')
             ->send();
     }
 
     public function deleteModule(Module $record): void
     {
-        if ($record->enabled) {
-            Modules::disable($record);
-        }
+        if (Modules::delete($record->name)) {
+            $record->delete();
 
-        Modules::clearCache();
+            Notification::make()
+                ->success()
+                ->title(sprintf('Module "%s" has been successfully deleted', $record->name))
+                ->send();
+        } else {
+            Notification::make()
+                ->danger()
+                ->title(sprintf('Module "%s" has been unsuccessfully deleted', $record->name))
+                ->body('LCFramework may not have writable permissions to the module directory')
+                ->send();
+        }
     }
 
     protected function getTableActions(): array
