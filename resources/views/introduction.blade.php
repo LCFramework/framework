@@ -63,6 +63,7 @@
                     <li>
                         <a
                             href="https://github.com/LCFramework/framework"
+                            target="_blank"
                             class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             Documentation
@@ -71,6 +72,7 @@
                     <li>
                         <a
                             href="https://github.com/LCFramework/framework"
+                            target="_blank"
                             class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             GitHub
@@ -79,6 +81,7 @@
                     <li>
                         <a
                             href="https://lckb.dev/"
+                            target="_blank"
                             class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             LCKB
