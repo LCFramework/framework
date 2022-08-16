@@ -2,7 +2,7 @@
 
 namespace LCFramework\Framework\Installer\Http\Livewire;
 
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -34,8 +34,8 @@ class Installer extends Component implements HasForms
             Wizard::make([
                 Wizard\Step::make('Requirements')
                     ->schema([
-                        TextInput::make('name')
-                            ->required(),
+                        Placeholder::make('requirements')
+                            ->view('lcframework::components.installer.requirements')
                     ]),
                 Wizard\Step::make('Application Settings')
                     ->schema([]),
