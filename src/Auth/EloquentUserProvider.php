@@ -15,7 +15,7 @@ class EloquentUserProvider extends UserProviderBase
             $plain,
             $user->getAuthPassword(),
             [
-                'username' => $user->username,
+                'username' => $user->user_id,
             ]
         );
     }
