@@ -85,7 +85,7 @@ class Installer extends Component implements HasForms
     {
         return [
             Wizard::make()
-                ->submitAction(view(''))
+                ->submitAction(view('lcframework::components.installer.submit'))
                 ->schema([
                     Wizard\Step::make('Requirements')
                         ->schema([
