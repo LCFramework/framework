@@ -191,6 +191,11 @@ class SiteSettings extends Page
                                 ->label('From name')
                                 ->hint('The sender name')
                                 ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name')),
+                            TextInput::make('mail_port')
+                                ->label('Port')
+                                ->required()
+                                ->integer()
+                                ->minValue(0),
                             Select::make('mail_encryption')
                                 ->label('Encryption')
                                 ->options([
