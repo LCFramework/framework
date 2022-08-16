@@ -14,7 +14,7 @@ class InstallerServiceProvider extends ServiceProvider
         Livewire::component('lcframework::installer', Installer::class);
 
         if (!LCFramework::installed()) {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/installer.php');
+            $this->loadRoutesFrom(__DIR__ . '/../../routes/installer.php');
         }
     }
 }
