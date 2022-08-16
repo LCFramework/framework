@@ -61,7 +61,7 @@ class SiteSettings extends Page
             ->put('MAIL_FROM_NAME', $data['mail_from_name']);
 
         $lcSalt = $data['lc_salt'];
-        if(!blank($lcSalt)) {
+        if (! blank($lcSalt)) {
             $env->put('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', $lcSalt);
         }
 
@@ -149,7 +149,7 @@ class SiteSettings extends Page
                                 ->options([
                                     'sha256' => 'SHA-256',
                                     'md5' => 'MD5',
-                                    'plaintext' => 'PlainText'
+                                    'plaintext' => 'PlainText',
                                 ]),
                             TextInput::make('lc_salt')
                                 ->label('Salt')
