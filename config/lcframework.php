@@ -13,7 +13,7 @@ return [
 
         'auth' => [
             'salt' => env('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', ''),
-        ]
+        ],
     ],
 
     'auth' => [

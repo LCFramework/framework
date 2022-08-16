@@ -24,7 +24,7 @@ class Sha256HashingDriver implements Hasher
 
         return hash(
             'sha256',
-            $value . $this->salt . $username
+            $value.$this->salt.$username
         );
     }
 
