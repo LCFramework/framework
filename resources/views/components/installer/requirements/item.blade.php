@@ -11,7 +11,7 @@
         @endif
     </div>
 
-    <div>
+    <div class="font-medium">
         {{$slot}}
     </div>
 </li>

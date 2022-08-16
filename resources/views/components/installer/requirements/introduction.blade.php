@@ -12,7 +12,7 @@
         Before continuing, please ensure your environment meets the requirements:
     </p>
 
-    <ul>
+    <ul class="space-y-2">
         <x-lcframework::installer.requirements.item
             :installed="$this->extensions['php']"
         >
