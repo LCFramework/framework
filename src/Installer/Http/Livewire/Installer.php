@@ -50,7 +50,7 @@ class Installer extends Component implements HasForms
                             ),
                         Checkbox::make('requirements_met')
                             ->label('I confirm the environment requirements are met')
-                            ->accepted()
+                            ->accepted(),
                     ]),
                 Wizard\Step::make('Application Settings')
                     ->schema([
@@ -79,7 +79,7 @@ class Installer extends Component implements HasForms
                                     ->label('Verbose logging')
                                     ->hint('This should never be enabled in production')
                                     ->helperText('Display detailed errors and enable debugging functionality'),
-                            ])
+                            ]),
                     ]),
                 Wizard\Step::make('Database Settings')
                     ->schema([
@@ -111,7 +111,7 @@ class Installer extends Component implements HasForms
                                     ->required()
                                     ->integer()
                                     ->minValue(0),
-                            ])
+                            ]),
                     ]),
                 Wizard\Step::make('LastChaos Settings')
                     ->schema([
