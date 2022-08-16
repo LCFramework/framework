@@ -37,7 +37,9 @@ class Installer extends Component implements HasForms
                 Wizard\Step::make('Requirements')
                     ->schema([
                         Placeholder::make('requirements')
-                            ->view('lcframework::components.installer.requirements'),
+                            ->view(
+                                'lcframework::components.installer.requirements.introduction'
+                            ),
                     ]),
                 Wizard\Step::make('Application Settings')
                     ->schema([]),
