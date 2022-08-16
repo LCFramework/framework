@@ -57,12 +57,12 @@ class SiteSettings extends Page
             ->put('MAIL_FROM_NAME', $data['mail_from_name']);
 
         $mailPassword = $data['mail_password'];
-        if (!blank($mailPassword)) {
+        if (! blank($mailPassword)) {
             $env->put('MAIL_PASSWORD', $mailPassword);
         }
 
         $dbPassword = $data['db_password'];
-        if (!blank($dbPassword)) {
+        if (! blank($dbPassword)) {
             $env->put('DB_PASSWORD', $dbPassword);
         }
 
@@ -199,8 +199,8 @@ class SiteSettings extends Page
                             Select::make('mail_encryption')
                                 ->label('Encryption')
                                 ->options([
-                                    'tls' => 'TLS'
-                                ])
+                                    'tls' => 'TLS',
+                                ]),
                         ]),
                 ]),
             Section::make('Database Settings')
