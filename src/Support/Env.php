@@ -46,29 +46,29 @@ class Env
         $oldPair = $this->readKeyValuePair($key);
 
         if (preg_match('/\s/', $value) || str_contains($value, '=')) {
-            $value = '"'.$value.'"';
+            $value = '"' . $value . '"';
         }
 
-        $newPair = $key.'='.$value;
+        $newPair = $key . '=' . $value;
 
         if ($oldPair !== null) {
             return preg_replace(
-                '/^'.
-                preg_quote($oldPair, '/').
+                '/^' .
+                preg_quote($oldPair, '/') .
                 '$/uimU',
                 $newPair,
                 $this->content
             );
         }
 
-        return $this->content."\n".$newPair."\n";
+        return $this->content . "\n" . $newPair . "\n";
     }
 
     protected function readKeyValuePair(string $key): ?string
     {
         if (
             preg_match(
-                "#^{$key}=*[^\\\R]*$#uimU",
+                "#^ *{$key} *= *[^\r\n]*$#uimU",
                 $this->content,
                 $matches)
         ) {
