@@ -45,6 +45,7 @@ class SiteSettings extends Page
             ->put('APP_DEBUG', $data['app_debug'])
             ->put('APP_DEBUG', $data['app_debug'])
             ->put('LCFRAMEWORK_LAST_CHAOS_VERSION', $data['lc_version'])
+            ->put('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', $data['lc_salt'])
             ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DATA', $data['lc_db_data'])
             ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DB', $data['lc_db_db'])
             ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_AUTH', $data['lc_db_auth'])
@@ -57,12 +58,12 @@ class SiteSettings extends Page
             ->put('MAIL_FROM_NAME', $data['mail_from_name']);
 
         $mailPassword = $data['mail_password'];
-        if (! blank($mailPassword)) {
+        if (!blank($mailPassword)) {
             $env->put('MAIL_PASSWORD', $mailPassword);
         }
 
         $dbPassword = $data['db_password'];
-        if (! blank($dbPassword)) {
+        if (!blank($dbPassword)) {
             $env->put('DB_PASSWORD', $dbPassword);
         }
 
@@ -137,6 +138,10 @@ class SiteSettings extends Page
                                     3 => 'Version 3',
                                     4 => 'Version 4',
                                 ]),
+                            TextInput::make('lc_salt')
+                                ->label('Salt')
+                                ->hint('Only required when using EP4')
+                                ->helperText('This should never be shared with anyone'),
                         ]),
                     Grid::make()
                         ->columns([
