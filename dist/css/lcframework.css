@@ -2028,7 +2028,7 @@ html {
   -moz-tab-size: 4; /* 3 */
   -o-tab-size: 4;
      tab-size: 4; /* 3 */
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
+  font-family: DM Sans, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
 }
 
 /*
@@ -4191,6 +4191,10 @@ select{
   padding-left: 1rem;
   padding-right: 1rem;
 }
+.py-4{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
 .py-12{
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -4230,10 +4234,6 @@ select{
 .px-5{
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-}
-.py-4{
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 }
 .py-1{
   padding-top: 0.25rem;
@@ -4314,11 +4314,11 @@ select{
   font-size: 1.875rem;
   line-height: 2.25rem;
 }
-.font-bold{
-  font-weight: 700;
-}
 .font-medium{
   font-weight: 500;
+}
+.font-bold{
+  font-weight: 700;
 }
 .font-semibold{
   font-weight: 600;
@@ -4749,6 +4749,10 @@ select{
 .hover\:text-white:hover{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.hover\:text-primary-600:hover{
+  --tw-text-opacity: 1;
+  color: rgb(202 138 4 / var(--tw-text-opacity));
 }
 .hover\:underline:hover{
   -webkit-text-decoration-line: underline;
