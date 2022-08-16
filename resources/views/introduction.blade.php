@@ -59,7 +59,7 @@
             </div>
 
             <div class="flex items-center justify-center py-12">
-                <ul>
+                <ul class="flex items-center justify-center space-x-4">
                     <li>
                         <a
                             href="#"
