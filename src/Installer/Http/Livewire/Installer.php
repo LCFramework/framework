@@ -68,7 +68,7 @@ class Installer extends Component implements HasForms
             'mbstring' => false,
             'openssl' => false,
             'pcre' => false,
-            'pdo' => false,
+            'PDO' => false,
             'pdo_mysql' => false,
             'pdo_sqlite' => false,
             'tokenizer' => false,

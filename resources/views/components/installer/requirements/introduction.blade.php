@@ -74,7 +74,7 @@
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$this->extensions['pdo']"
+            :installed="$this->extensions['PDO']"
         >
             PDO PHP Extension
         </x-lcframework::installer.requirements.item>
