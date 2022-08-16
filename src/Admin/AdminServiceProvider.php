@@ -34,9 +34,8 @@ class AdminServiceProvider extends PluginServiceProvider
         Filament::serving(function () {
             Filament::registerNavigationGroups([
                 'Users',
-                'Administration'
+                'Administration',
             ]);
-
 
             Filament::registerTheme(
                 mix('css/filament.css', 'lcframework'),
