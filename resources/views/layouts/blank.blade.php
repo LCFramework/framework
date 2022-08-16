@@ -24,7 +24,9 @@
         @stack('scripts')
     </head>
     <body class="bg-gray-100 text-gray-900 dark:text-gray-100 dark:bg-gray-900">
-        @yield('content')
+        <div class="min-h-screen w-full">
+            @yield('content')
+        </div>
 
         @livewire('notifications')
     </body>
