@@ -74,7 +74,7 @@ class ThemeResource extends Resource
 
     protected static function getNavigationBadge(): ?string
     {
-        return __(number_format(static::getModel()::count()) . ' Installed');
+        return __(number_format(static::getModel()::count()).' Installed');
     }
 
     public static function getWidgets(): array
