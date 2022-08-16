@@ -38,10 +38,6 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
 
     public function boot(): void
     {
-        if (! LCFramework::installed()) {
-            $this->loadRoutesFrom(__DIR__.'/../routes/installer.php');
-        }
-
         $this->loadViewsFrom(
             __DIR__.'/../resources/views',
             'lcframework'
