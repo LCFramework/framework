@@ -13,6 +13,8 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 {
     use Notifiable;
 
+    protected $primaryKey = 'user_code';
+
     public function shouldVerifyEmail(): bool
     {
         return config('lcframework.auth.require_email_verification');
