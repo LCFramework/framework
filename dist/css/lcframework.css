@@ -3585,17 +3585,17 @@ select{
 .min-w-\[2rem\]{
   min-width: 2rem;
 }
-.max-w-4xl{
-  max-width: 56rem;
+.max-w-md{
+  max-width: 28rem;
+}
+.max-w-screen-lg{
+  max-width: 1024px;
 }
 .max-w-xs{
   max-width: 20rem;
 }
 .max-w-sm{
   max-width: 24rem;
-}
-.max-w-md{
-  max-width: 28rem;
 }
 .max-w-lg{
   max-width: 32rem;
@@ -3608,6 +3608,9 @@ select{
 }
 .max-w-3xl{
   max-width: 48rem;
+}
+.max-w-4xl{
+  max-width: 56rem;
 }
 .max-w-5xl{
   max-width: 64rem;

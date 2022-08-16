@@ -11,7 +11,10 @@ class EnsureFrameworkIsInstalled
     public function handle($request, Closure $next)
     {
         $url = URL::route('installer');
-        if ($request->url() === $url) {
+        if (
+            $request->url() === $url ||
+            str_starts_with($request->path(), 'livewire')
+        ) {
             return $next($request);
         }
 

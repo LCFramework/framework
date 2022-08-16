@@ -31,14 +31,21 @@ class Installer extends Component implements HasForms
     protected function getFormSchema(): array
     {
         return [
-            Wizard::make()
-                ->schema([
-                    Wizard\Step::make('Requirements')
-                        ->schema([
-                            TextInput::make('name')
-                                ->required(),
-                        ]),
-                ]),
+            Wizard::make([
+                Wizard\Step::make('Requirements')
+                    ->schema([
+                        TextInput::make('name')
+                            ->required(),
+                    ]),
+                Wizard\Step::make('Application Settings')
+                    ->schema([]),
+                Wizard\Step::make('Database Settings')
+                    ->schema([]),
+                Wizard\Step::make('LastChaos Settings')
+                    ->schema([]),
+                Wizard\Step::make('Email Settings')
+                    ->schema([])
+            ])
         ];
     }
 }
