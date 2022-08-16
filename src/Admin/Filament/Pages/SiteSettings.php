@@ -2,15 +2,19 @@
 
 namespace LCFramework\Framework\Admin\Filament\Pages;
 
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Pages\Page;
+use Illuminate\Support\HtmlString;
 
 class SiteSettings extends Page
 {
     protected static ?string $slug = 'administration/site-settings';
 
-    protected static ?string $navigationIcon = 'heroicon-o-cloud-upload';
+    protected static ?string $navigationIcon = 'heroicon-o-cog';
 
     protected static ?string $navigationGroup = 'Administration';
 
@@ -18,23 +22,157 @@ class SiteSettings extends Page
 
     protected static string $view = 'lcframework::filament.pages.admin.site-settings';
 
+    public function mount(): void
+    {
+        $this->form->fill();
+    }
+
     protected function getFormSchema(): array
     {
         return [
-            Grid::make()
+            Section::make('Application Settings')
+                ->description('Global application settings')
+                ->collapsible()
+                ->collapsed()
+                ->columns([
+                    'sm' => 2,
+                ])
                 ->schema([
                     Grid::make()
                         ->schema([
-                            Card::make()
+                            TextInput::make('app_name')
+                                ->label('Application name')
+                                ->helperText('The display name of the application')
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('app_url')
+                                ->label('Application URL')
+                                ->hint('HTTPS is recommended')
+                                ->helperText('The base URL of the application (E.G - https://example.com)')
+                                ->required()
+                                ->maxLength(255),
+                            Select::make('app_environment')
+                                ->label('Environment')
+                                ->required()
+                                ->options([
+                                    'local' => 'Development',
+                                    'staging' => 'Staging',
+                                    'production' => 'Production'
+                                ]),
+                            Toggle::make('app_debug')
+                                ->label('Verbose logging')
+                                ->hint('This should never be enabled in production')
+                                ->helperText('Display detailed errors and enable debugging functionality')
                         ])
-                        ->columnSpan([
-                            'md' => 2
+                ]),
+            Section::make('LastChaos Settings')
+                ->description('Your LastChaos server settings')
+                ->collapsible()
+                ->collapsed()
+                ->schema([
+                    Grid::make()
+                        ->columns([
+                            'sm' => 2,
                         ])
-                        ->extraAttributes(['class' => 'md:col-start-2'])
-                ])
-                ->columns([
-                    'md' => 3,
-                    'lg' => null
+                        ->schema([
+                            Select::make('lc_version')
+                                ->label('Version')
+                                ->required()
+                                ->options([
+                                    1 => 'Version 1',
+                                    2 => 'Version 2',
+                                    3 => 'Version 3',
+                                    4 => 'Version 4'
+                                ])
+                        ]),
+                    Grid::make()
+                        ->columns([
+                            'sm' => 2,
+                        ])
+                        ->schema([
+                            TextInput::make('lc_db_data')
+                                ->label('Data database')
+                                ->helperText(new HtmlString('For example, <code>lc_data</code>'))
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('lc_db_db')
+                                ->label('DB database')
+                                ->helperText(new HtmlString('For example, <code>lc_db</code>'))
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('lc_db_auth')
+                                ->label('Auth database')
+                                ->helperText(new HtmlString('For example, <code>lc_auth_db</code>'))
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('lc_db_post')
+                                ->label('Post database')
+                                ->helperText(new HtmlString('For example, <code>lc_post</code>'))
+                                ->required()
+                                ->maxLength(255),
+                        ])
+                ]),
+            Section::make('Email Settings')
+                ->description('Your email server settings')
+                ->collapsible()
+                ->collapsed()
+                ->schema([
+                    Grid::make()
+                        ->columns([
+                            'sm' => 2,
+                        ])
+                        ->schema([
+                            TextInput::make('mail_host')
+                                ->label('Host'),
+                            TextInput::make('mail_username')
+                                ->label('Username')
+                                ->hint('This is usually your email address'),
+                            TextInput::make('mail_password')
+                                ->label('Password')
+                                ->password(),
+                            TextInput::make('mail_from_address')
+                                ->label('From address')
+                                ->hint('The sender email address'),
+                            TextInput::make('mail_from_name')
+                                ->label('From name')
+                                ->hint('The sender name')
+                                ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name'))
+                        ])
+                ]),
+            Section::make('Database Settings')
+                ->description('Your database server settings (ensure you know what you\'re doing updating this)')
+                ->collapsible()
+                ->collapsed()
+                ->schema([
+                    Grid::make()
+                        ->columns([
+                            'sm' => 2,
+                        ])
+                        ->schema([
+                            TextInput::make('db_host')
+                                ->label('Host')
+                                ->required(),
+                            TextInput::make('db_username')
+                                ->label('Username')
+                                ->required(),
+                            TextInput::make('db_password')
+                                ->label('Password')
+                                ->required()
+                                ->password()
+                                ->rules('confirmed'),
+                            TextInput::make('db_password_confirmation')
+                                ->label('Confirm password')
+                                ->required()
+                                ->password(),
+                            TextInput::make('db_name')
+                                ->label('Database name')
+                                ->required(),
+                            TextInput::make('db_port')
+                                ->label('Port')
+                                ->required()
+                                ->integer()
+                                ->minValue(0),
+                        ])
                 ])
         ];
     }
