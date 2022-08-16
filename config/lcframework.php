@@ -10,6 +10,10 @@ return [
             'auth' => env('LCFRAMEWORK_LAST_CHAOS_DATABASE_AUTH', 'auth'),
             'post' => env('LCFRAMEWORK_LAST_CHAOS_DATABASE_POST', 'post'),
         ],
+
+        'auth' => [
+            'salt' => env('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', ''),
+        ]
     ],
 
     'auth' => [
