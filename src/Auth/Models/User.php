@@ -35,14 +35,6 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
         return config('lcframework.last_chaos.database.auth').'.bg_user';
     }
 
-    public function getPrimaryKey(): string
-    {
-        return Transformer::transform(
-            'auth.user.fillable',
-            'user_code'
-        );
-    }
-
     public function getFillable(): array
     {
         return Transformer::transform(

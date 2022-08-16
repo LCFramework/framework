@@ -22,7 +22,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('username')
+                TextColumn::make('user_id')
                     ->label('Username')
                     ->sortable()
                     ->searchable(),

@@ -20,7 +20,7 @@ class Sha256HashingDriver implements Hasher
 
     public function make($value, array $options = []): string
     {
-        $username = $options['username'] ?? '';
+        $username = $options['user_id'] ?? '';
 
         return hash(
             'sha256',

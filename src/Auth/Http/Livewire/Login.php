@@ -59,7 +59,7 @@ class Login extends Component implements HasForms
         if (! auth()->attempt([
             function ($query) use ($data) {
                 $query->orWhere('email', '=', $data['email'])
-                    ->orWhere('username', '=', $data['email']);
+                    ->orWhere('user_id', '=', $data['email']);
             },
             'password' => $data['password'],
         ], $data['remember'])) {
