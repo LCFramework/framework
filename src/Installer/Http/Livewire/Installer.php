@@ -3,7 +3,6 @@
 namespace LCFramework\Framework\Installer\Http\Livewire;
 
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -26,7 +25,9 @@ class Installer extends Component implements HasForms
 
     public function render(): View
     {
-        return view('lcframework::livewire.installer.index');
+        return view('lcframework::livewire.installer.index', [
+            'extensions' => $this->checkExtensions()
+        ]);
     }
 
     protected function getFormSchema(): array
@@ -48,5 +49,36 @@ class Installer extends Component implements HasForms
                     ->schema([]),
             ]),
         ];
+    }
+
+    protected function checkExtensions(): array
+    {
+        $requirements = [
+            'php' => true,
+            'bcmath' => false,
+            'ctype' => false,
+            'curl' => false,
+            'dom' => false,
+            'fileinfo' => false,
+            'json' => false,
+            'mbstring' => false,
+            'openssl' => false,
+            'pcre' => false,
+            'pdo' => false,
+            'pdo_mysql' => false,
+            'pdo_sqlite' => false,
+            'tokenizer' => false,
+            'xml' => false
+        ];
+
+        $extensions = get_loaded_extensions();
+
+        foreach ($extensions as $extension) {
+            if (isset($requirements[$extension])) {
+                $requirements[$extension] = true;
+            }
+        }
+
+        return $requirements;
     }
 }
