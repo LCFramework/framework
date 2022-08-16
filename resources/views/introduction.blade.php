@@ -8,7 +8,7 @@
                     <li>
                         <a
                             href="{{route('filament.pages.dashboard')}}"
-                            class="test-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                            class="text-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             Administration
                         </a>
@@ -22,7 +22,7 @@
 
                             <button
                                 type="submit"
-                                class="test-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                                class="text-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                             >
                                 Logout
                             </button>
@@ -32,7 +32,7 @@
                     <li>
                         <a
                             href="{{route('login')}}"
-                            class="test-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                            class="text-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             Login
                         </a>
@@ -40,13 +40,19 @@
                     <li>
                         <a
                             href="{{route('register')}}"
-                            class="test-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                            class="text-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             Register
                         </a>
                     </li>
                 @endif
             </ul>
+        </div>
+
+        <div class="w-full py-24">
+            <h1 class="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600">
+                LCFramework
+            </h1>
         </div>
     </div>
 @endsection
