@@ -50,7 +50,7 @@ class Installer extends Component implements HasForms
                             ),
                         Checkbox::make('requirements_met')
                             ->label('I confirm the environment requirements are met')
-                            ->rules('checked')
+                            ->accepted()
                     ]),
                 Wizard\Step::make('Application Settings')
                     ->schema([
