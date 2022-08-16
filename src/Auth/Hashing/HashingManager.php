@@ -41,7 +41,7 @@ class HashingManager extends Manager implements Hasher
 
     public function check($value, $hashedValue, array $options = []): bool
     {
-        return $this->driver()->check($value, $options);
+        return $this->driver()->check($value, $hashedValue, $options);
     }
 
     public function needsRehash($hashedValue, array $options = []): bool
