@@ -14,6 +14,8 @@ class Installer extends Component implements HasForms
 {
     use InteractsWithForms;
 
+    public array $extensions = [];
+
     public function mount(): void
     {
         if (LCFramework::installed()) {
@@ -21,13 +23,13 @@ class Installer extends Component implements HasForms
         }
 
         $this->form->fill();
+
+        $this->extensions = $this->checkExtensions();
     }
 
     public function render(): View
     {
-        return view('lcframework::livewire.installer.index', [
-            'extensions' => $this->checkExtensions(),
-        ]);
+        return view('lcframework::livewire.installer.index');
     }
 
     protected function getFormSchema(): array

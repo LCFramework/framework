@@ -14,91 +14,91 @@
 
     <ul>
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['php']"
+            :installed="$this->extensions['php']"
         >
             PHP >= 8.0 (installed: {{phpversion()}})
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['bcmath']"
+            :installed="$this->extensions['bcmath']"
         >
             BCMath PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['ctype']"
+            :installed="$this->extensions['ctype']"
         >
             Ctype PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['curl']"
+            :installed="$this->extensions['curl']"
         >
             cURL PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['dom']"
+            :installed="$this->extensions['dom']"
         >
             DOM PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['fileinfo']"
+            :installed="$this->extensions['fileinfo']"
         >
             Fileinfo PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['json']"
+            :installed="$this->extensions['json']"
         >
             JSON PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['mbstring']"
+            :installed="$this->extensions['mbstring']"
         >
             Mbstring PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['openssl']"
+            :installed="$this->extensions['openssl']"
         >
             OpenSSL PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['pcre']"
+            :installed="$this->extensions['pcre']"
         >
             PCRE PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['pdo']"
+            :installed="$this->extensions['pdo']"
         >
             PDO PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['pdo_mysql']"
+            :installed="$this->extensions['pdo_mysql']"
         >
             PDO MySQL
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['pdo_sqlite']"
+            :installed="$this->extensions['pdo_sqlite']"
         >
             PDO SQLite
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['tokenizer']"
+            :installed="$this->extensions['tokenizer']"
         >
             Tokenizer PHP Extension
         </x-lcframework::installer.requirements.item>
 
         <x-lcframework::installer.requirements.item
-            :installed="$extensions['xml']"
+            :installed="$this->extensions['xml']"
         >
             XML PHP Extension
         </x-lcframework::installer.requirements.item>
