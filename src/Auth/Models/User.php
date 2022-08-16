@@ -40,7 +40,6 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
         return Transformer::transform(
             'auth.user.fillable',
             [
-                'user_code',
                 'user_id',
                 'email',
                 'passwd',

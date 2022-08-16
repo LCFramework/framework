@@ -43,19 +43,27 @@ class SiteSettings extends Page
             ->put('APP_URL', $data['app_url'])
             ->put('APP_ENV', $data['app_environment'])
             ->put('APP_DEBUG', $data['app_debug'])
-            ->put('APP_DEBUG', $data['app_debug'])
             ->put('LCFRAMEWORK_LAST_CHAOS_VERSION', $data['lc_version'])
-            ->put('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', $data['lc_salt'])
+            ->put('LCFRAMEWORK_LAST_CHAOS_AUTH_HASH', $data['lc_hash'])
             ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DATA', $data['lc_db_data'])
             ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DB', $data['lc_db_db'])
             ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_AUTH', $data['lc_db_auth'])
             ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_POST', $data['lc_db_post'])
+            ->put('DB_HOST', $data['db_host'] ?? '')
+            ->put('DB_PORT', $data['db_port'] ?? '')
+            ->put('DB_DATABASE', $data['db_name'] ?? '')
+            ->put('DB_USERNAME', $data['db_username'] ?? '')
             ->put('MAIL_HOST', $data['mail_host'])
             ->put('MAIL_PORT', $data['mail_port'])
             ->put('MAIL_USERNAME', $data['mail_username'])
             ->put('MAIL_ENCRYPTION', $data['mail_encryption'])
             ->put('MAIL_FROM_ADDRESS', $data['mail_from_address'])
             ->put('MAIL_FROM_NAME', $data['mail_from_name']);
+
+        $lcSalt = $data['lc_salt'];
+        if(!blank($lcSalt)) {
+            $env->put('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', $lcSalt);
+        }
 
         $mailPassword = $data['mail_password'];
         if (! blank($mailPassword)) {
@@ -124,16 +132,24 @@ class SiteSettings extends Page
                 ->collapsible()
                 ->collapsed()
                 ->schema([
+                    Select::make('lc_version')
+                        ->label('Version')
+                        ->required()
+                        ->options([
+                            4 => 'Version 4',
+                        ]),
                     Grid::make()
                         ->columns([
                             'sm' => 2,
                         ])
                         ->schema([
-                            Select::make('lc_version')
-                                ->label('Version')
+                            Select::make('lc_hash')
+                                ->label('Password hash')
                                 ->required()
                                 ->options([
-                                    4 => 'Version 4',
+                                    'sha256' => 'SHA-256',
+                                    'md5' => 'MD5',
+                                    'plaintext' => 'PlainText'
                                 ]),
                             TextInput::make('lc_salt')
                                 ->label('Salt')
@@ -245,6 +261,7 @@ class SiteSettings extends Page
             'app_debug' => config('app.debug'),
 
             'lc_version' => config('lcframework.last_chaos.version'),
+            'lc_hash' => config('lcframework.last_chaos.auth.hash'),
             'lc_db_data' => config('lcframework.last_chaos.database.auth'),
             'lc_db_db' => config('lcframework.last_chaos.database.db'),
             'lc_db_auth' => config('lcframework.last_chaos.database.auth'),
