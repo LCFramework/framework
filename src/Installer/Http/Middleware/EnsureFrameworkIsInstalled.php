@@ -3,13 +3,15 @@
 namespace LCFramework\Framework\Installer\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\URL;
 use LCFramework\Framework\LCFramework;
 
 class EnsureFrameworkIsInstalled
 {
     public function handle($request, Closure $next)
     {
-        if ($request->routeIs('installer.*')) {
+        $url = URL::route('installer');
+        if ($request->url() === $url) {
             return $next($request);
         }
 
@@ -19,6 +21,6 @@ class EnsureFrameworkIsInstalled
 
         return $request->expectsJson()
             ? abort(403, 'LCFramework is not installed.')
-            : redirect()->route('installer');
+            : redirect($url);
     }
 }
