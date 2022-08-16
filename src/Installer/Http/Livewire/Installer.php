@@ -44,8 +44,8 @@ class Installer extends Component implements HasForms
                 Wizard\Step::make('LastChaos Settings')
                     ->schema([]),
                 Wizard\Step::make('Email Settings')
-                    ->schema([])
-            ])
+                    ->schema([]),
+            ]),
         ];
     }
 }
