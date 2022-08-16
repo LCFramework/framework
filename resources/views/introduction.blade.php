@@ -62,7 +62,7 @@
                 <ul class="flex items-center justify-center space-x-4">
                     <li>
                         <a
-                            href="#"
+                            href="https://github.com/LCFramework/framework"
                             class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             Documentation
@@ -70,7 +70,7 @@
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="https://github.com/LCFramework/framework"
                             class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             GitHub
@@ -78,7 +78,7 @@
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="https://lckb.dev/"
                             class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             LCKB
