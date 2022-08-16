@@ -58,12 +58,12 @@ class SiteSettings extends Page
             ->put('MAIL_FROM_NAME', $data['mail_from_name']);
 
         $mailPassword = $data['mail_password'];
-        if (! blank($mailPassword)) {
+        if (!blank($mailPassword)) {
             $env->put('MAIL_PASSWORD', $mailPassword);
         }
 
         $dbPassword = $data['db_password'];
-        if (! blank($dbPassword)) {
+        if (!blank($dbPassword)) {
             $env->put('DB_PASSWORD', $dbPassword);
         }
 
@@ -139,12 +139,6 @@ class SiteSettings extends Page
                                 ->label('Salt')
                                 ->hint('Leave blank to ignore')
                                 ->helperText('This should never be shared with anyone'),
-                        ]),
-                    Grid::make()
-                        ->columns([
-                            'sm' => 2,
-                        ])
-                        ->schema([
                             TextInput::make('lc_db_data')
                                 ->label('Data database')
                                 ->helperText(new HtmlString('For example, <code>lc_data</code>'))
