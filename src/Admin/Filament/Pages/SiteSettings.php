@@ -57,13 +57,13 @@ class SiteSettings extends Page
                                 ->options([
                                     'local' => 'Development',
                                     'staging' => 'Staging',
-                                    'production' => 'Production'
+                                    'production' => 'Production',
                                 ]),
                             Toggle::make('app_debug')
                                 ->label('Verbose logging')
                                 ->hint('This should never be enabled in production')
-                                ->helperText('Display detailed errors and enable debugging functionality')
-                        ])
+                                ->helperText('Display detailed errors and enable debugging functionality'),
+                        ]),
                 ]),
             Section::make('LastChaos Settings')
                 ->description('Your LastChaos server settings')
@@ -82,8 +82,8 @@ class SiteSettings extends Page
                                     1 => 'Version 1',
                                     2 => 'Version 2',
                                     3 => 'Version 3',
-                                    4 => 'Version 4'
-                                ])
+                                    4 => 'Version 4',
+                                ]),
                         ]),
                     Grid::make()
                         ->columns([
@@ -110,7 +110,7 @@ class SiteSettings extends Page
                                 ->helperText(new HtmlString('For example, <code>lc_post</code>'))
                                 ->required()
                                 ->maxLength(255),
-                        ])
+                        ]),
                 ]),
             Section::make('Email Settings')
                 ->description('Your email server settings')
@@ -136,8 +136,8 @@ class SiteSettings extends Page
                             TextInput::make('mail_from_name')
                                 ->label('From name')
                                 ->hint('The sender name')
-                                ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name'))
-                        ])
+                                ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name')),
+                        ]),
                 ]),
             Section::make('Database Settings')
                 ->description('Your database server settings (ensure you know what you\'re doing updating this)')
@@ -172,8 +172,8 @@ class SiteSettings extends Page
                                 ->required()
                                 ->integer()
                                 ->minValue(0),
-                        ])
-                ])
+                        ]),
+                ]),
         ];
     }
 }
