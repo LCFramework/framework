@@ -9,7 +9,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use LCFramework\Framework\Auth\Hashing\Drivers\PlainTextHashingDriver;
 use LCFramework\Framework\Auth\Hashing\Drivers\Sha256HashingDriver;
-use LCFramework\Framework\Auth\Hashing\HashingManager;
+use LCFramework\Framework\Auth\Hashing\HashManager;
 use LCFramework\Framework\Auth\Http\Livewire\EmailVerification;
 use LCFramework\Framework\Auth\Http\Livewire\Login;
 use LCFramework\Framework\Auth\Http\Livewire\PasswordConfirmation;
@@ -51,8 +51,8 @@ class AuthServiceProvider extends EventServiceProvider
 
     protected function registerHashing(): void
     {
-        $this->app->alias(HashingManager::class, 'hash');
-        $this->app->singleton(Hasher::class, HashingManager::class);
+        $this->app->alias(HashManager::class, 'hash');
+        $this->app->singleton(Hasher::class, HashManager::class);
         $this->app->singleton(PlainTextHashingDriver::class);
         $this->app->singleton(Sha256HashingDriver::class);
     }

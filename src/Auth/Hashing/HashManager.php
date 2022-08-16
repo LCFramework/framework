@@ -3,11 +3,11 @@
 namespace LCFramework\Framework\Auth\Hashing;
 
 use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Support\Manager;
+use Illuminate\Hashing\HashManager as HashManagerBase;
 use LCFramework\Framework\Auth\Hashing\Drivers\PlainTextHashingDriver;
 use LCFramework\Framework\Auth\Hashing\Drivers\Sha256HashingDriver;
 
-class HashingManager extends Manager implements Hasher
+class HashManager extends HashManagerBase implements Hasher
 {
     public function getDefaultDriver(): string
     {

@@ -140,7 +140,7 @@ class SiteSettings extends Page
                                 ]),
                             TextInput::make('lc_salt')
                                 ->label('Salt')
-                                ->hint('Only required when using EP4')
+                                ->hint('Leave blank to ignore')
                                 ->helperText('This should never be shared with anyone'),
                         ]),
                     Grid::make()
