@@ -8,8 +8,14 @@ class LCFramework
 {
     const VERSION = '0.0.1';
 
+    private static ?bool $installed = null;
+
     public static function installed(): bool
     {
-        return Storage::exists('lcframework');
+        if (static::$installed !== null) {
+            return static::$installed;
+        }
+
+        return static::$installed = Storage::exists('lcframework');
     }
 }

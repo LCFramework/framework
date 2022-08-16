@@ -9,11 +9,11 @@ class EnsureFrameworkIsInstalled
 {
     public function handle($request, Closure $next)
     {
-        if (LCFramework::installed()) {
+        if ($request->routeIs('installer.*')) {
             return $next($request);
         }
 
-        if ($request->routeIs('installer/*')) {
+        if (LCFramework::installed()) {
             return $next($request);
         }
 
