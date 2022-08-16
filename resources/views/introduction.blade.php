@@ -8,7 +8,7 @@
                     <li>
                         <a
                             href="{{route('filament.pages.dashboard')}}"
-                            class="text-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                            class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             Administration
                         </a>
@@ -22,7 +22,7 @@
 
                             <button
                                 type="submit"
-                                class="text-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                                class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                             >
                                 Logout
                             </button>
@@ -32,7 +32,7 @@
                     <li>
                         <a
                             href="{{route('login')}}"
-                            class="text-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                            class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             Login
                         </a>
@@ -40,7 +40,7 @@
                     <li>
                         <a
                             href="{{route('register')}}"
-                            class="text-sm font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                            class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
                         >
                             Register
                         </a>
@@ -50,11 +50,42 @@
         </div>
 
         <div class="w-full py-36 text-center">
-            <h1
-                class="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-700 drop-shadow-lg"
-            >
-                LCFramework
-            </h1>
+            <div>
+                <h1
+                    class="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-700 drop-shadow-lg"
+                >
+                    LCFramework
+                </h1>
+            </div>
+
+            <div class="flex items-center justify-center py-12">
+                <ul>
+                    <li>
+                        <a
+                            href="#"
+                            class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                        >
+                            Documentation
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                        >
+                            GitHub
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                        >
+                            LCKB
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 @endsection
