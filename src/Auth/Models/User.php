@@ -30,7 +30,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 
     public function getTable(): string
     {
-        return config('lcframework.last_chaos.database.auth') . '.bg_user';
+        return config('lcframework.last_chaos.database.auth').'.bg_user';
     }
 
     public function getPrimaryKey(): string
@@ -50,7 +50,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
                 'user_id',
                 'email',
                 'passwd',
-                'email_verified_at'
+                'email_verified_at',
             ]
         );
     }
@@ -61,7 +61,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
             'auth.user.fillable',
             [
                 'passwd',
-                'remember_token'
+                'remember_token',
             ]
         );
     }
@@ -71,7 +71,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
         return Transformer::transform(
             'auth.user.fillable',
             [
-                'email_verified_at' => 'datetime'
+                'email_verified_at' => 'datetime',
             ]
         );
     }
