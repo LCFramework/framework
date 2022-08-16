@@ -50,7 +50,9 @@
         </div>
 
         <div class="w-full py-24">
-            <h1 class="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600">
+            <h1
+                class="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-700 drop-shadow-lg"
+            >
                 LCFramework
             </h1>
         </div>
