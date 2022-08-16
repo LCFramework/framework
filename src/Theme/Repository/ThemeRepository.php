@@ -145,6 +145,30 @@ class ThemeRepository implements ThemeRepositoryInterface
         $this->bootProviders($theme);
     }
 
+    public function delete(string|Theme $theme): bool
+    {
+        if (! ($theme instanceof Theme)) {
+            $theme = $this->find($theme);
+        }
+
+        if ($theme === null) {
+            return false;
+        }
+
+        if (! File::deleteDirectory($theme->getPath())) {
+            return false;
+        }
+
+        if (
+            ($enabledTheme = $this->enabled()) &&
+            $enabledTheme->getName() === $theme->getName()
+        ) {
+            $this->disable();
+        }
+
+        return true;
+    }
+
     protected function bootProviders(Theme $theme): void
     {
         (new ProviderRepository(

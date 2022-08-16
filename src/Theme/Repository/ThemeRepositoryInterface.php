@@ -23,4 +23,6 @@ interface ThemeRepositoryInterface
     public function validate(string|Theme $theme): bool;
 
     public function boot(): void;
+
+    public function delete(string|Theme $theme): bool;
 }

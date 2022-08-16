@@ -293,6 +293,39 @@ class ModuleRepository implements ModuleRepositoryInterface
         $this->loadOrdered();
     }
 
+    public function delete(string|Module $module): bool
+    {
+        if (! ($module instanceof Module)) {
+            $module = $this->find($module);
+        }
+
+        if ($module === null) {
+            return false;
+        }
+
+        if (! File::deleteDirectory($module->getPath())) {
+            return false;
+        }
+
+        $this->setStatus($module, 'deleted');
+
+        settings_forget('lcframework.modules.'.$module->getName());
+
+        return true;
+    }
+
+    protected function clearCache(): void
+    {
+        if (! $this->isCacheEnabled()) {
+            return;
+        }
+
+        ['all' => $allCacheKey, 'ordered' => $orderedCacheKey] = $this->getCacheKeys();
+
+        Cache::forget($allCacheKey);
+        Cache::forget($orderedCacheKey);
+    }
+
     protected function loadOrdered(): void
     {
         if ($this->ordered !== null) {
@@ -366,18 +399,6 @@ class ModuleRepository implements ModuleRepositoryInterface
         $module = $this->loader->fromPath($path);
 
         $this->modules[$module->getName()] = $module;
-    }
-
-    protected function clearCache(): void
-    {
-        if (! $this->isCacheEnabled()) {
-            return;
-        }
-
-        ['all' => $allCacheKey, 'ordered' => $orderedCacheKey] = $this->getCacheKeys();
-
-        Cache::forget($allCacheKey);
-        Cache::forget($orderedCacheKey);
     }
 
     protected function getCacheKeys(): array

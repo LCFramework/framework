@@ -8,6 +8,7 @@ use LCFramework\Framework\Auth\AuthServiceProvider;
 use LCFramework\Framework\Module\ModuleServiceProvider;
 use LCFramework\Framework\Setting\SettingsServiceProvider;
 use LCFramework\Framework\Support\Filesystem;
+use LCFramework\Framework\Theme\Facade\Themes;
 use LCFramework\Framework\Theme\ThemeServiceProvider;
 use LCFramework\Framework\Transformer\TransformerServiceProvider;
 
@@ -47,5 +48,16 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
                 __DIR__.'/../dist' => public_path('lcframework'),
             ], 'assets');
         }
+
+        $this->enableIntroduction();
+    }
+
+    protected function enableIntroduction(): void
+    {
+        if (Themes::enabled() !== null) {
+            return;
+        }
+
+        $this->loadRoutesFrom(__DIR__.'/../routes/default.php');
     }
 }

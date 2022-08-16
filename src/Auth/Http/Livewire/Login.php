@@ -57,7 +57,10 @@ class Login extends Component implements HasForms
         $data = $this->form->getState();
 
         if (! auth()->attempt([
-            'email' => $data['email'],
+            function ($query) use ($data) {
+                $query->orWhere('email', '=', $data['email'])
+                    ->orWhere('user_id', '=', $data['email']);
+            },
             'password' => $data['password'],
         ], $data['remember'])) {
             throw ValidationException::withMessages([
@@ -77,8 +80,7 @@ class Login extends Component implements HasForms
                     Placeholder::make('register_link')
                         ->view('lcframework::components.auth.register-link'),
                     TextInput::make('email')
-                        ->label('Email address')
-                        ->email()
+                        ->label('Email address or username')
                         ->required()
                         ->autocomplete(),
                     TextInput::make('password')

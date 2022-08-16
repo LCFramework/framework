@@ -1,4 +1,5 @@
 const colors = require('tailwindcss/colors');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,6 +7,9 @@ module.exports = {
         './resources/**/*.blade.php',
         './resources/**/*.js',
         './vendor/filament/**/*.blade.php'
+    ],
+    safelist: [
+        'md:col-start-2'
     ],
     darkMode: 'class',
     theme: {
@@ -16,6 +20,9 @@ module.exports = {
                 primary: colors.yellow,
                 success: colors.green,
                 warning: colors.yellow
+            },
+            fontFamily: {
+                sans: [ 'DM Sans', ...defaultTheme.fontFamily.sans ]
             }
         }
     },
