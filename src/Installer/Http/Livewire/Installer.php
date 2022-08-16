@@ -52,7 +52,7 @@ class Installer extends Component implements HasForms
 
         $installed = $this->updateEnv($data);
 
-        if (!$installed) {
+        if (! $installed) {
             Notification::make()
                 ->danger()
                 ->title('Settings have failed to update')
@@ -95,7 +95,7 @@ class Installer extends Component implements HasForms
                                 ),
                             Checkbox::make('requirements_met')
                                 ->label('I confirm the environment requirements are met')
-                                ->accepted()
+                                ->accepted(),
                         ]),
                     Wizard\Step::make('Application Settings')
                         ->schema([
@@ -124,7 +124,7 @@ class Installer extends Component implements HasForms
                                         ->label('Verbose logging')
                                         ->hint('This should never be enabled in production')
                                         ->helperText('Display detailed errors and enable debugging functionality'),
-                                ])
+                                ]),
                         ]),
                     Wizard\Step::make('Database Settings')
                         ->schema([
@@ -154,7 +154,7 @@ class Installer extends Component implements HasForms
                                         ->required()
                                         ->integer()
                                         ->minValue(0),
-                                ])
+                                ]),
                         ]),
                     Wizard\Step::make('LastChaos Settings')
                         ->schema([
@@ -175,7 +175,7 @@ class Installer extends Component implements HasForms
                                         ->options([
                                             'sha256' => 'SHA-256',
                                             'md5' => 'MD5',
-                                            'plaintext' => 'Text'
+                                            'plaintext' => 'Text',
                                         ]),
                                     TextInput::make('lc_salt')
                                         ->label('Salt')
@@ -217,7 +217,7 @@ class Installer extends Component implements HasForms
                                     TextInput::make('mail_password')
                                         ->label('Password')
                                         ->password()
-                                        ->dehydrated(fn($state) => filled($state)),
+                                        ->dehydrated(fn ($state) => filled($state)),
                                     TextInput::make('mail_from_address')
                                         ->label('From address')
                                         ->hint('The sender email address'),
@@ -238,7 +238,7 @@ class Installer extends Component implements HasForms
                                 ]),
                         ]),
                     Wizard\Step::make('Administrator')
-                        ->schema([])
+                        ->schema([]),
                 ]),
         ];
     }
@@ -298,7 +298,7 @@ class Installer extends Component implements HasForms
             User::on('installer')
                 ->create([
                     'user_id' => $data['user_username'],
-                    'email' => $data['']
+                    'email' => $data[''],
                 ]);
 
             return true;

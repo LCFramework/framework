@@ -10,8 +10,8 @@ class EnsureEnvFileExists
 {
     public function handle($request, Closure $next)
     {
-        if (!File::exists(base_path('.env'))) {
-            File::put('.env', 'APP_KEY=' . $this->generateRandomKey());
+        if (! File::exists(base_path('.env'))) {
+            File::put('.env', 'APP_KEY='.$this->generateRandomKey());
         }
 
         return $next($request);
@@ -19,8 +19,8 @@ class EnsureEnvFileExists
 
     protected function generateRandomKey()
     {
-        return 'base64:' . base64_encode(
-                Encrypter::generateKey(config('app.cipher'))
-            );
+        return 'base64:'.base64_encode(
+            Encrypter::generateKey(config('app.cipher'))
+        );
     }
 }
