@@ -41,6 +41,7 @@ class AuthServiceProvider extends EventServiceProvider
 
     protected function registerHashing(): void
     {
+        $this->app->alias(HashingManager::class, 'hash');
         $this->app->singleton(Hasher::class, HashingManager::class);
         $this->app->singleton(PlainTextHashingDriver::class);
         $this->app->singleton(Sha256HashingDriver::class);
