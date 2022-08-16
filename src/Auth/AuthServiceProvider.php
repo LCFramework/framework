@@ -17,6 +17,7 @@ use LCFramework\Framework\Auth\Http\Livewire\PasswordRequest;
 use LCFramework\Framework\Auth\Http\Livewire\PasswordReset;
 use LCFramework\Framework\Auth\Http\Livewire\Register;
 use LCFramework\Framework\Auth\Listeners\SendEmailVerificationNotification;
+use LCFramework\Framework\Auth\Models\User;
 use Livewire\Livewire;
 
 class AuthServiceProvider extends EventServiceProvider
@@ -41,7 +42,10 @@ class AuthServiceProvider extends EventServiceProvider
         $this->registerLivewireComponents();
 
         Auth::provider('eloquent', function (Application $app): EloquentUserProvider {
-            return $app->make(EloquentUserProvider::class);
+            return new EloquentUserProvider(
+                $app['hash'],
+                User::class
+            );
         });
     }
 
