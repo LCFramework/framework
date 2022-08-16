@@ -36,9 +36,9 @@ class Installer extends Component implements HasForms
                     Wizard\Step::make('Requirements')
                         ->schema([
                             TextInput::make('name')
-                                ->required()
-                        ])
-                ])
+                                ->required(),
+                        ]),
+                ]),
         ];
     }
 }
