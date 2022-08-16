@@ -258,6 +258,7 @@ class SiteSettings extends Page
             'mail_username' => config('mail.mailers.smtp.username'),
             'mail_from_address' => config('mail.from.address'),
             'mail_from_name' => config('mail.from.name'),
+            'mail_port' => config('mail.mailers.smtp.port'),
             'mail_encryption' => config('mail.mailers.smtp.encryption'),
 
             'db_host' => config('database.connections.mysql.host'),
