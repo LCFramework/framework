@@ -3,8 +3,10 @@
 namespace LCFramework\Framework\Auth;
 
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
+use Illuminate\Support\Facades\Auth;
 use LCFramework\Framework\Auth\Hashing\Drivers\PlainTextHashingDriver;
 use LCFramework\Framework\Auth\Hashing\Drivers\Sha256HashingDriver;
 use LCFramework\Framework\Auth\Hashing\HashingManager;
@@ -34,9 +36,13 @@ class AuthServiceProvider extends EventServiceProvider
 
     public function boot(): void
     {
-        $this->loadRoutesFrom(__DIR__.'/../../routes/auth.php');
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/auth.php');
 
         $this->registerLivewireComponents();
+
+        Auth::provider('eloquent', function (Application $app): EloquentUserProvider {
+            return $app->make(EloquentUserProvider::class);
+        });
     }
 
     protected function registerHashing(): void
