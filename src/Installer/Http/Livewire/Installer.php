@@ -26,7 +26,7 @@ class Installer extends Component implements HasForms
     public function render(): View
     {
         return view('lcframework::livewire.installer.index', [
-            'extensions' => $this->checkExtensions()
+            'extensions' => $this->checkExtensions(),
         ]);
     }
 
@@ -68,7 +68,7 @@ class Installer extends Component implements HasForms
             'pdo_mysql' => false,
             'pdo_sqlite' => false,
             'tokenizer' => false,
-            'xml' => false
+            'xml' => false,
         ];
 
         $extensions = get_loaded_extensions();
