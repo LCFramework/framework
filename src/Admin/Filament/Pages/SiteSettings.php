@@ -7,8 +7,10 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\HtmlString;
+use LCFramework\Framework\Support\Env;
 
 class SiteSettings extends Page
 {
@@ -24,7 +26,58 @@ class SiteSettings extends Page
 
     public function mount(): void
     {
-        $this->form->fill();
+        $this->form->fill($this->loadConfig());
+    }
+
+    public function submit(): void
+    {
+        $data = $this->form->getState();
+        foreach ($data as $key => $value) {
+            if (blank($value)) {
+                $data[$key] = '';
+            }
+        }
+
+        $env = Env::make()
+            ->put('APP_NAME', $data['app_name'])
+            ->put('APP_URL', $data['app_url'])
+            ->put('APP_ENV', $data['app_environment'])
+            ->put('APP_DEBUG', $data['app_debug'])
+            ->put('APP_DEBUG', $data['app_debug'])
+            ->put('LCFRAMEWORK_LAST_CHAOS_VERSION', $data['lc_version'])
+            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DATA', $data['lc_db_data'])
+            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DB', $data['lc_db_db'])
+            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_AUTH', $data['lc_db_auth'])
+            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_POST', $data['lc_db_post'])
+            ->put('MAIL_HOST', $data['mail_host'])
+            ->put('MAIL_PORT', $data['mail_port'])
+            ->put('MAIL_USERNAME', $data['mail_username'])
+            ->put('MAIL_ENCRYPTION', $data['mail_encryption'])
+            ->put('MAIL_FROM_ADDRESS', $data['mail_from_address'])
+            ->put('MAIL_FROM_NAME', $data['mail_from_name']);
+
+        $mailPassword = $data['mail_password'];
+        if (!blank($mailPassword)) {
+            $env->put('MAIL_PASSWORD', $mailPassword);
+        }
+
+        $dbPassword = $data['db_password'];
+        if (!blank($dbPassword)) {
+            $env->put('DB_PASSWORD', $dbPassword);
+        }
+
+        if ($env->save()) {
+            Notification::make()
+                ->success()
+                ->title('Settings have been successfully updated')
+                ->send();
+        } else {
+            Notification::make()
+                ->danger()
+                ->title('Settings have failed to update')
+                ->body('LCFramework may not have write access to the .env file')
+                ->send();
+        }
     }
 
     protected function getFormSchema(): array
@@ -129,6 +182,7 @@ class SiteSettings extends Page
                                 ->hint('This is usually your email address'),
                             TextInput::make('mail_password')
                                 ->label('Password')
+                                ->hint('Leave blank to ignore')
                                 ->password(),
                             TextInput::make('mail_from_address')
                                 ->label('From address')
@@ -137,6 +191,11 @@ class SiteSettings extends Page
                                 ->label('From name')
                                 ->hint('The sender name')
                                 ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name')),
+                            Select::make('mail_encryption')
+                                ->label('Encryption')
+                                ->options([
+                                    'tls' => 'TLS'
+                                ])
                         ]),
                 ]),
             Section::make('Database Settings')
@@ -157,12 +216,11 @@ class SiteSettings extends Page
                                 ->required(),
                             TextInput::make('db_password')
                                 ->label('Password')
-                                ->required()
+                                ->hint('Leave blank to ignore')
                                 ->password()
                                 ->rules('confirmed'),
                             TextInput::make('db_password_confirmation')
                                 ->label('Confirm password')
-                                ->required()
                                 ->password(),
                             TextInput::make('db_name')
                                 ->label('Database name')
@@ -174,6 +232,33 @@ class SiteSettings extends Page
                                 ->minValue(0),
                         ]),
                 ]),
+        ];
+    }
+
+    protected function loadConfig(): array
+    {
+        return [
+            'app_name' => config('app.name'),
+            'app_url' => config('app.url'),
+            'app_environment' => config('app.env'),
+            'app_debug' => config('app.debug'),
+
+            'lc_version' => config('lcframework.last_chaos.version'),
+            'lc_db_data' => config('lcframework.last_chaos.database.auth'),
+            'lc_db_db' => config('lcframework.last_chaos.database.db'),
+            'lc_db_auth' => config('lcframework.last_chaos.database.auth'),
+            'lc_db_post' => config('lcframework.last_chaos.database.post'),
+
+            'mail_host' => config('mail.mailers.smtp.host'),
+            'mail_username' => config('mail.mailers.smtp.username'),
+            'mail_from_address' => config('mail.from.address'),
+            'mail_from_name' => config('mail.from.name'),
+            'mail_encryption' => config('mail.mailers.smtp.encryption'),
+
+            'db_host' => config('database.connections.mysql.host'),
+            'db_username' => config('database.connections.mysql.username'),
+            'db_name' => config('database.connections.mysql.database'),
+            'db_port' => config('database.connections.mysql.port'),
         ];
     }
 }

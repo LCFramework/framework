@@ -2,7 +2,11 @@
     {{$this->form}}
 
     <div>
-        <x-filament-support::button type="submit">
+        <x-filament-support::button
+            type="submit"
+            wire:loading.attr="disabled"
+            wire:target="submit"
+        >
             Save
         </x-filament-support::button>
     </div>
