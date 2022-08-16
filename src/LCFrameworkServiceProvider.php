@@ -8,6 +8,7 @@ use LCFramework\Framework\Auth\AuthServiceProvider;
 use LCFramework\Framework\Module\ModuleServiceProvider;
 use LCFramework\Framework\Setting\SettingsServiceProvider;
 use LCFramework\Framework\Support\Filesystem;
+use LCFramework\Framework\Theme\Facade\Themes;
 use LCFramework\Framework\Theme\ThemeServiceProvider;
 use LCFramework\Framework\Transformer\TransformerServiceProvider;
 
@@ -25,7 +26,7 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/lcframework.php',
+            __DIR__ . '/../config/lcframework.php',
             'lcframework'
         );
 
@@ -38,14 +39,25 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(
-            __DIR__.'/../resources/views',
+            __DIR__ . '/../resources/views',
             'lcframework'
         );
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../dist' => public_path('lcframework'),
+                __DIR__ . '/../dist' => public_path('lcframework'),
             ], 'assets');
         }
+
+        $this->enableIntroduction();
+    }
+
+    protected function enableIntroduction(): void
+    {
+        if (Themes::enabled() !== null) {
+            return;
+        }
+
+        $this->loadRoutesFrom(__DIR__ . '/../routes/default.php');
     }
 }
