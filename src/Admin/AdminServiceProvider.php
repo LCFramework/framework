@@ -7,6 +7,7 @@ use Filament\PluginServiceProvider;
 use LCFramework\Framework\Admin\Filament\Pages\SiteSettings;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
 use LCFramework\Framework\Admin\Filament\Resources\ThemeResource;
+use LCFramework\Framework\Admin\Filament\Resources\UserResource;
 use Spatie\LaravelPackageTools\Package;
 
 class AdminServiceProvider extends PluginServiceProvider
@@ -18,6 +19,7 @@ class AdminServiceProvider extends PluginServiceProvider
     protected array $resources = [
         ModuleResource::class,
         ThemeResource::class,
+        UserResource::class
     ];
 
     public function configurePackage(Package $package): void
