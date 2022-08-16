@@ -2,7 +2,7 @@
     {{$this->form}}
 
     <div>
-        <x-filament-support::button>
+        <x-filament-support::button type="submit">
             Save
         </x-filament-support::button>
     </div>
