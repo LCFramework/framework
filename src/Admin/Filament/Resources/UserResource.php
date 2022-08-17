@@ -119,6 +119,7 @@ class UserResource extends Resource
                     ->searchable(),
                 BooleanColumn::make('email_verified_at')
                     ->label('Verified')
+                    ->extraAttributes(['class' => 'flex justify-center'])
                     ->sortable()
                     ->getStateUsing(fn (User $record): bool => $record->hasVerifiedEmail()),
                 TextColumn::make('create_date')

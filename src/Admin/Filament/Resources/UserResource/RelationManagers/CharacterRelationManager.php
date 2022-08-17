@@ -89,6 +89,7 @@ class CharacterRelationManager extends RelationManager
                     ->searchable(),
                 BooleanColumn::make('a_admin')
                     ->label('Administrator')
+                    ->extraAttributes(['class' => 'flex justify-center'])
                     ->sortable()
                     ->getStateUsing(fn(Character $record): bool => $record->is_admin),
                 TextColumn::make('a_createdate')
