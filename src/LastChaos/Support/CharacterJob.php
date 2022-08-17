@@ -10,7 +10,7 @@ class CharacterJob
 
     public static function getJobs(): array
     {
-        if (! static::$jobs !== null) {
+        if (static::$jobs !== null) {
             return static::$jobs;
         }
 
