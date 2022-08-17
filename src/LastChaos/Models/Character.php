@@ -54,7 +54,7 @@ class Character extends Model
         );
     }
 
-    public function job_title(): Attribute
+    public function jobTitle(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->determineJobTitle()
