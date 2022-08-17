@@ -50,11 +50,7 @@ trait DelayedDeleting
 
     public function withTrashed(Builder $query): Builder
     {
-        return $query->where(
-            $this->getDelayedDeletingColumn(),
-            '>=',
-            0
-        );
+        return $query;
     }
 
     public function withoutTrashed(Builder $query): Builder

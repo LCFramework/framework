@@ -39,39 +39,42 @@ class SiteSettings extends Page
         }
 
         $env = Env::make()
-            ->put('APP_NAME', $data['app_name'])
-            ->put('APP_URL', $data['app_url'])
-            ->put('APP_ENV', $data['app_environment'])
-            ->put('APP_DEBUG', $data['app_debug'])
-            ->put('LCFRAMEWORK_LAST_CHAOS_VERSION', $data['lc_version'])
-            ->put('LCFRAMEWORK_LAST_CHAOS_AUTH_HASH', $data['lc_hash'])
-            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DATA', $data['lc_db_data'])
-            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DB', $data['lc_db_db'])
-            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_AUTH', $data['lc_db_auth'])
-            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_POST', $data['lc_db_post'])
+            ->put('APP_NAME', $data['app_name'] ?? '')
+            ->put('APP_URL', $data['app_url'] ?? '')
+            ->put('APP_ENV', $data['app_environment'] ?? '')
+            ->put('APP_DEBUG', $data['app_debug'] ?? false)
+            ->put('LCFRAMEWORK_AUTH_REQUIRE_EMAIL_VERIFICATION', $data['app_require_email_verification'] ?? false)
+            ->put('LCFRAMEWORK_LAST_CHAOS_VERSION', $data['lc_version'] ?? '')
+            ->put('LCFRAMEWORK_LAST_CHAOS_AUTH_HASH', $data['lc_hash'] ?? '')
+            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DATA', $data['lc_db_data'] ?? '')
+            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_DB', $data['lc_db_db'] ?? '')
+            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_AUTH', $data['lc_db_auth'] ?? '')
+            ->put('LCFRAMEWORK_LAST_CHAOS_DATABASE_POST', $data['lc_db_post'] ?? '')
             ->put('DB_HOST', $data['db_host'] ?? '')
             ->put('DB_PORT', $data['db_port'] ?? '')
             ->put('DB_DATABASE', $data['db_name'] ?? '')
             ->put('DB_USERNAME', $data['db_username'] ?? '')
-            ->put('MAIL_HOST', $data['mail_host'])
-            ->put('MAIL_PORT', $data['mail_port'])
-            ->put('MAIL_USERNAME', $data['mail_username'])
-            ->put('MAIL_ENCRYPTION', $data['mail_encryption'])
-            ->put('MAIL_FROM_ADDRESS', $data['mail_from_address'])
-            ->put('MAIL_FROM_NAME', $data['mail_from_name']);
+            ->put('DB_PASSWORD', $data['db_password'] ?? '')
+            ->put('MAIL_HOST', $data['mail_host'] ?? '')
+            ->put('MAIL_PORT', $data['mail_port'] ?? '')
+            ->put('MAIL_USERNAME', $data['mail_username'] ?? '')
+            ->put('MAIL_PASSWORD', $data['mail_password'] ?? '')
+            ->put('MAIL_ENCRYPTION', $data['mail_encryption'] ?? '')
+            ->put('MAIL_FROM_ADDRESS', $data['mail_from_address'] ?? '')
+            ->put('MAIL_FROM_NAME', $data['mail_from_name'] ?? '');
 
         $lcSalt = $data['lc_salt'];
-        if (! blank($lcSalt)) {
+        if (!blank($lcSalt)) {
             $env->put('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', $lcSalt);
         }
 
         $mailPassword = $data['mail_password'];
-        if (! blank($mailPassword)) {
+        if (!blank($mailPassword)) {
             $env->put('MAIL_PASSWORD', $mailPassword);
         }
 
         $dbPassword = $data['db_password'];
-        if (! blank($dbPassword)) {
+        if (!blank($dbPassword)) {
             $env->put('DB_PASSWORD', $dbPassword);
         }
 
@@ -100,43 +103,49 @@ class SiteSettings extends Page
                     'sm' => 2,
                 ])
                 ->schema([
-                    Grid::make()
-                        ->schema([
-                            TextInput::make('app_name')
-                                ->label('Application name')
-                                ->helperText('The display name of the application')
-                                ->required()
-                                ->maxLength(255),
-                            TextInput::make('app_url')
-                                ->label('Application URL')
-                                ->hint('HTTPS is recommended')
-                                ->helperText('The base URL of the application (E.G - https://example.com)')
-                                ->required()
-                                ->maxLength(255),
-                            Select::make('app_environment')
-                                ->label('Environment')
-                                ->required()
-                                ->options([
-                                    'local' => 'Development',
-                                    'staging' => 'Staging',
-                                    'production' => 'Production',
-                                ]),
-                            Toggle::make('app_debug')
-                                ->label('Verbose logging')
-                                ->hint('This should never be enabled in production')
-                                ->helperText('Display detailed errors and enable debugging functionality'),
+                    TextInput::make('app_name')
+                        ->label('Application name')
+                        ->helperText('The display name of the application')
+                        ->required()
+                        ->maxLength(255),
+                    TextInput::make('app_url')
+                        ->label('Application URL')
+                        ->hint('HTTPS is recommended')
+                        ->helperText('The base URL of the application (E.G - https://example.com)')
+                        ->required()
+                        ->maxLength(255),
+                    Select::make('app_environment')
+                        ->label('Environment')
+                        ->required()
+                        ->options([
+                            'local' => 'Development',
+                            'staging' => 'Staging',
+                            'production' => 'Production',
                         ]),
+                    Toggle::make('app_debug')
+                        ->label('Verbose logging')
+                        ->hint('This should never be enabled in production')
+                        ->helperText('Display detailed errors and enable debugging functionality'),
+                    Toggle::make('app_require_email_verification')
+                        ->label('Require email verification')
+                        ->helperText('When a user creates an account, should they be required to confirm their email?'),
                 ]),
             Section::make('LastChaos Settings')
                 ->description('Your LastChaos server settings')
                 ->collapsible()
                 ->collapsed()
                 ->schema([
-                    Select::make('lc_version')
-                        ->label('Version')
-                        ->required()
-                        ->options([
-                            4 => 'Version 4',
+                    Grid::make()
+                        ->columns([
+                            'sm' => 2,
+                        ])
+                        ->schema([
+                            Select::make('lc_version')
+                                ->label('Version')
+                                ->required()
+                                ->options([
+                                    4 => 'Version 4',
+                                ]),
                         ]),
                     Grid::make()
                         ->columns([
@@ -149,12 +158,12 @@ class SiteSettings extends Page
                                 ->options([
                                     'sha256' => 'SHA-256',
                                     'md5' => 'MD5',
-                                    'plaintext' => 'PlainText',
+                                    'plaintext' => 'Text',
                                 ]),
                             TextInput::make('lc_salt')
                                 ->label('Salt')
-                                ->hint('Leave blank to ignore')
-                                ->helperText('This should never be shared with anyone'),
+                                ->helperText('This should never be shared with anyone')
+                                ->password(),
                             TextInput::make('lc_db_data')
                                 ->label('Data database')
                                 ->helperText(new HtmlString('For example, <code>lc_data</code>'))
@@ -181,73 +190,65 @@ class SiteSettings extends Page
                 ->description('Your email server settings')
                 ->collapsible()
                 ->collapsed()
+                ->columns([
+                    'sm' => 2,
+                ])
                 ->schema([
-                    Grid::make()
-                        ->columns([
-                            'sm' => 2,
-                        ])
-                        ->schema([
-                            TextInput::make('mail_host')
-                                ->label('Host'),
-                            TextInput::make('mail_username')
-                                ->label('Username')
-                                ->hint('This is usually your email address'),
-                            TextInput::make('mail_password')
-                                ->label('Password')
-                                ->hint('Leave blank to ignore')
-                                ->password(),
-                            TextInput::make('mail_from_address')
-                                ->label('From address')
-                                ->hint('The sender email address'),
-                            TextInput::make('mail_from_name')
-                                ->label('From name')
-                                ->hint('The sender name')
-                                ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name')),
-                            TextInput::make('mail_port')
-                                ->label('Port')
-                                ->required()
-                                ->integer()
-                                ->minValue(0),
-                            Select::make('mail_encryption')
-                                ->label('Encryption')
-                                ->options([
-                                    'tls' => 'TLS',
-                                ]),
+                    TextInput::make('mail_host')
+                        ->label('Host'),
+                    TextInput::make('mail_username')
+                        ->label('Username')
+                        ->hint('This is usually your email address'),
+                    TextInput::make('mail_password')
+                        ->label('Password')
+                        ->password(),
+                    TextInput::make('mail_from_address')
+                        ->label('From address')
+                        ->hint('The sender email address'),
+                    TextInput::make('mail_from_name')
+                        ->label('From name')
+                        ->hint('The sender name')
+                        ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name')),
+                    TextInput::make('mail_port')
+                        ->label('Port')
+                        ->integer()
+                        ->minValue(0),
+                    Select::make('mail_encryption')
+                        ->label('Encryption')
+                        ->options([
+                            'tls' => 'TLS',
                         ]),
                 ]),
             Section::make('Database Settings')
                 ->description('Your database server settings (ensure you know what you\'re doing updating this)')
                 ->collapsible()
                 ->collapsed()
+                ->columns([
+                    'sm' => 2,
+                ])
                 ->schema([
-                    Grid::make()
-                        ->columns([
-                            'sm' => 2,
-                        ])
-                        ->schema([
-                            TextInput::make('db_host')
-                                ->label('Host')
-                                ->required(),
-                            TextInput::make('db_username')
-                                ->label('Username')
-                                ->required(),
-                            TextInput::make('db_password')
-                                ->label('Password')
-                                ->hint('Leave blank to ignore')
-                                ->password()
-                                ->rules('confirmed'),
-                            TextInput::make('db_password_confirmation')
-                                ->label('Confirm password')
-                                ->password(),
-                            TextInput::make('db_name')
-                                ->label('Database name')
-                                ->required(),
-                            TextInput::make('db_port')
-                                ->label('Port')
-                                ->required()
-                                ->integer()
-                                ->minValue(0),
-                        ]),
+                    TextInput::make('db_host')
+                        ->label('Host')
+                        ->required(),
+                    TextInput::make('db_username')
+                        ->label('Username')
+                        ->required(),
+                    TextInput::make('db_password')
+                        ->label('Password')
+                        ->password()
+                        ->rules('confirmed'),
+                    TextInput::make('db_password_confirmation')
+                        ->label('Confirm password')
+                        ->password(),
+                    TextInput::make('db_name')
+                        ->label('Database name')
+                        ->required(),
+                    TextInput::make('db_port')
+                        ->label('Port')
+                        ->default(3306)
+                        ->required()
+                        ->integer()
+                        ->minValue(0),
                 ]),
         ];
     }
@@ -260,6 +261,7 @@ class SiteSettings extends Page
             'app_environment' => config('app.env'),
             'app_debug' => config('app.debug'),
 
+            'app_require_email_verification' => config('lcframework.auth.require_email_verification'),
             'lc_version' => config('lcframework.last_chaos.version'),
             'lc_hash' => config('hashing.driver'),
             'lc_db_data' => config('lcframework.last_chaos.database.auth'),

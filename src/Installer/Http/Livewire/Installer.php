@@ -61,7 +61,7 @@ class Installer extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (! $this->updateConfig($data)) {
+        if (!$this->updateConfig($data)) {
             Notification::make()
                 ->danger()
                 ->title('Config has failed to update')
@@ -76,7 +76,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (! $this->runMigrations()) {
+        if (!$this->runMigrations()) {
             Notification::make()
                 ->danger()
                 ->title('Migrations have failed to run')
@@ -92,7 +92,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (! ($user = $this->createUser($data))) {
+        if (!($user = $this->createUser($data))) {
             Notification::make()
                 ->danger()
                 ->title('Failed to create the user')
@@ -108,7 +108,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (! $this->updateEnv($data)) {
+        if (!$this->updateEnv($data)) {
             Notification::make()
                 ->danger()
                 ->title('Settings have failed to update')
@@ -165,67 +165,64 @@ class Installer extends Component implements HasForms
                                 ->accepted(),
                         ]),
                     Wizard\Step::make('Application Settings')
+                        ->columns([
+                            'sm' => 2,
+                        ])
                         ->schema([
-                            Grid::make()
-                                ->schema([
-                                    TextInput::make('app_name')
-                                        ->label('Application name')
-                                        ->helperText('The display name of the application')
-                                        ->required()
-                                        ->maxLength(255),
-                                    TextInput::make('app_url')
-                                        ->label('Application URL')
-                                        ->hint('HTTPS is recommended')
-                                        ->helperText('The base URL of the application (E.G - https://example.com)')
-                                        ->required()
-                                        ->maxLength(255),
-                                    Select::make('app_environment')
-                                        ->label('Environment')
-                                        ->required()
-                                        ->options([
-                                            'local' => 'Development',
-                                            'staging' => 'Staging',
-                                            'production' => 'Production',
-                                        ]),
-                                    Toggle::make('app_debug')
-                                        ->label('Verbose logging')
-                                        ->hint('This should never be enabled in production')
-                                        ->helperText('Display detailed errors and enable debugging functionality'),
-                                    Toggle::make('app_require_email_verification')
-                                        ->label('Require email verification')
-                                        ->helperText('When a user creates an account, should they be required to confirm their email?'),
+                            TextInput::make('app_name')
+                                ->label('Application name')
+                                ->helperText('The display name of the application')
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('app_url')
+                                ->label('Application URL')
+                                ->hint('HTTPS is recommended')
+                                ->helperText('The base URL of the application (E.G - https://example.com)')
+                                ->required()
+                                ->maxLength(255),
+                            Select::make('app_environment')
+                                ->label('Environment')
+                                ->required()
+                                ->options([
+                                    'local' => 'Development',
+                                    'staging' => 'Staging',
+                                    'production' => 'Production',
                                 ]),
+                            Toggle::make('app_debug')
+                                ->label('Verbose logging')
+                                ->hint('This should never be enabled in production')
+                                ->helperText('Display detailed errors and enable debugging functionality'),
+                            Toggle::make('app_require_email_verification')
+                                ->label('Require email verification')
+                                ->helperText('When a user creates an account, should they be required to confirm their email?'),
                         ]),
                     Wizard\Step::make('Database Settings')
+                        ->columns([
+                            'sm' => 2,
+                        ])
                         ->schema([
-                            Grid::make()
-                                ->columns([
-                                    'sm' => 2,
-                                ])
-                                ->schema([
-                                    TextInput::make('db_host')
-                                        ->label('Host')
-                                        ->required(),
-                                    TextInput::make('db_username')
-                                        ->label('Username')
-                                        ->required(),
-                                    TextInput::make('db_password')
-                                        ->label('Password')
-                                        ->password()
-                                        ->rules('confirmed'),
-                                    TextInput::make('db_password_confirmation')
-                                        ->label('Confirm password')
-                                        ->password(),
-                                    TextInput::make('db_name')
-                                        ->label('Database name')
-                                        ->required(),
-                                    TextInput::make('db_port')
-                                        ->label('Port')
-                                        ->default(3306)
-                                        ->required()
-                                        ->integer()
-                                        ->minValue(0),
-                                ]),
+                            TextInput::make('db_host')
+                                ->label('Host')
+                                ->required(),
+                            TextInput::make('db_username')
+                                ->label('Username')
+                                ->required(),
+                            TextInput::make('db_password')
+                                ->label('Password')
+                                ->password()
+                                ->rules('confirmed'),
+                            TextInput::make('db_password_confirmation')
+                                ->label('Confirm password')
+                                ->password(),
+                            TextInput::make('db_name')
+                                ->label('Database name')
+                                ->required(),
+                            TextInput::make('db_port')
+                                ->label('Port')
+                                ->default(3306)
+                                ->required()
+                                ->integer()
+                                ->minValue(0),
                         ]),
                     Wizard\Step::make('LastChaos Settings')
                         ->schema([
@@ -281,63 +278,57 @@ class Installer extends Component implements HasForms
                                 ]),
                         ]),
                     Wizard\Step::make('Email Settings')
+                        ->columns([
+                            'sm' => 2,
+                        ])
                         ->schema([
-                            Grid::make()
-                                ->columns([
-                                    'sm' => 2,
-                                ])
-                                ->schema([
-                                    TextInput::make('mail_host')
-                                        ->label('Host'),
-                                    TextInput::make('mail_username')
-                                        ->label('Username')
-                                        ->hint('This is usually your email address'),
-                                    TextInput::make('mail_password')
-                                        ->label('Password')
-                                        ->password(),
-                                    TextInput::make('mail_from_address')
-                                        ->label('From address')
-                                        ->hint('The sender email address'),
-                                    TextInput::make('mail_from_name')
-                                        ->label('From name')
-                                        ->hint('The sender name')
-                                        ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name')),
-                                    TextInput::make('mail_port')
-                                        ->label('Port')
-                                        ->integer()
-                                        ->minValue(0),
-                                    Select::make('mail_encryption')
-                                        ->label('Encryption')
-                                        ->options([
-                                            'tls' => 'TLS',
-                                        ]),
+                            TextInput::make('mail_host')
+                                ->label('Host'),
+                            TextInput::make('mail_username')
+                                ->label('Username')
+                                ->hint('This is usually your email address'),
+                            TextInput::make('mail_password')
+                                ->label('Password')
+                                ->password(),
+                            TextInput::make('mail_from_address')
+                                ->label('From address')
+                                ->hint('The sender email address'),
+                            TextInput::make('mail_from_name')
+                                ->label('From name')
+                                ->hint('The sender name')
+                                ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name')),
+                            TextInput::make('mail_port')
+                                ->label('Port')
+                                ->integer()
+                                ->minValue(0),
+                            Select::make('mail_encryption')
+                                ->label('Encryption')
+                                ->options([
+                                    'tls' => 'TLS',
                                 ]),
                         ]),
                     Wizard\Step::make('Administrator')
+                        ->columns([
+                            'sm' => 2,
+                        ])
                         ->schema([
-                            Grid::make()
-                                ->columns([
-                                    'sm' => 2,
-                                ])
-                                ->schema([
-                                    TextInput::make('user_username')
-                                        ->label('Username')
-                                        ->required()
-                                        ->maxLength(30),
-                                    TextInput::make('user_email')
-                                        ->label('Email address')
-                                        ->required()
-                                        ->maxLength(255),
-                                    TextInput::make('user_password')
-                                        ->label('Password')
-                                        ->password()
-                                        ->required()
-                                        ->rules('confirmed'),
-                                    TextInput::make('user_password_confirmation')
-                                        ->label('Confirm password')
-                                        ->password()
-                                        ->required(),
-                                ]),
+                            TextInput::make('user_username')
+                                ->label('Username')
+                                ->required()
+                                ->maxLength(30),
+                            TextInput::make('user_email')
+                                ->label('Email address')
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('user_password')
+                                ->label('Password')
+                                ->password()
+                                ->required()
+                                ->rules('confirmed'),
+                            TextInput::make('user_password_confirmation')
+                                ->label('Confirm password')
+                                ->password()
+                                ->required(),
                         ]),
                 ]),
         ];
