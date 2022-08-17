@@ -20,9 +20,7 @@ use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Filters\TrashedFilter;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use LCFramework\Framework\LastChaos\Models\Character;
 use LCFramework\Framework\LastChaos\Support\CharacterJob;
@@ -51,7 +49,7 @@ class CharacterRelationManager extends RelationManager
                     ->minValue(1),
                 Select::make('a_job2')
                     ->label('Job')
-                    ->options(fn(Character $record) => CharacterJob::get($record->a_job))
+                    ->options(fn (Character $record) => CharacterJob::get($record->a_job))
                     ->required(),
                 Toggle::make('a_admin')
                     ->label('Administrator')
@@ -68,9 +66,9 @@ class CharacterRelationManager extends RelationManager
 
                         $isAdmin = $record->is_admin;
 
-                        return $state ? !$isAdmin : $isAdmin;
+                        return $state ? ! $isAdmin : $isAdmin;
                     })
-                    ->dehydrateStateUsing(fn(bool $state): int => $state ? 10 : 0),
+                    ->dehydrateStateUsing(fn (bool $state): int => $state ? 10 : 0),
             ]);
     }
 
@@ -91,7 +89,7 @@ class CharacterRelationManager extends RelationManager
                 BooleanColumn::make('a_admin')
                     ->label('Administrator')
                     ->sortable()
-                    ->getStateUsing(fn(Character $record): bool => $record->is_admin),
+                    ->getStateUsing(fn (Character $record): bool => $record->is_admin),
                 TextColumn::make('a_createdate')
                     ->label('Created at')
                     ->date()
@@ -112,7 +110,7 @@ class CharacterRelationManager extends RelationManager
                     }),
             ])
             ->filters([
-                TrashedFilter::make()
+                TrashedFilter::make(),
             ])
             ->actions([
                 EditAction::make(),
