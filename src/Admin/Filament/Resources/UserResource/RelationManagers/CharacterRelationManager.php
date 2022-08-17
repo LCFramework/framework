@@ -50,7 +50,7 @@ class CharacterRelationManager extends RelationManager
                     ->minValue(1),
                 Select::make('a_job2')
                     ->label('Job')
-                    ->options(fn (Character $record) => CharacterJob::get($record->a_job))
+                    ->options(fn(Character $record) => CharacterJob::get($record->a_job))
                     ->required(),
                 Toggle::make('a_admin')
                     ->label('Administrator')
@@ -67,9 +67,9 @@ class CharacterRelationManager extends RelationManager
 
                         $isAdmin = $record->is_admin;
 
-                        return $state ? ! $isAdmin : $isAdmin;
+                        return $state ? !$isAdmin : $isAdmin;
                     })
-                    ->dehydrateStateUsing(fn (bool $state): int => $state ? 10 : 0),
+                    ->dehydrateStateUsing(fn(bool $state): int => $state ? 10 : 0),
             ]);
     }
 
@@ -89,9 +89,8 @@ class CharacterRelationManager extends RelationManager
                     ->searchable(),
                 BooleanColumn::make('a_admin')
                     ->label('Administrator')
-                    ->extraAttributes(['class' => 'flex justify-center'])
                     ->sortable()
-                    ->getStateUsing(fn (Character $record): bool => $record->is_admin),
+                    ->getStateUsing(fn(Character $record): bool => $record->is_admin),
                 TextColumn::make('a_createdate')
                     ->label('Created at')
                     ->date()
@@ -117,10 +116,10 @@ class CharacterRelationManager extends RelationManager
                     ->trueLabel('Only trashed records')
                     ->falseLabel('Without trashed records')
                     ->queries(
-                        true: fn (Builder $query) => $query->getModel()->onlyTrashed($query),
-                        false: fn (Builder $query) => $query->getModel()->withoutTrashed($query),
-                        blank: fn (Builder $query) => $query->getModel()->withTrashed($query),
-                    ),
+                        true: fn(Builder $query) => $query->getModel()->onlyTrashed($query),
+                        false: fn(Builder $query) => $query->getModel()->withoutTrashed($query),
+                        blank: fn(Builder $query) => $query->getModel()->withTrashed($query),
+                    )
             ])
             ->actions([
                 EditAction::make(),

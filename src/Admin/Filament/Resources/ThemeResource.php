@@ -39,8 +39,7 @@ class ThemeResource extends Resource
                     ->searchable()
                     ->wrap(),
                 BooleanColumn::make('enabled')
-                    ->label('Enabled')
-                    ->extraAttributes(['class' => 'flex justify-center']),
+                    ->label('Enabled'),
             ])
             ->filters([
                 TernaryFilter::make('enabled')
