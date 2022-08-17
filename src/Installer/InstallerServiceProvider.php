@@ -13,9 +13,9 @@ class InstallerServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->beforeResolving(EncrypterInterface::class, function ($app) {
-            if ($app['config']->get('app.key') === null) {
-                $app['config']->set('app.key', $this->generateRandomKey());
+        $this->app->beforeResolving(EncrypterInterface::class, function () {
+            if (config()->get('app.key') === null) {
+                config()->set('app.key', $this->generateRandomKey());
             }
         });
     }
