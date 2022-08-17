@@ -15,7 +15,7 @@ return new class extends Migration {
         $tableName = $this->getTableName();
 
         Schema::create($tableName, function (Blueprint $table) use ($tableName) {
-            $table->integer('user_code')->autoIncrement()->change();
+            $table->unsignedInteger('user_code')->autoIncrement()->change();
             $table->string('passwd')->change();
 
             if (!Schema::hasColumn($tableName, 'remember_token')) {
@@ -38,6 +38,10 @@ return new class extends Migration {
                 $table->string('email')->unique();
             } else {
                 $table->string('email')->change();
+            }
+
+            if (!Schema::hasColumn($tableName, 'email_verified_at')) {
+                $table->dateTime('email_verified_at')->nullable();
             }
 
             $indexes = $this->getTableIndexes($tableName);

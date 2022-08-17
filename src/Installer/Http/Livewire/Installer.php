@@ -257,7 +257,31 @@ class Installer extends Component implements HasForms
                                 ]),
                         ]),
                     Wizard\Step::make('Administrator')
-                        ->schema([]),
+                        ->schema([
+                            Grid::make()
+                                ->columns([
+                                    'sm' => 2,
+                                ])
+                                ->schema([
+                                    TextInput::make('user_username')
+                                        ->label('Username')
+                                        ->required()
+                                        ->maxLength(30),
+                                    TextInput::make('user_email')
+                                        ->label('Email address')
+                                        ->required()
+                                        ->maxLength(255),
+                                    TextInput::make('user_password')
+                                        ->label('Password')
+                                        ->password()
+                                        ->required()
+                                        ->rules('confirmed'),
+                                    TextInput::make('user_password_confirmation')
+                                        ->label('Confirm password')
+                                        ->password()
+                                        ->required(),
+                                ])
+                        ]),
                 ]),
         ];
     }
@@ -347,7 +371,7 @@ class Installer extends Component implements HasForms
         }
     }
 
-    protected function runMigrations(array $data): bool
+    protected function runMigrations(): bool
     {
         try {
             Artisan::call('migrate');

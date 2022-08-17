@@ -13,6 +13,10 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 {
     use Notifiable;
 
+    const CREATED_AT = 'create_date';
+
+    const UPDATED_AT = 'update_time';
+
     protected $primaryKey = 'user_code';
 
     public function shouldVerifyEmail(): bool
@@ -32,7 +36,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 
     public function getTable(): string
     {
-        return config('lcframework.last_chaos.database.auth').'.bg_user';
+        return config('lcframework.last_chaos.database.auth') . '.bg_user';
     }
 
     public function getFillable(): array
