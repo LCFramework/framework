@@ -12,7 +12,6 @@ return [
         ],
 
         'auth' => [
-            'hash' => env('LCFRAMEWORK_LAST_CHAOS_AUTH_HASH', 'sha256'),
             'salt' => env('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', ''),
         ],
     ],

@@ -261,7 +261,7 @@ class SiteSettings extends Page
             'app_debug' => config('app.debug'),
 
             'lc_version' => config('lcframework.last_chaos.version'),
-            'lc_hash' => config('lcframework.last_chaos.auth.hash'),
+            'lc_hash' => config('hashing.driver'),
             'lc_db_data' => config('lcframework.last_chaos.database.auth'),
             'lc_db_db' => config('lcframework.last_chaos.database.db'),
             'lc_db_auth' => config('lcframework.last_chaos.database.auth'),

@@ -363,7 +363,7 @@ class Installer extends Component implements HasForms
                 'app.url' => $data['app_url'],
                 'app.env' => $data['app_environment'],
                 'app.debug' => $data['app_debug'],
-                'lcframework.last_chaos.auth.hash' => $data['lc_hash'],
+                'hashing.driver' => $data['lc_hash'],
                 'lcframework.last_chaos.auth.salt' => $data['lc_salt'],
                 'lcframework.last_chaos.database.data' => $data['lc_db_data'],
                 'lcframework.last_chaos.database.db' => $data['lc_db_db'],
