@@ -8,7 +8,6 @@ use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Collection;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
-use LCFramework\Framework\Module\Exception\InvalidModuleEnabled;
 use LCFramework\Framework\Module\Facade\Modules;
 use LCFramework\Framework\Module\Models\Module;
 
