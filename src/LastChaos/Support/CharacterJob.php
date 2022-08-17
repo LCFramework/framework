@@ -50,6 +50,8 @@ class CharacterJob
 
     public static function get(int $class): array
     {
-        return static::$jobs[$class] ?? [];
+        $jobs = static::getJobs();
+
+        return $jobs[$class] ?? [];
     }
 }
