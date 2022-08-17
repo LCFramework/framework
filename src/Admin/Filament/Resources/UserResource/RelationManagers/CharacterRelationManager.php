@@ -30,7 +30,7 @@ class CharacterRelationManager extends RelationManager
                     ->label('Created at')
                     ->date()
                     ->sortable()
-                    ->searchable()
+                    ->searchable(),
             ]);
     }
 }

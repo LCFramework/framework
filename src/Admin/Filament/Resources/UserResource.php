@@ -55,10 +55,10 @@ class UserResource extends Resource
                             ->label('Password')
                             ->password()
                             ->dehydrateStateUsing(
-                                fn(?string $state, Closure $get): string => Hash::make($state, ['user_id' => $get('user_id')])
+                                fn (?string $state, Closure $get): string => Hash::make($state, ['user_id' => $get('user_id')])
                             )
-                            ->dehydrated(fn($state) => filled($state))
-                            ->required(fn(Page $livewire): bool => $livewire instanceof CreateRecord),
+                            ->dehydrated(fn ($state) => filled($state))
+                            ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord),
                         TextInput::make('passwd_confirmation')
                             ->label('Confirm password')
                             ->password(),
@@ -86,15 +86,15 @@ class UserResource extends Resource
 
                                 $verified = $record->hasVerifiedEmail();
 
-                                return $state ? !$verified : $verified;
+                                return $state ? ! $verified : $verified;
                             })
-                            ->dehydrateStateUsing(fn(bool $state): ?DateTimeInterface => $state ? now() : null),
+                            ->dehydrateStateUsing(fn (bool $state): ?DateTimeInterface => $state ? now() : null),
                         Placeholder::make('create_date')
                             ->label('Created at')
-                            ->content(fn(?User $record): string => $record?->create_date?->diffForHumans() ?? '-'),
+                            ->content(fn (?User $record): string => $record?->create_date?->diffForHumans() ?? '-'),
                         Placeholder::make('update_time')
                             ->label('Updated at')
-                            ->content(fn(?User $record): string => $record?->update_time?->diffForHumans() ?? '-'),
+                            ->content(fn (?User $record): string => $record?->update_time?->diffForHumans() ?? '-'),
                     ])
                     ->columnSpan(1),
             ])
@@ -119,7 +119,7 @@ class UserResource extends Resource
                 BooleanColumn::make('email_verified_at')
                     ->label('Verified')
                     ->sortable()
-                    ->getStateUsing(fn(User $record): bool => $record->hasVerifiedEmail()),
+                    ->getStateUsing(fn (User $record): bool => $record->hasVerifiedEmail()),
                 TextColumn::make('create_date')
                     ->label('Created at')
                     ->date()
@@ -141,7 +141,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            CharacterRelationManager::class
+            CharacterRelationManager::class,
         ];
     }
 
