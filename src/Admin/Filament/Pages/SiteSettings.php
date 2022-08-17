@@ -64,17 +64,17 @@ class SiteSettings extends Page
             ->put('MAIL_FROM_NAME', $data['mail_from_name'] ?? '');
 
         $lcSalt = $data['lc_salt'];
-        if (!blank($lcSalt)) {
+        if (! blank($lcSalt)) {
             $env->put('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', $lcSalt);
         }
 
         $mailPassword = $data['mail_password'];
-        if (!blank($mailPassword)) {
+        if (! blank($mailPassword)) {
             $env->put('MAIL_PASSWORD', $mailPassword);
         }
 
         $dbPassword = $data['db_password'];
-        if (!blank($dbPassword)) {
+        if (! blank($dbPassword)) {
             $env->put('DB_PASSWORD', $dbPassword);
         }
 
