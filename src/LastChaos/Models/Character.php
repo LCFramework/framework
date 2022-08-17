@@ -16,7 +16,7 @@ class Character extends Model
 
     public function getTable(): string
     {
-        return config('lcframework.last_chaos.database.db') . '.t_characters';
+        return config('lcframework.last_chaos.database.db').'.t_characters';
     }
 
     public function getFillable(): array
@@ -29,7 +29,7 @@ class Character extends Model
                 'a_nick',
                 'a_job',
                 'a_job2',
-                'a_level'
+                'a_level',
             ]
         );
     }
@@ -57,7 +57,7 @@ class Character extends Model
     public function job_title(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->determineJobTitle()
+            get: fn () => $this->determineJobTitle()
         );
     }
 
