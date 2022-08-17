@@ -34,7 +34,7 @@ class UserResource extends Resource
                 BooleanColumn::make('email_verified_at')
                     ->label('Verified')
                     ->sortable()
-                    ->getStateUsing(fn(User $record): bool => $record->hasVerifiedEmail()),
+                    ->getStateUsing(fn (User $record): bool => $record->hasVerifiedEmail()),
                 TextColumn::make('create_date')
                     ->label('Created at')
                     ->date()
@@ -44,7 +44,7 @@ class UserResource extends Resource
                     ->label('Updated at')
                     ->date()
                     ->sortable()
-                    ->searchable()
+                    ->searchable(),
             ]);
     }
 
