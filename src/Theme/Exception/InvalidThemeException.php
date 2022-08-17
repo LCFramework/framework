@@ -14,6 +14,6 @@ class InvalidThemeException extends Exception
             $name = $name->getName();
         }
 
-        return new(sprintf('Cannot enable invalid theme "%s"', $name));
+        return new static(sprintf('Cannot enable invalid theme "%s"', $name));
     }
 }
