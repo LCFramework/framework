@@ -43,16 +43,16 @@ class UserResource extends Resource
                             ->label('Email address')
                             ->required()
                             ->email()
-                            ->unique(User::class, 'email', fn(User $record) => $record)
+                            ->unique(User::class, 'email', fn (User $record) => $record)
                             ->maxLength(255),
                         TextInput::make('passwd')
                             ->label('Password')
                             ->password()
                             ->dehydrateStateUsing(
-                                fn(?string $state, User $record): string => Hash::make($state, ['user_id' => $record->user_id])
+                                fn (?string $state, User $record): string => Hash::make($state, ['user_id' => $record->user_id])
                             )
-                            ->dehydrated(fn($state) => filled($state))
-                            ->required(fn(Page $livewire): bool => $livewire instanceof CreateRecord),
+                            ->dehydrated(fn ($state) => filled($state))
+                            ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord),
                         TextInput::make('passwd_confirmation')
                             ->label('Confirm password')
                             ->password(),
@@ -76,15 +76,15 @@ class UserResource extends Resource
                             ->dehydrated(function (bool $state, User $record): bool {
                                 $verified = $record->hasVerifiedEmail();
 
-                                return $state ? !$verified : $verified;
+                                return $state ? ! $verified : $verified;
                             })
-                            ->dehydrateStateUsing(fn(bool $state): ?DateTimeInterface => $state ? now() : null),
+                            ->dehydrateStateUsing(fn (bool $state): ?DateTimeInterface => $state ? now() : null),
                         Placeholder::make('create_date')
                             ->label('Created at')
-                            ->content(fn(?User $record): string => $record?->create_date?->diffForHumans() ?? '-'),
+                            ->content(fn (?User $record): string => $record?->create_date?->diffForHumans() ?? '-'),
                         Placeholder::make('update_time')
                             ->label('Updated at')
-                            ->content(fn(?User $record): string => $record?->update_time?->diffForHumans() ?? '-'),
+                            ->content(fn (?User $record): string => $record?->update_time?->diffForHumans() ?? '-'),
                     ])
                     ->columnSpan(1),
             ])
