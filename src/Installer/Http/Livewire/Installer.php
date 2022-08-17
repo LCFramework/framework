@@ -247,7 +247,6 @@ class Installer extends Component implements HasForms
                                         ->helperText(new HtmlString('Use <code>${APP_NAME}</code> to send the application name')),
                                     TextInput::make('mail_port')
                                         ->label('Port')
-                                        ->required()
                                         ->integer()
                                         ->minValue(0),
                                     Select::make('mail_encryption')
