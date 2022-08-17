@@ -60,7 +60,7 @@ class Installer extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (!$this->updateConfig($data)) {
+        if (! $this->updateConfig($data)) {
             Notification::make()
                 ->danger()
                 ->title('Config has failed to update')
@@ -75,7 +75,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!$this->runMigrations()) {
+        if (! $this->runMigrations()) {
             Notification::make()
                 ->danger()
                 ->title('Migrations have failed to run')
@@ -91,7 +91,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!$this->createUser($data)) {
+        if (! $this->createUser($data)) {
             Notification::make()
                 ->danger()
                 ->title('Failed to create the user')
@@ -107,7 +107,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!$this->updateEnv($data)) {
+        if (! $this->updateEnv($data)) {
             Notification::make()
                 ->danger()
                 ->title('Settings have failed to update')
@@ -433,7 +433,7 @@ class Installer extends Component implements HasForms
                     'user_id' => $data['user_username'],
                     'email' => $data['user_email'],
                     'passwd' => Hash::make($data['user_password'], [
-                        'user_id' => $data['user_username']
+                        'user_id' => $data['user_username'],
                     ]),
                     'email_verified_at',
                 ]);
