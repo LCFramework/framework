@@ -4,12 +4,15 @@ namespace LCFramework\Framework\Admin\Filament\Resources\UserResource\RelationMa
 
 use Closure;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use LCFramework\Framework\LastChaos\Models\Character;
+use LCFramework\Framework\LastChaos\Support\CharacterJob;
 
 class CharacterRelationManager extends RelationManager
 {
@@ -33,6 +36,10 @@ class CharacterRelationManager extends RelationManager
                     ->label('Level')
                     ->required()
                     ->minValue(1),
+                Select::make('a_job2')
+                    ->label('Job')
+                    ->options(fn(Character $record) => CharacterJob::get($record->a_job))
+                    ->required()
             ]);
     }
 
