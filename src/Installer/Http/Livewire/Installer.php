@@ -16,6 +16,7 @@ use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
@@ -91,7 +92,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!$this->createUser($data)) {
+        if (($user = $this->createUser($data))) {
             Notification::make()
                 ->danger()
                 ->title('Failed to create the user')
@@ -127,10 +128,14 @@ class Installer extends Component implements HasForms
 
         $this->linkStorage();
 
+        Auth::login($user);
+
         Notification::make()
             ->success()
             ->title('Successfully installed')
             ->send();
+
+        return redirect()->route('filament.pages.dashboard');
     }
 
     public function openExceptionModal(): void
@@ -401,6 +406,7 @@ class Installer extends Component implements HasForms
                     'name' => $data['mail_from_name'],
                 ],
             ]);
+            1
 
             return true;
         } catch (Exception $e) {
@@ -425,24 +431,27 @@ class Installer extends Component implements HasForms
         }
     }
 
-    protected function createUser(array $data): bool
+    protected function createUser(array $data): ?User
     {
         try {
-            User::query()
-                ->create([
-                    'user_id' => $data['user_username'],
-                    'email' => $data['user_email'],
-                    'passwd' => Hash::make($data['user_password'], [
+            $user = User::query()
+                ->updateOrCreate(
+                    [
                         'user_id' => $data['user_username']
-                    ]),
-                    'email_verified_at',
-                ]);
+                    ],
+                    [
+                        'email' => $data['user_email'],
+                        'passwd' => Hash::make($data['user_password'], [
+                            'user_id' => $data['user_username']
+                        ]),
+                        'email_verified_at',
+                    ]);
 
-            return true;
+            return $user;
         } catch (Exception $e) {
             $this->exceptionMessage = $e->getMessage();
 
-            return false;
+            return null;
         }
     }
 
