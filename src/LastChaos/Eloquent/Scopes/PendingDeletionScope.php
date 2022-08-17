@@ -4,33 +4,22 @@ namespace LCFramework\Framework\LastChaos\Eloquent\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PendingDeletionScope implements Scope
+class PendingDeletionScope extends SoftDeletingScope
 {
-    /**
-     * All of the extensions to be added to the builder.
-     *
-     * @var string[]
-     */
-    protected array $extensions = [
-        'Restore',
-        'WithPendingDeletes',
-        'WithoutPendingDeletes',
-        'OnlyPendingDeletes',
-    ];
-
     /**
      * Apply the scope to a given Eloquent query builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return void
      */
-    public function apply(Builder $builder, Model $model): void
+    public function apply(Builder $builder, Model $model)
     {
         $builder->where(
-            $model->getQualifiedPendingDeleteColumn(),
+            $model->getQualifiedDeletedAtColumn(),
             '=',
             0
         );
@@ -42,14 +31,14 @@ class PendingDeletionScope implements Scope
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    public function extend(Builder $builder): void
+    public function extend(Builder $builder)
     {
         foreach ($this->extensions as $extension) {
             $this->{"add{$extension}"}($builder);
         }
 
         $builder->onDelete(function (Builder $builder) {
-            $column = $this->getPendingDeleteColumn($builder);
+            $column = $this->getDeletedAtColumn($builder);
 
             return $builder->update([
                 $column => $builder->getModel()->freshTimestamp()->addDays()->unix(),
@@ -58,67 +47,35 @@ class PendingDeletionScope implements Scope
     }
 
     /**
-     * Get the "pending delete" column for the builder.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @return string
-     */
-    protected function getPendingDeleteColumn(Builder $builder): string
-    {
-        if (count((array) $builder->getQuery()->joins) > 0) {
-            return $builder->getModel()->getQualifiedPendingDeleteColumn();
-        }
-
-        return $builder->getModel()->getPendingDeleteColumn();
-    }
-
-    /**
      * Add the restore extension to the builder.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    protected function addRestore(Builder $builder): void
+    protected function addRestore(Builder $builder)
     {
         $builder->macro('restore', function (Builder $builder) {
-            $builder->withPendingDeletes();
+            $builder->withTrashed();
 
             return $builder->update([
-                $builder->getModel()->getPendingDeleteColumn() => 0,
+                $builder->getModel()->getDeletedAtColumn() => 0
             ]);
         });
     }
 
     /**
-     * Add the with-pending-deletes extension to the builder.
+     * Add the without-trashed extension to the builder.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    protected function addWithPendingDeletes(Builder $builder): void
+    protected function addWithoutTrashed(Builder $builder)
     {
-        $builder->macro('withPendingDeletes', function (Builder $builder, $withPendingDeletes = true) {
-            if (! $withPendingDeletes) {
-                return $builder->withoutPendingDeletes();
-            }
-
-            return $builder->withoutGlobalScope($this);
-        });
-    }
-
-    /**
-     * Add the without-pending-deletes extension to the builder.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @return void
-     */
-    protected function addWithoutPendingDeletes(Builder $builder): void
-    {
-        $builder->macro('withoutPendingDeletes', function (Builder $builder) {
+        $builder->macro('withoutTrashed', function (Builder $builder) {
             $model = $builder->getModel();
 
             $builder->withoutGlobalScope($this)->where(
-                $model->getQualifiedPendingDeleteColumn(),
+                $model->getQualifiedDeletedAtColumn(),
                 '=',
                 0
             );
@@ -128,18 +85,18 @@ class PendingDeletionScope implements Scope
     }
 
     /**
-     * Add the only-pending-deletes extension to the builder.
+     * Add the only-trashed extension to the builder.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    protected function addOnlyPendingDeletes(Builder $builder): void
+    protected function addOnlyTrashed(Builder $builder)
     {
-        $builder->macro('onlyPendingDeletes', function (Builder $builder) {
+        $builder->macro('onlyTrashed', function (Builder $builder) {
             $model = $builder->getModel();
 
             $builder->withoutGlobalScope($this)->where(
-                $model->getQualifiedPendingDeleteColumn(),
+                $model->getQualifiedDeletedAtColumn(),
                 '!=',
                 0
             );

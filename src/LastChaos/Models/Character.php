@@ -5,14 +5,15 @@ namespace LCFramework\Framework\LastChaos\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use LCFramework\Framework\Auth\Models\User;
-use LCFramework\Framework\LastChaos\Eloquent\PendingDeletion;
+use LCFramework\Framework\LastChaos\Eloquent\Scopes\PendingDeletionScope;
 use LCFramework\Framework\LastChaos\Support\CharacterJob;
 use LCFramework\Framework\Transformer\Facade\Transformer;
 
 class Character extends Model
 {
-    use PendingDeletion;
+    use SoftDeletes;
 
     public $timestamps = false;
 
@@ -20,7 +21,7 @@ class Character extends Model
 
     public function getTable(): string
     {
-        return config('lcframework.last_chaos.database.db').'.t_characters';
+        return config('lcframework.last_chaos.database.db') . '.t_characters';
     }
 
     public function getFillable(): array
@@ -64,14 +65,29 @@ class Character extends Model
     public function jobTitle(): Attribute
     {
         return Attribute::make(
-            get: fn (): ?string => CharacterJob::title($this->a_job, $this->a_job2)
+            get: fn(): ?string => CharacterJob::title($this->a_job, $this->a_job2)
         );
     }
 
     public function isAdmin(): Attribute
     {
         return Attribute::make(
-            get: fn (): int => $this->a_admin === 10
+            get: fn(): int => $this->a_admin === 10
         );
+    }
+
+    /**
+     * Boot the soft deleting trait for a model.
+     *
+     * @return void
+     */
+    public static function bootSoftDeletes()
+    {
+        static::addGlobalScope(new PendingDeletionScope());
+    }
+
+    public function getDeletedAtColumn()
+    {
+        return 'a_deletedelay';
     }
 }

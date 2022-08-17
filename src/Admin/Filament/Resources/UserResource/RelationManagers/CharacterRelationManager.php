@@ -11,11 +11,17 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Filters\TrashedFilter;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use LCFramework\Framework\LastChaos\Models\Character;
@@ -45,7 +51,7 @@ class CharacterRelationManager extends RelationManager
                     ->minValue(1),
                 Select::make('a_job2')
                     ->label('Job')
-                    ->options(fn (Character $record) => CharacterJob::get($record->a_job))
+                    ->options(fn(Character $record) => CharacterJob::get($record->a_job))
                     ->required(),
                 Toggle::make('a_admin')
                     ->label('Administrator')
@@ -62,9 +68,9 @@ class CharacterRelationManager extends RelationManager
 
                         $isAdmin = $record->is_admin;
 
-                        return $state ? ! $isAdmin : $isAdmin;
+                        return $state ? !$isAdmin : $isAdmin;
                     })
-                    ->dehydrateStateUsing(fn (bool $state): int => $state ? 10 : 0),
+                    ->dehydrateStateUsing(fn(bool $state): int => $state ? 10 : 0),
             ]);
     }
 
@@ -85,7 +91,7 @@ class CharacterRelationManager extends RelationManager
                 BooleanColumn::make('a_admin')
                     ->label('Administrator')
                     ->sortable()
-                    ->getStateUsing(fn (Character $record): bool => $record->is_admin),
+                    ->getStateUsing(fn(Character $record): bool => $record->is_admin),
                 TextColumn::make('a_createdate')
                     ->label('Created at')
                     ->date()
@@ -105,21 +111,19 @@ class CharacterRelationManager extends RelationManager
                             ->translatedFormat(config('tables.date_time_format'));
                     }),
             ])
+            ->filters([
+                TrashedFilter::make()
+            ])
             ->actions([
                 EditAction::make(),
                 DeleteAction::make(),
+                ForceDeleteAction::make(),
+                RestoreAction::make(),
             ])
-            ->filters([
-                TernaryFilter::make('pendingDeletion')
-                    ->placeholder('Without pending deletes')
-                    ->trueLabel('With pending deletes')
-                    ->falseLabel('Only pending deletes')
-                    ->queries(
-                        true: fn (Builder $query) => $query->withPendingDeletes(),
-                        false: fn (Builder $query) => $query->onlyPendingDeletes(),
-                        blank: fn (Builder $query) => $query->withoutPendingDeletes(),
-                    )
-                    ->default(),
+            ->bulkActions([
+                DeleteBulkAction::make(),
+                RestoreBulkAction::make(),
+                ForceDeleteBulkAction::make(),
             ]);
     }
 }
