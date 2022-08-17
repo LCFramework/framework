@@ -191,6 +191,9 @@ class Installer extends Component implements HasForms
                                         ->label('Verbose logging')
                                         ->hint('This should never be enabled in production')
                                         ->helperText('Display detailed errors and enable debugging functionality'),
+                                    Toggle::make('app_require_email_verification')
+                                        ->label('Require email verifications')
+                                        ->helperText('When a user creates an account, should they be required to confirm their email?'),
                                 ]),
                         ]),
                     Wizard\Step::make('Database Settings')
@@ -346,7 +349,8 @@ class Installer extends Component implements HasForms
             ->put('APP_NAME', $data['app_name'] ?? '')
             ->put('APP_URL', $data['app_url'] ?? '')
             ->put('APP_ENV', $data['app_environment'] ?? '')
-            ->put('APP_DEBUG', $data['app_debug'] ?? '')
+            ->put('APP_DEBUG', $data['app_debug'] ?? false)
+            ->put('LCFRAMEWORK_AUTH_REQUIRE_EMAIL_VERIFICATION', $data['app_require_email_verification'] ?? false)
             ->put('LCFRAMEWORK_LAST_CHAOS_VERSION', $data['lc_version'] ?? '')
             ->put('LCFRAMEWORK_LAST_CHAOS_AUTH_SALT', $data['lc_salt'] ?? '')
             ->put('LCFRAMEWORK_LAST_CHAOS_AUTH_HASH', $data['lc_hash'] ?? '')
@@ -379,6 +383,7 @@ class Installer extends Component implements HasForms
                 'app.env' => $data['app_environment'],
                 'app.debug' => $data['app_debug'],
                 'hashing.driver' => $data['lc_hash'],
+                'lcframework.auth.require_email_verification' => $data['app_require_email_verification'],
                 'lcframework.last_chaos.auth.salt' => $data['lc_salt'],
                 'lcframework.last_chaos.database.data' => $data['lc_db_data'],
                 'lcframework.last_chaos.database.db' => $data['lc_db_db'],
