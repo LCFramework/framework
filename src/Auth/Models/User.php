@@ -68,6 +68,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
         return Transformer::transform(
             'auth.user.fillable',
             [
+                ...parent::getCasts(),
                 'email_verified_at' => 'datetime',
             ]
         );

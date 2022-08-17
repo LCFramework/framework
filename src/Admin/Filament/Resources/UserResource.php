@@ -51,7 +51,7 @@ class UserResource extends Resource
                             ->dehydrateStateUsing(
                                 fn(?string $state, User $record): string => Hash::make($state, ['user_id' => $record->user_id])
                             )
-                            ->dehydrated(fn(?string $state) => filled($state))
+                            ->dehydrated(fn($state) => filled($state))
                             ->required(fn(Page $livewire): bool => $livewire instanceof CreateRecord),
                         TextInput::make('passwd_confirmation')
                             ->label('Confirm password')
@@ -69,7 +69,7 @@ class UserResource extends Resource
                         Toggle::make('email_verified_at')
                             ->label('Verified')
                             ->afterStateHydrated(
-                                function (Toggle $component, ?DateTimeInterface $state): void {
+                                function (Toggle $component, $state): void {
                                     $component->state($state !== null);
                                 }
                             )
