@@ -13,8 +13,11 @@ use Filament\Resources\Form;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use LCFramework\Framework\Admin\Filament\Resources\UserResource\Pages\CreateUser;
 use LCFramework\Framework\Admin\Filament\Resources\UserResource\Pages\EditUser;
@@ -126,6 +129,11 @@ class UserResource extends Resource
                     ->date()
                     ->sortable()
                     ->searchable(),
+            ])
+            ->actions([
+                EditAction::make(),
+                DeleteAction::make()
+                    ->hidden(fn(User $record): bool => $record->user_code === auth()->id())
             ]);
     }
 
@@ -136,5 +144,11 @@ class UserResource extends Resource
             'create' => CreateUser::route('/create'),
             'edit' => EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return $record->user_code !== auth()->id() &&
+            parent::canDelete($record);
     }
 }
