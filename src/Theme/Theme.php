@@ -87,7 +87,7 @@ class Theme implements Arrayable
             'path' => $this->getPath(),
             'parent' => $this->getParent(),
             'providers' => $this->getProviders(),
-            'dependencies' => $this->getDependencies()
+            'dependencies' => $this->getDependencies(),
         ];
     }
 }

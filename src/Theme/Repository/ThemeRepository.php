@@ -26,11 +26,10 @@ class ThemeRepository implements ThemeRepositoryInterface
     protected ?Theme $enabledTheme = null;
 
     public function __construct(
-        Application               $app,
-        ThemeLoaderInterface      $loader,
+        Application $app,
+        ThemeLoaderInterface $loader,
         ModuleRepositoryInterface $modules
-    )
-    {
+    ) {
         $this->app = $app;
         $this->loader = $loader;
         $this->modules = $modules;
@@ -42,7 +41,7 @@ class ThemeRepository implements ThemeRepositoryInterface
             return $this->themes;
         }
 
-        if (!$this->loadCache()) {
+        if (! $this->loadCache()) {
             $this->load();
         }
 
@@ -62,17 +61,17 @@ class ThemeRepository implements ThemeRepositoryInterface
         }
 
         return collect($this->all())
-            ->filter(fn(Theme $theme): bool => $theme->getName() !== $enabledTheme->getName())
+            ->filter(fn (Theme $theme): bool => $theme->getName() !== $enabledTheme->getName())
             ->all();
     }
 
     public function enable(Theme|string $theme): void
     {
-        if (!($theme instanceof Theme)) {
+        if (! ($theme instanceof Theme)) {
             $theme = $this->find($theme);
         }
 
-        if (!$this->validate($theme)) {
+        if (! $this->validate($theme)) {
             throw InvalidThemeException::theme($theme);
         }
 
@@ -113,7 +112,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     public function validate(Theme|string $theme): bool
     {
-        if (!($theme instanceof Theme)) {
+        if (! ($theme instanceof Theme)) {
             $theme = $this->find($theme);
         }
 
@@ -122,7 +121,7 @@ class ThemeRepository implements ThemeRepositoryInterface
         }
 
         foreach ($theme->getDependencies() as $dependency => $version) {
-            if (!($dependencyModule = $this->modules->find($dependency))) {
+            if (! ($dependencyModule = $this->modules->find($dependency))) {
                 return false;
             }
 
@@ -135,7 +134,7 @@ class ThemeRepository implements ThemeRepositoryInterface
                 return false;
             }
 
-            if (!$this->modules->validate($dependency)) {
+            if (! $this->modules->validate($dependency)) {
                 return false;
             }
         }
@@ -161,7 +160,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
         $this->enabledTheme = $theme;
 
-        if (!$this->validate($theme)) {
+        if (! $this->validate($theme)) {
             $this->disable();
 
             return;
@@ -169,7 +168,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
         foreach ($theme->getDependencies() as $dependency => $version) {
             $module = $this->modules->find($dependency);
-            if (!$module->enabled()) {
+            if (! $module->enabled()) {
                 $this->modules->enable($module);
             }
         }
@@ -179,7 +178,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     public function delete(string|Theme $theme): bool
     {
-        if (!($theme instanceof Theme)) {
+        if (! ($theme instanceof Theme)) {
             $theme = $this->find($theme);
         }
 
@@ -187,7 +186,7 @@ class ThemeRepository implements ThemeRepositoryInterface
             return false;
         }
 
-        if (!File::deleteDirectory($theme->getPath())) {
+        if (! File::deleteDirectory($theme->getPath())) {
             return false;
         }
 
@@ -217,21 +216,21 @@ class ThemeRepository implements ThemeRepositoryInterface
         if (env('VAPOR_MAINTENANCE_MODE') === null) {
             return Str::replaceLast(
                 'config.php',
-                $name . '_theme.php',
+                $name.'_theme.php',
                 $this->app->getCachedConfigPath()
             );
         }
 
         return Str::replaceLast(
             'services.php',
-            $name . '_theme.php',
+            $name.'_theme.php',
             $this->app->getCachedServicesPath()
         );
     }
 
     protected function loadCache(): bool
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return false;
         }
 
@@ -267,7 +266,7 @@ class ThemeRepository implements ThemeRepositoryInterface
             Cache::forever(
                 $cacheKey,
                 collect($this->all())
-                    ->mapWithKeys(fn(Theme $theme, string $name): array => [
+                    ->mapWithKeys(fn (Theme $theme, string $name): array => [
                         $name => $theme->toArray(),
                     ])
                     ->all()
@@ -277,7 +276,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected function clearCache(): void
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return;
         }
 
@@ -288,7 +287,7 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected function discover(string $path): array
     {
-        $search = rtrim($path, '/\\') . '/' . 'composer.json';
+        $search = rtrim($path, '/\\').'/'.'composer.json';
 
         return str_replace('composer.json', '', File::find($search));
     }
@@ -314,11 +313,11 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected function isCacheEnabled(): bool
     {
-        return (bool)config('lcframework.themes.cache.enabled', true);
+        return (bool) config('lcframework.themes.cache.enabled', true);
     }
 
     protected function getPaths(): array
     {
-        return (array)config('lcframework.themes.paths');
+        return (array) config('lcframework.themes.paths');
     }
 }
