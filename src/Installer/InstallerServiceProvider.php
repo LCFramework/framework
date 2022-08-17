@@ -20,7 +20,7 @@ class InstallerServiceProvider extends ServiceProvider
 
                 if (
                     File::put(
-                        base_path('.env'), 'APP_KEY=' . $key
+                        base_path('.env'), 'APP_KEY='.$key
                     )
                 ) {
                     config()->set('app.key', $key);
@@ -36,17 +36,17 @@ class InstallerServiceProvider extends ServiceProvider
             Installer::class
         );
 
-        if (!LCFramework::installed()) {
+        if (! LCFramework::installed()) {
             $this->loadRoutesFrom(
-                __DIR__ . '/../../routes/installer.php'
+                __DIR__.'/../../routes/installer.php'
             );
         }
     }
 
     protected function generateRandomKey()
     {
-        return 'base64:' . base64_encode(
-                Encrypter::generateKey(config('app.cipher'))
-            );
+        return 'base64:'.base64_encode(
+            Encrypter::generateKey(config('app.cipher'))
+        );
     }
 }
