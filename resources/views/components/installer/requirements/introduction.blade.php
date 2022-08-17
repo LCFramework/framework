@@ -1,11 +1,12 @@
 <div class="space-y-4">
     <p>
-        Welcome to LCFramework. Before getting started, we need some information
-        to help us configure your application to fit your requirements.
+        Welcome to LCFramework. Before getting started, we need some information to help us configure your application
+        to fit your requirements. All this information can be easily changed at any time after installation.
     </p>
 
     <p>
-        All this information can be easily changed at any time after installation.
+        Please do not refresh the page or the browser back button (use the navigation buttons provided to you in the
+        form), otherwise you risk losing your progress.
     </p>
 
     <p>

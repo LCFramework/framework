@@ -14,6 +14,9 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
 use LCFramework\Framework\Auth\Models\User;
 use LCFramework\Framework\LCFramework;
@@ -50,9 +53,7 @@ class Installer extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        $installed = $this->updateEnv($data);
-
-        if (! $installed) {
+        if (!$this->updateEnv($data)) {
             Notification::make()
                 ->danger()
                 ->title('Settings have failed to update')
@@ -62,18 +63,36 @@ class Installer extends Component implements HasForms
             return;
         }
 
-//        $installed = $this->createUser($data);
-//        if (!$installed) {
-//            Notification::make()
-//                ->danger()
-//                ->title('Failed to create the user')
-//                ->body('LCFramework may not be able to connect to the database')
-//                ->send();
-//
-//            return;
-//        }
-//
-//        Storage::put('lcframework', '');
+        if (!$this->updateConfig($data)) {
+            Notification::make()
+                ->danger()
+                ->title('Config has failed to update')
+                ->send();
+
+            return;
+        }
+
+        if (!$this->runMigrations($data)) {
+            Notification::make()
+                ->danger()
+                ->title('Migrations have failed to run')
+                ->body('LCFramework may not be able to connect to your database')
+                ->send();
+
+            return;
+        }
+
+        if (!$this->createUser($data)) {
+            Notification::make()
+                ->danger()
+                ->title('Failed to create the user')
+                ->body('LCFramework may not be able to connect to the database')
+                ->send();
+
+            return;
+        }
+
+        Storage::put('lcframework', '');
 
         Notification::make()
             ->success()
@@ -217,7 +236,7 @@ class Installer extends Component implements HasForms
                                     TextInput::make('mail_password')
                                         ->label('Password')
                                         ->password()
-                                        ->dehydrated(fn ($state) => filled($state)),
+                                        ->dehydrated(fn($state) => filled($state)),
                                     TextInput::make('mail_from_address')
                                         ->label('From address')
                                         ->hint('The sender email address'),
@@ -274,31 +293,79 @@ class Installer extends Component implements HasForms
         return true;
     }
 
+    protected function updateConfig(array $data): bool
+    {
+        try {
+            config([
+                'app.name' => $data['app_name'],
+                'app.url' => $data['app_url'],
+                'app.env' => $data['app_environment'],
+                'app.debug' => $data['app_debug'],
+                'lcframework.last_chaos.auth.hash' => $data['lc_hash'],
+                'lcframework.last_chaos.auth.salt' => $data['lc_salt'],
+                'lcframework.last_chaos.database.data' => $data['lc_db_data'],
+                'lcframework.last_chaos.database.db' => $data['lc_db_db'],
+                'lcframework.last_chaos.database.auth' => $data['lc_db_auth'],
+                'lcframework.last_chaos.database.post' => $data['lc_db_post'],
+                'database.connections.mysql' => [
+                    'driver' => 'mysql',
+                    'url' => null,
+                    'host' => $data['db_host'],
+                    'port' => $data['db_port'],
+                    'database' => $data['db_name'],
+                    'username' => $data['db_username'],
+                    'password' => $data['password'],
+                    'unix_socket' => '',
+                    'charset' => 'utf8mb4',
+                    'collation' => 'utf8mb4_unicode_ci',
+                    'prefix' => '',
+                    'prefix_indexes' => true,
+                    'strict' => true,
+                    'engine' => null,
+                    'options' => [],
+                ],
+                'mail.mailers.smtp' => [
+                    'transport' => 'smtp',
+                    'host' => $data['mail_host'],
+                    'port' => $data['mail_port'],
+                    'encryption' => $data['mail_encryption'],
+                    'username' => $data['mail_username'],
+                    'password' => $data['mail_password'],
+                    'timeout' => null,
+                    'local_domain' => null,
+                ],
+                'mail.address' => [
+                    'address' => $data['mail_from_address'],
+                    'name' => $data['mail_from_name']
+                ]
+            ]);
+
+
+            return true;
+        } catch (Exception) {
+            return false;
+        }
+    }
+
+    protected function runMigrations(array $data): bool
+    {
+        try {
+            Artisan::call('migrate');
+
+            return true;
+        } catch (Exception) {
+            return false;
+        }
+    }
+
     protected function createUser(array $data): bool
     {
         try {
-            config()->set('database.connections.installer', [
-                'driver' => 'mysql',
-                'url' => null,
-                'host' => $data['db_host'],
-                'port' => $data['db_port'],
-                'database' => $data['db_name'],
-                'username' => $data['db_username'],
-                'password' => $data['password'],
-                'unix_socket' => '',
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
-                'prefix' => '',
-                'prefix_indexes' => true,
-                'strict' => true,
-                'engine' => null,
-                'options' => [],
-            ]);
-
             User::on('installer')
                 ->create([
                     'user_id' => $data['user_username'],
-                    'email' => $data[''],
+                    'email' => $data['user_email'],
+                    'password' => Hash::make($data['user_password'])
                 ]);
 
             return true;
