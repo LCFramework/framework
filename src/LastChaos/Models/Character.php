@@ -10,6 +10,10 @@ use LCFramework\Framework\Transformer\Facade\Transformer;
 
 class Character extends Model
 {
+    public $timestamps = false;
+
+    protected $primaryKey = 'a_index';
+
     public function getTable(): string
     {
         return config('lcframework.last_chaos.database.db') . '.t_characters';
