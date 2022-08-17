@@ -2,6 +2,7 @@
 
 namespace LCFramework\Framework\Admin\Filament\Resources\UserResource\RelationManagers;
 
+use Closure;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -22,7 +23,10 @@ class CharacterRelationManager extends RelationManager
                 TextInput::make('a_nick')
                     ->label('Name')
                     ->required()
-                    ->maxLength(20),
+                    ->maxLength(20)
+                    ->afterStateUpdated(function (string $state, Closure $set): void {
+                        $set('a_name', $state);
+                    }),
                 TextInput::make('a_level')
                     ->label('Level')
                     ->required()
