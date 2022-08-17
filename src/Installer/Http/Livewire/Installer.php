@@ -130,9 +130,12 @@ class Installer extends Component implements HasForms
 
         Auth::login($user);
 
+        session()->put('auth.password_confirmed_at', time());
+
         Notification::make()
             ->success()
             ->title('Successfully installed')
+            ->body('Thank you for using LCFramework!')
             ->send();
 
         return redirect()->route('filament.pages.dashboard');

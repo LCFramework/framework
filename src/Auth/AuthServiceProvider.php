@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use LCFramework\Framework\Auth\Hashing\Drivers\Md5HashingDriver;
 use LCFramework\Framework\Auth\Hashing\Drivers\PlainTextHashingDriver;
 use LCFramework\Framework\Auth\Hashing\Drivers\Sha256HashingDriver;
 use LCFramework\Framework\Auth\Http\Livewire\EmailVerification;
@@ -52,6 +53,10 @@ class AuthServiceProvider extends EventServiceProvider
     {
         Hash::extend('sha256', function () {
             return new Sha256HashingDriver();
+        });
+
+        Hash::extend('md5', function () {
+            return new Md5HashingDriver();
         });
 
         Hash::extend('plaintext', function () {
