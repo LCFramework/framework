@@ -18,8 +18,8 @@ class EditUser extends EditRecord
             Action::make('ban')
                 ->label('Ban')
                 ->requiresConfirmation()
-                ->hidden(fn(User $record) => $record->is_banned)
-                ->action(fn(User $record) => $record->ban())
+                ->hidden(fn (User $record) => $record->is_banned)
+                ->action(fn (User $record) => $record->ban()),
         ];
     }
 }
