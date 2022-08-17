@@ -96,6 +96,12 @@ class Installer extends Component implements HasForms
                 ->danger()
                 ->title('Failed to create the user')
                 ->body('LCFramework may not be able to connect to the database')
+                ->actions([
+                    Action::make('exception_message')
+                        ->label('View')
+                        ->button()
+                        ->emit('openExceptionModal'),
+                ])
                 ->send();
 
             return;
