@@ -4,13 +4,11 @@ namespace LCFramework\Framework\Auth;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use LCFramework\Framework\Auth\Hashing\Drivers\PlainTextHashingDriver;
 use LCFramework\Framework\Auth\Hashing\Drivers\Sha256HashingDriver;
-use LCFramework\Framework\Auth\Hashing\HashManager;
 use LCFramework\Framework\Auth\Http\Livewire\EmailVerification;
 use LCFramework\Framework\Auth\Http\Livewire\Login;
 use LCFramework\Framework\Auth\Http\Livewire\PasswordConfirmation;
@@ -52,11 +50,11 @@ class AuthServiceProvider extends EventServiceProvider
 
     protected function extendHashing(): void
     {
-        Hash::extend('sha256', function() {
+        Hash::extend('sha256', function () {
             return new Sha256HashingDriver();
         });
 
-        Hash::extend('plaintext', function() {
+        Hash::extend('plaintext', function () {
             return new PlainTextHashingDriver();
         });
     }
