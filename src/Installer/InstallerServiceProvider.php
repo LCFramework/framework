@@ -14,6 +14,9 @@ class InstallerServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        // Laravel will crash if app.key isn't set,
+        // so ensure a persistent key is set before
+        // the resulting crash
         $this->app->beforeResolving(EncrypterInterface::class, function () {
             if (config()->get('app.key') === null) {
                 $key = $this->generateRandomKey();
@@ -43,7 +46,7 @@ class InstallerServiceProvider extends ServiceProvider
         }
     }
 
-    protected function generateRandomKey()
+    protected function generateRandomKey(): string
     {
         return 'base64:' . base64_encode(
                 Encrypter::generateKey(config('app.cipher'))
