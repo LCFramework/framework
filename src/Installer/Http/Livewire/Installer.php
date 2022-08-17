@@ -252,7 +252,7 @@ class Installer extends Component implements HasForms
                                         ->maxLength(255),
                                     TextInput::make('lc_db_auth')
                                         ->label('Auth database')
-                                        ->helperText(new HtmlString('For example, <code>lc_auth_db</code>'))
+                                        ->helperText(new HtmlString('For example, <code>lc_db_auth</code>'))
                                         ->required()
                                         ->maxLength(255),
                                     TextInput::make('lc_db_post')
