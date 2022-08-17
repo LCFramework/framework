@@ -19,7 +19,7 @@ class AdminServiceProvider extends PluginServiceProvider
     protected array $resources = [
         ModuleResource::class,
         ThemeResource::class,
-        //UserResource::class,
+        UserResource::class,
     ];
 
     public function configurePackage(Package $package): void
