@@ -48,7 +48,7 @@ class Character extends Model
                 ...parent::getCasts(),
                 'a_createdate' => 'datetime',
                 'a_admin' => 'integer',
-                'a_deletedelay' => 'integer'
+                'a_deletedelay' => 'integer',
             ]
         );
     }
