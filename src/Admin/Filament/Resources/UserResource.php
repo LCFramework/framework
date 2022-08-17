@@ -133,7 +133,7 @@ class UserResource extends Resource
             ->actions([
                 EditAction::make(),
                 DeleteAction::make()
-                    ->hidden(fn(User $record): bool => $record->user_code === auth()->id())
+                    ->hidden(fn (User $record): bool => $record->user_code === auth()->id()),
             ]);
     }
 
