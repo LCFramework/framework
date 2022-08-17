@@ -134,7 +134,7 @@ class Installer extends Component implements HasForms
 
         Notification::make()
             ->success()
-            ->title('Successfully installed')
+            ->title('Installation has completed successfully')
             ->body('Thank you for using LCFramework!')
             ->send();
 
