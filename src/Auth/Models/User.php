@@ -36,7 +36,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 
     public function getTable(): string
     {
-        return config('lcframework.last_chaos.database.auth') . '.bg_user';
+        return config('lcframework.last_chaos.database.auth').'.bg_user';
     }
 
     public function getFillable(): array

@@ -280,7 +280,7 @@ class Installer extends Component implements HasForms
                                         ->label('Confirm password')
                                         ->password()
                                         ->required(),
-                                ])
+                                ]),
                         ]),
                 ]),
         ];
