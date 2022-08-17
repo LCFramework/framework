@@ -16,18 +16,22 @@ class Theme implements Arrayable
 
     protected array $providers = [];
 
+    protected array $dependencies = [];
+
     public function __construct(
         string $name,
         string $description,
         string $path,
         ?string $parent = null,
-        array $providers = []
+        array $providers = [],
+        array $dependencies = []
     ) {
         $this->name = $name;
         $this->description = $description;
         $this->path = $path;
         $this->parent = $parent;
         $this->providers = $providers;
+        $this->dependencies = $dependencies;
     }
 
     public static function make(
@@ -35,9 +39,10 @@ class Theme implements Arrayable
         string $description,
         string $path,
         ?string $parent = null,
-        array $providers = []
+        array $providers = [],
+        array $dependencies = []
     ): static {
-        return new static($name, $description, $path, $parent, $providers);
+        return new static($name, $description, $path, $parent, $providers, $dependencies);
     }
 
     public function getName(): string
@@ -69,6 +74,11 @@ class Theme implements Arrayable
         return $this->providers;
     }
 
+    public function getDependencies(): array
+    {
+        return $this->dependencies;
+    }
+
     public function toArray(): array
     {
         return [
@@ -77,6 +87,7 @@ class Theme implements Arrayable
             'path' => $this->getPath(),
             'parent' => $this->getParent(),
             'providers' => $this->getProviders(),
+            'dependencies' => $this->getDependencies()
         ];
     }
 }

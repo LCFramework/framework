@@ -18,7 +18,8 @@ class ThemeLoader implements ThemeLoaderInterface
             $json->get('description'),
             $path,
             $json->get('extra.lcframework.theme.parent'),
-            $json->get('extra.lcframework.theme.providers', [])
+            $json->get('extra.lcframework.theme.providers', []),
+            $json->get('extra.lcframework.theme.dependencies', []),
         );
     }
 
@@ -29,7 +30,8 @@ class ThemeLoader implements ThemeLoaderInterface
             $array['description'],
             $array['path'],
             $array['parent'],
-            $array['providers']
+            $array['providers'],
+            $array['dependencies']
         );
     }
 }
