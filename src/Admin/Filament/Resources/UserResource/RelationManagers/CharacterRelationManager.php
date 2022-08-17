@@ -21,7 +21,6 @@ use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
-use Filament\Tables\Filters\TrashedFilter;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use LCFramework\Framework\LastChaos\Models\Character;
@@ -121,7 +120,7 @@ class CharacterRelationManager extends RelationManager
                         false: fn (Builder $query) => $query->getModel()->onlyTrashed($query),
                         blank: fn (Builder $query) => $query->getModel()->withoutTrashed($query),
                     )
-                ->default()
+                ->default(),
             ])
             ->actions([
                 EditAction::make(),
