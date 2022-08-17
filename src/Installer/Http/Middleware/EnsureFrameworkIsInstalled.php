@@ -10,15 +10,15 @@ class EnsureFrameworkIsInstalled
 {
     public function handle($request, Closure $next)
     {
+        if (LCFramework::installed()) {
+            return $next($request);
+        }
+
         $url = URL::route('installer');
         if (
             $request->url() === $url ||
             str_starts_with($request->path(), 'livewire')
         ) {
-            return $next($request);
-        }
-
-        if (LCFramework::installed()) {
             return $next($request);
         }
 
