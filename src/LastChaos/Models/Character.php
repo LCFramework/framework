@@ -5,16 +5,12 @@ namespace LCFramework\Framework\LastChaos\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use LCFramework\Framework\Auth\Models\User;
-use LCFramework\Framework\LastChaos\Eloquent\Scopes\PendingDeletionScope;
 use LCFramework\Framework\LastChaos\Support\CharacterJob;
 use LCFramework\Framework\Transformer\Facade\Transformer;
 
 class Character extends Model
 {
-    use SoftDeletes;
-
     public $timestamps = false;
 
     protected $primaryKey = 'a_index';
@@ -74,20 +70,5 @@ class Character extends Model
         return Attribute::make(
             get: fn(): int => $this->a_admin === 10
         );
-    }
-
-    /**
-     * Boot the soft deleting trait for a model.
-     *
-     * @return void
-     */
-    public static function bootSoftDeletes()
-    {
-        static::addGlobalScope(new PendingDeletionScope());
-    }
-
-    public function getDeletedAtColumn()
-    {
-        return 'a_deletedelay';
     }
 }
