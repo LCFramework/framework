@@ -61,7 +61,7 @@ class Installer extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (! $this->updateConfig($data)) {
+        if (!$this->updateConfig($data)) {
             Notification::make()
                 ->danger()
                 ->title('Config has failed to update')
@@ -76,7 +76,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (! $this->runMigrations()) {
+        if (!$this->runMigrations()) {
             Notification::make()
                 ->danger()
                 ->title('Migrations have failed to run')
@@ -92,7 +92,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (! ($user = $this->createUser($data))) {
+        if (!($user = $this->createUser($data))) {
             Notification::make()
                 ->danger()
                 ->title('Failed to create the user')
@@ -108,7 +108,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (! $this->updateEnv($data)) {
+        if (!$this->updateEnv($data)) {
             Notification::make()
                 ->danger()
                 ->title('Settings have failed to update')
@@ -226,11 +226,17 @@ class Installer extends Component implements HasForms
                         ]),
                     Wizard\Step::make('LastChaos Settings')
                         ->schema([
-                            Select::make('lc_version')
-                                ->label('Version')
-                                ->required()
-                                ->options([
-                                    4 => 'Version 4',
+                            Grid::make()
+                                ->columns([
+                                    'sm' => 2,
+                                ])
+                                ->schema([
+                                    Select::make('lc_version')
+                                        ->label('Version')
+                                        ->required()
+                                        ->options([
+                                            4 => 'Version 4',
+                                        ])
                                 ]),
                             Grid::make()
                                 ->columns([
@@ -247,7 +253,8 @@ class Installer extends Component implements HasForms
                                         ]),
                                     TextInput::make('lc_salt')
                                         ->label('Salt')
-                                        ->helperText('This should never be shared with anyone'),
+                                        ->helperText('This should never be shared with anyone')
+                                        ->disableAutocomplete(),
                                     TextInput::make('lc_db_data')
                                         ->label('Data database')
                                         ->helperText(new HtmlString('For example, <code>lc_data</code>'))
