@@ -15,7 +15,7 @@ class UserMeta extends Model
 
     public function getTable(): string
     {
-        return config('lcframework.last_chaos.database.auth') . '.t_users';
+        return config('lcframework.last_chaos.database.auth').'.t_users';
     }
 
     public function getFillable(): array
@@ -24,7 +24,7 @@ class UserMeta extends Model
             'auth.user_meta.fillable',
             [
                 'a_enable',
-                'a_zone_num'
+                'a_zone_num',
             ]
         );
     }
@@ -36,7 +36,7 @@ class UserMeta extends Model
             [
                 ...parent::getCasts(),
                 'a_enable' => 'boolean',
-                'a_zone_num' => 'integer'
+                'a_zone_num' => 'integer',
             ]
         );
     }
