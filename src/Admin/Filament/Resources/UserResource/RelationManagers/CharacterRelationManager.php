@@ -11,6 +11,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\TextColumn;
 use LCFramework\Framework\LastChaos\Models\Character;
 use LCFramework\Framework\LastChaos\Support\CharacterJob;
@@ -76,6 +77,10 @@ class CharacterRelationManager extends RelationManager
                     ->label('Level')
                     ->sortable()
                     ->searchable(),
+                BooleanColumn::make('a_admin')
+                    ->label('Administrator')
+                    ->sortable()
+                    ->getStateUsing(fn(Character $record): bool => $record->is_admin),
                 TextColumn::make('a_createdate')
                     ->label('Created at')
                     ->date()
