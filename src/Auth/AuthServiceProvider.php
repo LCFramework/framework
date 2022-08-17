@@ -4,12 +4,12 @@ namespace LCFramework\Framework\Auth;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use LCFramework\Framework\Auth\Hashing\Drivers\Md5HashingDriver;
 use LCFramework\Framework\Auth\Hashing\Drivers\PlainTextHashingDriver;
 use LCFramework\Framework\Auth\Hashing\Drivers\Sha256HashingDriver;
-use LCFramework\Framework\Auth\Hashing\HashManager;
 use LCFramework\Framework\Auth\Http\Livewire\EmailVerification;
 use LCFramework\Framework\Auth\Http\Livewire\Login;
 use LCFramework\Framework\Auth\Http\Livewire\PasswordConfirmation;
@@ -31,8 +31,6 @@ class AuthServiceProvider extends EventServiceProvider
     public function register()
     {
         parent::register();
-
-        $this->registerHashing();
     }
 
     public function boot(): void
@@ -40,6 +38,8 @@ class AuthServiceProvider extends EventServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../../routes/auth.php');
 
         $this->registerLivewireComponents();
+
+        $this->extendHashing();
 
         Auth::provider('eloquent', function (Application $app): EloquentUserProvider {
             return new EloquentUserProvider(
@@ -49,12 +49,19 @@ class AuthServiceProvider extends EventServiceProvider
         });
     }
 
-    protected function registerHashing(): void
+    protected function extendHashing(): void
     {
-        $this->app->alias(HashManager::class, 'hash');
-        $this->app->singleton(Hasher::class, HashManager::class);
-        $this->app->singleton(PlainTextHashingDriver::class);
-        $this->app->singleton(Sha256HashingDriver::class);
+        Hash::extend('sha256', function () {
+            return new Sha256HashingDriver();
+        });
+
+        Hash::extend('md5', function () {
+            return new Md5HashingDriver();
+        });
+
+        Hash::extend('plaintext', function () {
+            return new PlainTextHashingDriver();
+        });
     }
 
     protected function registerLivewireComponents(): void

@@ -13,6 +13,10 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 {
     use Notifiable;
 
+    const CREATED_AT = 'create_date';
+
+    const UPDATED_AT = 'update_time';
+
     protected $primaryKey = 'user_code';
 
     public function shouldVerifyEmail(): bool
@@ -40,7 +44,6 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
         return Transformer::transform(
             'auth.user.fillable',
             [
-                'user_code',
                 'user_id',
                 'email',
                 'passwd',

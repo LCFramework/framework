@@ -68,6 +68,8 @@ class Login extends Component implements HasForms
             ]);
         }
 
+        session()->put('auth.password_confirmed_at', time());
+
         return redirect('/');
     }
 

@@ -5,6 +5,7 @@ namespace LCFramework\Framework;
 use Illuminate\Support\AggregateServiceProvider;
 use LCFramework\Framework\Admin\AdminServiceProvider;
 use LCFramework\Framework\Auth\AuthServiceProvider;
+use LCFramework\Framework\Installer\InstallerServiceProvider;
 use LCFramework\Framework\Module\ModuleServiceProvider;
 use LCFramework\Framework\Setting\SettingsServiceProvider;
 use LCFramework\Framework\Support\Filesystem;
@@ -15,6 +16,7 @@ use LCFramework\Framework\Transformer\TransformerServiceProvider;
 class LCFrameworkServiceProvider extends AggregateServiceProvider
 {
     protected $providers = [
+        InstallerServiceProvider::class,
         SettingsServiceProvider::class,
         TransformerServiceProvider::class,
         AuthServiceProvider::class,
@@ -42,6 +44,8 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
             __DIR__.'/../resources/views',
             'lcframework'
         );
+
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
