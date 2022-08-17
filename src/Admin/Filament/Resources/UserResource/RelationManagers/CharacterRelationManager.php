@@ -38,8 +38,8 @@ class CharacterRelationManager extends RelationManager
                     ->minValue(1),
                 Select::make('a_job2')
                     ->label('Job')
-                    ->options(fn(Character $record) => CharacterJob::get($record->a_job))
-                    ->required()
+                    ->options(fn (Character $record) => CharacterJob::get($record->a_job))
+                    ->required(),
             ]);
     }
 
