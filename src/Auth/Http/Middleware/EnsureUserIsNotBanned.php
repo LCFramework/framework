@@ -11,7 +11,7 @@ class EnsureUserIsNotBanned
     public function handle($request, Closure $next)
     {
         $user = $request->user();
-        if ($user === null || !$user->is_banned) {
+        if ($user === null || ! $user->is_banned) {
             return $next($request);
         }
 
