@@ -98,21 +98,18 @@ class ListThemes extends ListRecords
         return [
             Action::make('enable')
                 ->label('Enable')
-                ->button()
                 ->hidden(fn (Theme $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableTheme'),
             Action::make('disable')
                 ->label('Disable')
-                ->button()
                 ->hidden(fn (Theme $record): bool => ! $record->enabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableTheme'),
             Action::make('delete')
                 ->label('Delete')
-                ->button()
                 ->color('danger')
                 ->icon('heroicon-o-trash')
                 ->requiresConfirmation()
