@@ -6,6 +6,7 @@ use Closure;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
@@ -39,7 +40,25 @@ class CharacterRelationManager extends RelationManager
                 Select::make('a_job2')
                     ->label('Job')
                     ->options(fn(Character $record) => CharacterJob::get($record->a_job))
-                    ->required()
+                    ->required(),
+                Toggle::make('a_admin')
+                    ->label('Administrator')
+                    ->helperText('Grant access to in-game admin commands')
+                    ->afterStateHydrated(
+                        function (Toggle $component, Character $record): void {
+                            $component->state($record->is_admin);
+                        }
+                    )
+                    ->dehydrated(function (bool $state, ?Character $record): bool {
+                        if ($record === null) {
+                            return true;
+                        }
+
+                        $isAdmin = $record->is_admin;
+
+                        return $state ? !$isAdmin : $isAdmin;
+                    })
+                    ->dehydrateStateUsing(fn(bool $state): int => $state ? 10 : 0),
             ]);
     }
 
