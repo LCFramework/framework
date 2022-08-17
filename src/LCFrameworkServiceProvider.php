@@ -45,12 +45,12 @@ class LCFrameworkServiceProvider extends AggregateServiceProvider
             'lcframework'
         );
 
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../dist' => public_path('lcframework'),
             ], 'assets');
-
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
 
         $this->enableIntroduction();
