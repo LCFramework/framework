@@ -3,7 +3,7 @@
 namespace LCFramework\Framework\Admin\Filament\Resources\UserResource\RelationManagers;
 
 use Closure;
-use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -21,9 +21,7 @@ class CharacterRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Placeholder::make('a_name')
-                    ->label('Name')
-                    ->hidden(),
+                Hidden::make('a_name'),
                 TextInput::make('a_nick')
                     ->label('Name')
                     ->required()
