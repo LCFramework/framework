@@ -41,7 +41,7 @@ return new class extends Migration
                 $table->string('email')->change();
             }
 
-            if (!Schema::hasColumn($tableName, 'email_verified_at')) {
+            if (! Schema::hasColumn($tableName, 'email_verified_at')) {
                 $table->dateTime('email_verified_at')->nullable();
             }
 
