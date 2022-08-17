@@ -29,7 +29,7 @@ class ListThemes extends ListRecords
                 ->send();
         } catch (Exception) {
             Notification::make()
-                ->success()
+                ->danger()
                 ->title(sprintf('Theme "%s" has failed to be enabled', $record->name))
                 ->body('The theme has errors that cannot be automatically resolved')
                 ->send();
