@@ -60,22 +60,6 @@ class Installer extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (!$this->updateEnv($data)) {
-            Notification::make()
-                ->danger()
-                ->title('Settings have failed to update')
-                ->body('LCFramework may not have write access to the .env file')
-                ->actions([
-                    Action::make('exception_message')
-                        ->label('View')
-                        ->button()
-                        ->emit('openExceptionModal'),
-                ])
-                ->send();
-
-            return;
-        }
-
         if (!$this->updateConfig($data)) {
             Notification::make()
                 ->danger()
@@ -117,7 +101,31 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        Storage::put('lcframework', '');
+        if (!Storage::put('lcframework', '')) {
+            Notification::make()
+                ->danger()
+                ->title('Settings have failed to update')
+                ->body('LCFramework may not have write access to the storage folder')
+                ->send();
+        }
+
+        if (!$this->updateEnv($data)) {
+            Notification::make()
+                ->danger()
+                ->title('Settings have failed to update')
+                ->body('LCFramework may not have write access to the .env file')
+                ->actions([
+                    Action::make('exception_message')
+                        ->label('View')
+                        ->button()
+                        ->emit('openExceptionModal'),
+                ])
+                ->send();
+
+            return;
+        }
+
+        $this->linkStorage();
 
         Notification::make()
             ->success()
@@ -433,6 +441,17 @@ class Installer extends Component implements HasForms
             $this->exceptionMessage = $e->getMessage();
 
             return false;
+        }
+    }
+
+    protected function linkStorage(): void
+    {
+        try {
+            Artisan::call('storage:link', [
+                '--force' => true
+            ]);
+        } catch (Exception) {
+            // This isn't critical
         }
     }
 
