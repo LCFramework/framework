@@ -406,7 +406,6 @@ class Installer extends Component implements HasForms
                     'name' => $data['mail_from_name'],
                 ],
             ]);
-            1
 
             return true;
         } catch (Exception $e) {
@@ -444,8 +443,9 @@ class Installer extends Component implements HasForms
                         'passwd' => Hash::make($data['user_password'], [
                             'user_id' => $data['user_username']
                         ]),
-                        'email_verified_at',
-                    ]);
+                        'email_verified_at' => now(),
+                    ]
+                );
 
             return $user;
         } catch (Exception $e) {
