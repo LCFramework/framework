@@ -6,6 +6,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 
 class CharacterRelationManager extends RelationManager
@@ -48,6 +49,9 @@ class CharacterRelationManager extends RelationManager
                     ->date()
                     ->sortable()
                     ->searchable(),
+            ])
+            ->actions([
+                EditAction::make()
             ]);
     }
 }
