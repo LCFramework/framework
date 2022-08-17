@@ -3,7 +3,6 @@
 namespace LCFramework\Framework\Admin\Filament\Resources\UserResource\RelationManagers;
 
 use Closure;
-use DateTimeInterface;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -14,10 +13,11 @@ use Filament\Resources\Table;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\BooleanColumn;
+use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Carbon;
 use LCFramework\Framework\LastChaos\Models\Character;
 use LCFramework\Framework\LastChaos\Support\CharacterJob;
 
@@ -95,8 +95,15 @@ class CharacterRelationManager extends RelationManager
                     ->label('Deleting at')
                     ->dateTime()
                     ->sortable()
-                    ->searchable()
-                    ->getStateUsing(fn(Character $record): DateTimeInterface => Date::createFromTimestamp($record->a_deletedelay)),
+                    ->formatStateUsing(function (Column $column, $state): ?string {
+                        if (blank($state) || $state === 0) {
+                            return '-';
+                        }
+
+                        return Carbon::parse($state)
+                            ->setTimezone($column->getTimezone())
+                            ->translatedFormat(config('tables.date_time_format'));
+                    }),
             ])
             ->actions([
                 EditAction::make(),
