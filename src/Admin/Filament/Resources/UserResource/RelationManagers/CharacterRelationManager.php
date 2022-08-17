@@ -39,7 +39,7 @@ class CharacterRelationManager extends RelationManager
                     ->minValue(1),
                 Select::make('a_job2')
                     ->label('Job')
-                    ->options(fn(Character $record) => CharacterJob::get($record->a_job))
+                    ->options(fn (Character $record) => CharacterJob::get($record->a_job))
                     ->required(),
                 Toggle::make('a_admin')
                     ->label('Administrator')
@@ -56,9 +56,9 @@ class CharacterRelationManager extends RelationManager
 
                         $isAdmin = $record->is_admin;
 
-                        return $state ? !$isAdmin : $isAdmin;
+                        return $state ? ! $isAdmin : $isAdmin;
                     })
-                    ->dehydrateStateUsing(fn(bool $state): int => $state ? 10 : 0),
+                    ->dehydrateStateUsing(fn (bool $state): int => $state ? 10 : 0),
             ]);
     }
 
