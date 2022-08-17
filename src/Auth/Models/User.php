@@ -41,7 +41,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 
     public function getTable(): string
     {
-        return config('lcframework.last_chaos.database.auth').'.bg_user';
+        return config('lcframework.last_chaos.database.auth') . '.bg_user';
     }
 
     public function getFillable(): array
@@ -104,14 +104,14 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 
     public function ban(): void
     {
-        $this->meta->forceFill([
+        $this->meta?->forceFill([
             'a_enable' => false,
         ])->save();
     }
 
     public function unban(): void
     {
-        $this->meta->forceFill([
+        $this->meta?->forceFill([
             'a_enable' => true,
         ])->save();
     }
@@ -125,7 +125,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
                     return false;
                 }
 
-                return ! $meta->a_enable;
+                return !$meta->a_enable;
             }
         );
     }
