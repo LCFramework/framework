@@ -4,6 +4,7 @@ namespace LCFramework\Framework\Admin\Filament\Resources;
 
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\TextColumn;
 use LCFramework\Framework\Admin\Filament\Resources\UserResource\Pages\ListUsers;
 use LCFramework\Framework\Auth\Models\User;
@@ -30,6 +31,20 @@ class UserResource extends Resource
                     ->label('Email address')
                     ->sortable()
                     ->searchable(),
+                BooleanColumn::make('email_verified_at')
+                    ->label('Verified')
+                    ->sortable()
+                    ->getStateUsing(fn(User $user): bool => $user->hasVerifiedEmail()),
+                TextColumn::make('created_date')
+                    ->label('Created at')
+                    ->date()
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('updated_time')
+                    ->label('Updated at')
+                    ->date()
+                    ->sortable()
+                    ->searchable()
             ]);
     }
 
