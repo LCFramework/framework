@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use LCFramework\Framework\Auth\Hashing\Drivers\PlainTextHashingDriver;
 use LCFramework\Framework\Auth\Hashing\Drivers\Sha256HashingDriver;
 use LCFramework\Framework\Auth\Hashing\HashManager;
@@ -51,10 +52,13 @@ class AuthServiceProvider extends EventServiceProvider
 
     protected function registerHashing(): void
     {
-        $this->app->alias(HashManager::class, 'hash');
-        $this->app->singleton(Hasher::class, HashManager::class);
-        $this->app->singleton(PlainTextHashingDriver::class);
-        $this->app->singleton(Sha256HashingDriver::class);
+        Hash::extend('sha256', function() {
+            return new Sha256HashingDriver();
+        });
+
+        Hash::extend('plaintext', function() {
+            return new PlainTextHashingDriver();
+        });
     }
 
     protected function registerLivewireComponents(): void
