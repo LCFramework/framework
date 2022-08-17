@@ -30,7 +30,7 @@ trait PendingDeletion
      */
     public function initializePendingDeletion()
     {
-        if (!isset($this->casts[$this->getPendingDeleteColumn()])) {
+        if (! isset($this->casts[$this->getPendingDeleteColumn()])) {
             $this->casts[$this->getPendingDeleteColumn()] = 'integer';
         }
     }
@@ -84,7 +84,7 @@ trait PendingDeletion
 
         $this->{$this->getPendingDeleteColumn()} = $time;
 
-        if ($this->timestamps && !is_null($this->getUpdatedAtColumn())) {
+        if ($this->timestamps && ! is_null($this->getUpdatedAtColumn())) {
             $this->{$this->getUpdatedAtColumn()} = $time;
 
             $columns[$this->getUpdatedAtColumn()] = $this->fromDateTime($time);
@@ -132,7 +132,7 @@ trait PendingDeletion
      */
     public function restoreQuietly()
     {
-        return static::withoutEvents(fn() => $this->restore());
+        return static::withoutEvents(fn () => $this->restore());
     }
 
     /**
@@ -142,14 +142,13 @@ trait PendingDeletion
      */
     public function pendingDeletion()
     {
-        return !is_null($this->{$this->getPendingDeleteColumn()});
+        return ! is_null($this->{$this->getPendingDeleteColumn()});
     }
 
     /**
      * Register a "pendingDeletion" model event callback with the dispatcher.
      *
-     * @param string|\Closure $callback
-     *
+     * @param  string|\Closure  $callback
      * @return void
      */
     public static function pendingDeleted(string|\Closure $callback): void
@@ -160,8 +159,7 @@ trait PendingDeletion
     /**
      * Register a "restoring" model event callback with the dispatcher.
      *
-     * @param string|\Closure $callback
-     *
+     * @param  string|\Closure  $callback
      * @return void
      */
     public static function restoring(string|\Closure $callback): void
@@ -172,8 +170,7 @@ trait PendingDeletion
     /**
      * Register a "restored" model event callback with the dispatcher.
      *
-     * @param string|\Closure $callback
-     *
+     * @param  string|\Closure  $callback
      * @return void
      */
     public static function restored(string|\Closure $callback): void
@@ -184,8 +181,7 @@ trait PendingDeletion
     /**
      * Register a "forceDeleted" model event callback with the dispatcher.
      *
-     * @param string|\Closure $callback
-     *
+     * @param  string|\Closure  $callback
      * @return void
      */
     public static function forceDeleted(string|\Closure $callback): void
@@ -210,7 +206,7 @@ trait PendingDeletion
      */
     public function getPendingDeleteColumn(): string
     {
-        return defined(static::class . '::PENDING_DELETE') ? static::PENDING_DELETE : 'a_delete_delay';
+        return defined(static::class.'::PENDING_DELETE') ? static::PENDING_DELETE : 'a_delete_delay';
     }
 
     /**

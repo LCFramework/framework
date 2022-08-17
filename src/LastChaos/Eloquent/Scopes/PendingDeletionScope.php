@@ -17,15 +17,14 @@ class PendingDeletionScope implements Scope
         'Restore',
         'WithPendingDeletes',
         'WithoutPendingDeletes',
-        'OnlyPendingDeletes'
+        'OnlyPendingDeletes',
     ];
 
     /**
      * Apply the scope to a given Eloquent query builder.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @param \Illuminate\Database\Eloquent\Model $model
-     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return void
      */
     public function apply(Builder $builder, Model $model): void
@@ -85,7 +84,7 @@ class PendingDeletionScope implements Scope
             $builder->withPendingDeletes();
 
             return $builder->update([
-                $builder->getModel()->getPendingDeleteColumn() => 0
+                $builder->getModel()->getPendingDeleteColumn() => 0,
             ]);
         });
     }
