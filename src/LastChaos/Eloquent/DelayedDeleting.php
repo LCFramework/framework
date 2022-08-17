@@ -2,6 +2,8 @@
 
 namespace LCFramework\Framework\LastChaos\Eloquent;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
+
 trait DelayedDeleting
 {
     public bool $forceDeleting = false;
@@ -44,6 +46,33 @@ trait DelayedDeleting
         $this->forceFill([
             $this->getDelayedDeletingColumn() => 0
         ])->save();
+    }
+
+    public function withTrashed(Builder $query): Builder
+    {
+        return $query->where(
+            $this->getDelayedDeletingColumn(),
+            '>=',
+            0
+        );
+    }
+
+    public function withoutTrashed(Builder $query): Builder
+    {
+        return $query->where(
+            $this->getDelayedDeletingColumn(),
+            '=',
+            0
+        );
+    }
+
+    public function onlyTrashed(Builder $query): Builder
+    {
+        return $query->where(
+            $this->getDelayedDeletingColumn(),
+            '!=',
+            0
+        );
     }
 
     protected function getDelayedDeletingColumn()

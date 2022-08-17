@@ -20,7 +20,9 @@ use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Filters\TrashedFilter;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use LCFramework\Framework\LastChaos\Models\Character;
 use LCFramework\Framework\LastChaos\Support\CharacterJob;
@@ -110,7 +112,16 @@ class CharacterRelationManager extends RelationManager
                     }),
             ])
             ->filters([
-                TrashedFilter::make(),
+                TernaryFilter::make('trashed')
+                    ->placeholder('Without trashed records')
+                    ->trueLabel('With trashed records')
+                    ->falseLabel('Only trashed records')
+                    ->queries(
+                        true: fn (Builder $query) => $query->getModel()->withTrashed($query),
+                        false: fn (Builder $query) => $query->getModel()->onlyTrashed($query),
+                        blank: fn (Builder $query) => $query->getModel()->withoutTrashed($query),
+                    )
+                ->default()
             ])
             ->actions([
                 EditAction::make(),
