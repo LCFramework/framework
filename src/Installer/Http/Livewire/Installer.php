@@ -85,7 +85,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!$this->runMigrations($data)) {
+        if (!$this->runMigrations()) {
             Notification::make()
                 ->danger()
                 ->title('Migrations have failed to run')
