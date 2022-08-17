@@ -34,13 +34,13 @@ class UserResource extends Resource
                 BooleanColumn::make('email_verified_at')
                     ->label('Verified')
                     ->sortable()
-                    ->getStateUsing(fn(User $user): bool => $user->hasVerifiedEmail()),
-                TextColumn::make('created_date')
+                    ->getStateUsing(fn(User $record): bool => $record->hasVerifiedEmail()),
+                TextColumn::make('create_date')
                     ->label('Created at')
                     ->date()
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('updated_time')
+                TextColumn::make('update_time')
                     ->label('Updated at')
                     ->date()
                     ->sortable()
