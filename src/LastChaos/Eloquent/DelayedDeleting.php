@@ -15,13 +15,13 @@ trait DelayedDeleting
 
     public function delete()
     {
-        if (!$this->exists) {
+        if (! $this->exists) {
             return;
         }
 
-        if (!$this->forceDeleting) {
+        if (! $this->forceDeleting) {
             $this->forceFill([
-                $this->getDelayedDeletingColumn() => now()->addDay()->unix()
+                $this->getDelayedDeletingColumn() => now()->addDay()->unix(),
             ])->save();
 
             return;
@@ -39,12 +39,12 @@ trait DelayedDeleting
 
     public function restore()
     {
-        if (!$this->exists) {
+        if (! $this->exists) {
             return;
         }
 
         $this->forceFill([
-            $this->getDelayedDeletingColumn() => 0
+            $this->getDelayedDeletingColumn() => 0,
         ])->save();
     }
 
