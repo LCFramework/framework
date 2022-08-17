@@ -192,7 +192,7 @@ class Installer extends Component implements HasForms
                                         ->hint('This should never be enabled in production')
                                         ->helperText('Display detailed errors and enable debugging functionality'),
                                     Toggle::make('app_require_email_verification')
-                                        ->label('Require email verifications')
+                                        ->label('Require email verification')
                                         ->helperText('When a user creates an account, should they be required to confirm their email?'),
                                 ]),
                         ]),
