@@ -10,7 +10,7 @@ class CharacterJob
 
     public static function getJobs(): array
     {
-        if (!static::$jobs !== null) {
+        if (! static::$jobs !== null) {
             return static::$jobs;
         }
 
@@ -25,7 +25,7 @@ class CharacterJob
                 ['Sorcerer', 'Specialist', 'Elementalist'],
                 ['Nightshadow'],
                 ['Ex-Rogue', 'Ex-Ranger', 'Ex-Assassin'],
-                ['ArchMage', 'ArchWizard', 'ArchWitch']
+                ['ArchMage', 'ArchWizard', 'ArchWitch'],
             ]
         );
     }
