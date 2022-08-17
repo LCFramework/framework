@@ -25,7 +25,7 @@ class CharacterRelationManager extends RelationManager
                 TextInput::make('a_level')
                     ->label('Level')
                     ->required()
-                    ->minValue(1)
+                    ->minValue(1),
             ]);
     }
 
