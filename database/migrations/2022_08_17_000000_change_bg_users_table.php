@@ -15,7 +15,7 @@ return new class extends Migration
     {
         $tableName = $this->getTableName();
 
-        Schema::table($tableName, function (Blueprint $table) use ($tableName) {
+        Schema::connection('installer')->table($tableName, function (Blueprint $table) use ($tableName) {
             $table->unsignedInteger('user_code')->autoIncrement()->change();
             $table->string('passwd')->change();
 
