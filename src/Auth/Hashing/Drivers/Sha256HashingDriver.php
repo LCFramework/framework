@@ -6,13 +6,6 @@ use Illuminate\Contracts\Hashing\Hasher;
 
 class Sha256HashingDriver implements Hasher
 {
-    protected string $salt;
-
-    public function __construct()
-    {
-        $this->salt = config('lcframework.last_chaos.auth.salt');
-    }
-
     public function info($hashedValue): array
     {
         return [];
@@ -20,11 +13,12 @@ class Sha256HashingDriver implements Hasher
 
     public function make($value, array $options = []): string
     {
+        $salt = config('lcframework.last_chaos.auth.salt');
         $username = $options['user_id'] ?? '';
 
         return hash(
             'sha256',
-            $value.$this->salt.$username
+            $value.$salt.$username
         );
     }
 
