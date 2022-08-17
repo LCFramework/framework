@@ -77,6 +77,7 @@ class Installer extends Component implements HasForms
                 ->actions([
                     Action::make('exception_message')
                         ->label('View')
+                        ->button()
                         ->emit('openExceptionModal')
                 ])
                 ->send();
