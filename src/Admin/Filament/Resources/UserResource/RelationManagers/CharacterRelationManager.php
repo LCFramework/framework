@@ -2,6 +2,8 @@
 
 namespace LCFramework\Framework\Admin\Filament\Resources\UserResource\RelationManagers;
 
+use Filament\Forms\Components\TextInput;
+use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables\Columns\TextColumn;
@@ -11,6 +13,21 @@ class CharacterRelationManager extends RelationManager
     protected static string $relationship = 'characters';
 
     protected static ?string $recordTitleAttribute = 'a_nick';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                TextInput::make('a_nick')
+                    ->label('Name')
+                    ->required()
+                    ->maxLength(20),
+                TextInput::make('a_level')
+                    ->label('Level')
+                    ->required()
+                    ->minValue(1)
+            ]);
+    }
 
     public static function table(Table $table): Table
     {
