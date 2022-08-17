@@ -55,7 +55,7 @@ return new class extends Migration
 
     protected function getTableName(): string
     {
-        return config('lcframework.last_chaos.database.auth').'.bg_user';
+        return 'bg_user';
     }
 
     protected function getTableIndexes(string $tableName): array
