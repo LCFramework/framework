@@ -42,7 +42,7 @@ class PendingDeletionScope implements Scope
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    public function extend(Builder $builder)
+    public function extend(Builder $builder): void
     {
         foreach ($this->extensions as $extension) {
             $this->{"add{$extension}"}($builder);
@@ -63,7 +63,7 @@ class PendingDeletionScope implements Scope
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return string
      */
-    protected function getPendingDeleteColumn(Builder $builder)
+    protected function getPendingDeleteColumn(Builder $builder): string
     {
         if (count((array) $builder->getQuery()->joins) > 0) {
             return $builder->getModel()->getQualifiedPendingDeleteColumn();
@@ -78,7 +78,7 @@ class PendingDeletionScope implements Scope
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    protected function addRestore(Builder $builder)
+    protected function addRestore(Builder $builder): void
     {
         $builder->macro('restore', function (Builder $builder) {
             $builder->withPendingDeletes();
@@ -95,7 +95,7 @@ class PendingDeletionScope implements Scope
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    protected function addWithPendingDeletes(Builder $builder)
+    protected function addWithPendingDeletes(Builder $builder): void
     {
         $builder->macro('withPendingDeletes', function (Builder $builder, $withPendingDeletes = true) {
             if (! $withPendingDeletes) {
@@ -112,7 +112,7 @@ class PendingDeletionScope implements Scope
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    protected function addWithoutPendingDeletes(Builder $builder)
+    protected function addWithoutPendingDeletes(Builder $builder): void
     {
         $builder->macro('withoutPendingDeletes', function (Builder $builder) {
             $model = $builder->getModel();
@@ -133,13 +133,13 @@ class PendingDeletionScope implements Scope
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    protected function addOnlyPendingDeletes(Builder $builder)
+    protected function addOnlyPendingDeletes(Builder $builder): void
     {
         $builder->macro('onlyPendingDeletes', function (Builder $builder) {
             $model = $builder->getModel();
 
             $builder->withoutGlobalScope($this)->where(
-                $model->getQualifiedPendingDeletesColumn(),
+                $model->getQualifiedPendingDeleteColumn(),
                 '!=',
                 0
             );
