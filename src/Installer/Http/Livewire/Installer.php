@@ -65,6 +65,12 @@ class Installer extends Component implements HasForms
                 ->danger()
                 ->title('Settings have failed to update')
                 ->body('LCFramework may not have write access to the .env file')
+                ->actions([
+                    Action::make('exception_message')
+                        ->label('View')
+                        ->button()
+                        ->emit('openExceptionModal'),
+                ])
                 ->send();
 
             return;
@@ -90,6 +96,12 @@ class Installer extends Component implements HasForms
                 ->danger()
                 ->title('Migrations have failed to run')
                 ->body('LCFramework may not be able to connect to your database')
+                ->actions([
+                    Action::make('exception_message')
+                        ->label('View')
+                        ->button()
+                        ->emit('openExceptionModal'),
+                ])
                 ->send();
 
             return;
@@ -357,7 +369,7 @@ class Installer extends Component implements HasForms
                     'port' => $data['db_port'],
                     'database' => $data['db_name'],
                     'username' => $data['db_username'],
-                    'password' => $data['password'],
+                    'password' => $data['db_password'],
                     'unix_socket' => '',
                     'charset' => 'utf8mb4',
                     'collation' => 'utf8mb4_unicode_ci',
