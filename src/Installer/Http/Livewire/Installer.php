@@ -321,7 +321,6 @@ class Installer extends Component implements HasForms
     {
         try {
             config([
-                'app.name' => $data['app_name'],
                 'app.url' => $data['app_url'],
                 'app.env' => $data['app_environment'],
                 'app.debug' => $data['app_debug'],
