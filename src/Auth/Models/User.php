@@ -3,12 +3,15 @@
 namespace LCFramework\Framework\Auth\Models;
 
 use Filament\Models\Contracts\HasName;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use LCFramework\Framework\Auth\Contracts\ShouldVerifyEmail;
 use LCFramework\Framework\Auth\Notifications\EmailVerification;
 use LCFramework\Framework\LastChaos\Models\Character;
+use LCFramework\Framework\LastChaos\Models\UserMeta;
 use LCFramework\Framework\Transformer\Facade\Transformer;
 
 class User extends Authenticatable implements ShouldVerifyEmail, HasName
@@ -38,7 +41,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 
     public function getTable(): string
     {
-        return config('lcframework.last_chaos.database.auth').'.bg_user';
+        return config('lcframework.last_chaos.database.auth') . '.bg_user';
     }
 
     public function getFillable(): array
@@ -87,6 +90,43 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
             Character::class,
             'a_user_index',
             'user_code'
+        );
+    }
+
+    public function meta(): HasOne
+    {
+        return $this->hasOne(
+            UserMeta::class,
+            'a_idname',
+            'user_id'
+        );
+    }
+
+    public function isBanned(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $meta = $this->meta;
+                if ($meta === null) {
+                    return false;
+                }
+
+                return $meta->a_enable;
+            }
+        );
+    }
+
+    public function isOnline(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $meta = $this->meta;
+                if ($meta === null) {
+                    return false;
+                }
+
+                return $meta->a_zone_num !== -1;
+            }
         );
     }
 }
