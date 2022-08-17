@@ -18,8 +18,10 @@ class InstallerServiceProvider extends ServiceProvider
             if (config()->get('app.key') === null) {
                 $key = $this->generateRandomKey();
 
-                if (File::put(
-                    base_path('.env'), 'APP_KEY=' . $key)
+                if (
+                    File::put(
+                        base_path('.env'), 'APP_KEY=' . $key
+                    )
                 ) {
                     config()->set('app.key', $key);
                 }
