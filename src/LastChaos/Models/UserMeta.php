@@ -35,7 +35,7 @@ class UserMeta extends Model
             'auth.user_meta.casts',
             [
                 ...parent::getCasts(),
-                'a_enable' => 'integer',
+                'a_enable' => 'boolean',
                 'a_zone_num' => 'integer'
             ]
         );

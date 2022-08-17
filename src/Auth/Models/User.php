@@ -111,7 +111,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
                     return false;
                 }
 
-                return $meta->a_enable;
+                return !$meta->a_enable;
             }
         );
     }
