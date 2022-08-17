@@ -80,7 +80,7 @@ class CharacterRelationManager extends RelationManager
                 BooleanColumn::make('a_admin')
                     ->label('Administrator')
                     ->sortable()
-                    ->getStateUsing(fn(Character $record): bool => $record->is_admin),
+                    ->getStateUsing(fn (Character $record): bool => $record->is_admin),
                 TextColumn::make('a_createdate')
                     ->label('Created at')
                     ->date()
