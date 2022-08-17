@@ -206,7 +206,7 @@ trait PendingDeletion
      */
     public function getPendingDeleteColumn(): string
     {
-        return defined(static::class.'::PENDING_DELETE') ? static::PENDING_DELETE : 'a_delete_delay';
+        return defined(static::class.'::PENDING_DELETE') ? static::PENDING_DELETE : 'a_deletedelay';
     }
 
     /**
