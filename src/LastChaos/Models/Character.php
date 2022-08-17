@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use LCFramework\Framework\Auth\Models\User;
+use LCFramework\Framework\LastChaos\Eloquent\DelayedDeleting;
 use LCFramework\Framework\LastChaos\Support\CharacterJob;
 use LCFramework\Framework\Transformer\Facade\Transformer;
 
 class Character extends Model
 {
+    use DelayedDeleting;
+
     public $timestamps = false;
 
     protected $primaryKey = 'a_index';
@@ -45,6 +48,7 @@ class Character extends Model
                 ...parent::getCasts(),
                 'a_createdate' => 'datetime',
                 'a_admin' => 'integer',
+                'a_deletedelay' => 'integer'
             ]
         );
     }
