@@ -4,6 +4,7 @@ namespace LCFramework\Framework\Installer;
 
 use Illuminate\Contracts\Encryption\Encrypter as EncrypterInterface;
 use Illuminate\Encryption\Encrypter;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use LCFramework\Framework\Installer\Http\Livewire\Installer;
 use LCFramework\Framework\LCFramework;
@@ -15,7 +16,13 @@ class InstallerServiceProvider extends ServiceProvider
     {
         $this->app->beforeResolving(EncrypterInterface::class, function () {
             if (config()->get('app.key') === null) {
-                config()->set('app.key', $this->generateRandomKey());
+                $key = $this->generateRandomKey();
+
+                if (File::put(
+                    base_path('.env'), 'APP_KEY=' . $key)
+                ) {
+                    config()->set('app.key', $key);
+                }
             }
         });
     }
@@ -27,17 +34,17 @@ class InstallerServiceProvider extends ServiceProvider
             Installer::class
         );
 
-        if (! LCFramework::installed()) {
+        if (!LCFramework::installed()) {
             $this->loadRoutesFrom(
-                __DIR__.'/../../routes/installer.php'
+                __DIR__ . '/../../routes/installer.php'
             );
         }
     }
 
     protected function generateRandomKey()
     {
-        return 'base64:'.base64_encode(
-            Encrypter::generateKey(config('app.cipher'))
-        );
+        return 'base64:' . base64_encode(
+                Encrypter::generateKey(config('app.cipher'))
+            );
     }
 }
