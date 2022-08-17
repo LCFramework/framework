@@ -92,7 +92,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!($user = $this->createUser($data))) {
+        if (! ($user = $this->createUser($data))) {
             Notification::make()
                 ->danger()
                 ->title('Failed to create the user')
