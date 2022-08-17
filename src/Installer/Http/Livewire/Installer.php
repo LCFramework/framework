@@ -117,13 +117,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!Storage::put('lcframework', '')) {
-            Notification::make()
-                ->danger()
-                ->title('Settings have failed to update')
-                ->body('LCFramework may not have write access to the storage folder')
-                ->send();
-        }
+        Storage::put('lcframework', '');
 
         $this->linkStorage();
 
