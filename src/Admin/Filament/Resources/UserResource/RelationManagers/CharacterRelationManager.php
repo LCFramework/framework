@@ -55,7 +55,7 @@ class CharacterRelationManager extends RelationManager
                     ->searchable(),
             ])
             ->actions([
-                EditAction::make()
+                EditAction::make(),
             ]);
     }
 }
