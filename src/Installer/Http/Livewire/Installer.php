@@ -53,7 +53,7 @@ class Installer extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (!$this->updateEnv($data)) {
+        if (! $this->updateEnv($data)) {
             Notification::make()
                 ->danger()
                 ->title('Settings have failed to update')
@@ -63,7 +63,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!$this->updateConfig($data)) {
+        if (! $this->updateConfig($data)) {
             Notification::make()
                 ->danger()
                 ->title('Config has failed to update')
@@ -72,7 +72,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!$this->runMigrations($data)) {
+        if (! $this->runMigrations($data)) {
             Notification::make()
                 ->danger()
                 ->title('Migrations have failed to run')
@@ -82,7 +82,7 @@ class Installer extends Component implements HasForms
             return;
         }
 
-        if (!$this->createUser($data)) {
+        if (! $this->createUser($data)) {
             Notification::make()
                 ->danger()
                 ->title('Failed to create the user')
@@ -236,7 +236,7 @@ class Installer extends Component implements HasForms
                                     TextInput::make('mail_password')
                                         ->label('Password')
                                         ->password()
-                                        ->dehydrated(fn($state) => filled($state)),
+                                        ->dehydrated(fn ($state) => filled($state)),
                                     TextInput::make('mail_from_address')
                                         ->label('From address')
                                         ->hint('The sender email address'),
@@ -336,10 +336,9 @@ class Installer extends Component implements HasForms
                 ],
                 'mail.address' => [
                     'address' => $data['mail_from_address'],
-                    'name' => $data['mail_from_name']
-                ]
+                    'name' => $data['mail_from_name'],
+                ],
             ]);
-
 
             return true;
         } catch (Exception) {
@@ -365,7 +364,7 @@ class Installer extends Component implements HasForms
                 ->create([
                     'user_id' => $data['user_username'],
                     'email' => $data['user_email'],
-                    'password' => Hash::make($data['user_password'])
+                    'password' => Hash::make($data['user_password']),
                 ]);
 
             return true;

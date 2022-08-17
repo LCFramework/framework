@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -18,23 +19,23 @@ return new class extends Migration {
             $table->integer('user_code')->autoIncrement()->change();
             $table->string('passwd')->change();
 
-            if (!Schema::hasColumn($tableName, 'remember_token')) {
+            if (! Schema::hasColumn($tableName, 'remember_token')) {
                 $table->rememberToken();
             }
 
-            if (!Schema::hasColumn($tableName, 'active_time')) {
+            if (! Schema::hasColumn($tableName, 'active_time')) {
                 $table->dateTime('active_time')->useCurrent();
             }
 
-            if (!Schema::hasColumn($tableName, 'create_date')) {
+            if (! Schema::hasColumn($tableName, 'create_date')) {
                 $table->dateTime('create_date')->useCurrent();
             }
 
-            if (!Schema::hasColumn($tableName, 'update_time')) {
+            if (! Schema::hasColumn($tableName, 'update_time')) {
                 $table->dateTime('update_time')->useCurrent();
             }
 
-            if (!Schema::hasColumn($tableName, 'email')) {
+            if (! Schema::hasColumn($tableName, 'email')) {
                 $table->string('email')->unique();
             } else {
                 $table->string('email')->change();
@@ -42,7 +43,7 @@ return new class extends Migration {
 
             $indexes = $this->getTableIndexes($tableName);
 
-            if (!isset($indexes['bg_users_unique'])) {
+            if (! isset($indexes['bg_users_unique'])) {
                 $table->unique('email');
             }
         });
@@ -50,7 +51,7 @@ return new class extends Migration {
 
     protected function getTableName(): string
     {
-        return config('lcframework.last_chaos.database.auth') . '.bg_user';
+        return config('lcframework.last_chaos.database.auth').'.bg_user';
     }
 
     protected function getTableIndexes(string $tableName): array
