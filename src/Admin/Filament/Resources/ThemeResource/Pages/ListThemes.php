@@ -2,6 +2,7 @@
 
 namespace LCFramework\Framework\Admin\Filament\Resources\ThemeResource\Pages;
 
+use Exception;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
@@ -16,15 +17,23 @@ class ListThemes extends ListRecords
 
     public function enableTheme(Theme $record): void
     {
-        Themes::enable($record->name);
+        try {
+            Themes::enable($record->name);
 
-        $record->forceFill(['enabled' => true])->save();
+            $record->forceFill(['enabled' => true])->save();
 
-        Notification::make()
-            ->success()
-            ->title(sprintf('Theme "%s" has been successfully enabled', $record->name))
-            ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
-            ->send();
+            Notification::make()
+                ->success()
+                ->title(sprintf('Theme "%s" has been successfully enabled', $record->name))
+                ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
+                ->send();
+        } catch (Exception) {
+            Notification::make()
+                ->danger()
+                ->title(sprintf('Theme "%s" has failed to be enabled', $record->name))
+                ->body('The theme has errors that cannot be automatically resolved')
+                ->send();
+        }
     }
 
     public function disableTheme(Theme $record): void

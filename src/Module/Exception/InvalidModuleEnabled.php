@@ -14,6 +14,6 @@ class InvalidModuleEnabled extends Exception
             $name = $name->getName();
         }
 
-        return new(sprintf('Cannot enable invalid module "%s"', $name));
+        return new static(sprintf('Cannot enable invalid module "%s"', $name));
     }
 }

@@ -7,7 +7,8 @@ use Illuminate\Foundation\ProviderRepository;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use LCFramework\Framework\Module\Exception\InvalidModuleEnabled;
+use LCFramework\Framework\Module\Repository\ModuleRepositoryInterface;
+use LCFramework\Framework\Theme\Exception\InvalidThemeException;
 use LCFramework\Framework\Theme\Exception\ThemeNotFoundException;
 use LCFramework\Framework\Theme\Loader\ThemeLoaderInterface;
 use LCFramework\Framework\Theme\Theme;
@@ -18,16 +19,20 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected ThemeLoaderInterface $loader;
 
+    protected ModuleRepositoryInterface $modules;
+
     protected ?array $themes = null;
 
     protected ?Theme $enabledTheme = null;
 
     public function __construct(
         Application $app,
-        ThemeLoaderInterface $loader
+        ThemeLoaderInterface $loader,
+        ModuleRepositoryInterface $modules
     ) {
         $this->app = $app;
         $this->loader = $loader;
+        $this->modules = $modules;
     }
 
     public function all(): array
@@ -67,7 +72,7 @@ class ThemeRepository implements ThemeRepositoryInterface
         }
 
         if (! $this->validate($theme)) {
-            throw InvalidModuleEnabled::module($theme);
+            throw InvalidThemeException::theme($theme);
         }
 
         settings_put('lcframework.themes.enabled', $theme->getName());
@@ -115,6 +120,25 @@ class ThemeRepository implements ThemeRepositoryInterface
             return false;
         }
 
+        foreach ($theme->getDependencies() as $dependency => $version) {
+            if (! ($dependencyModule = $this->modules->find($dependency))) {
+                return false;
+            }
+
+            $dependencyVersion = $dependencyModule->getVersion();
+
+            if (
+                $dependencyVersion !== '*' &&
+                version_compare($dependencyVersion, $version, '<')
+            ) {
+                return false;
+            }
+
+            if (! $this->modules->validate($dependency)) {
+                return false;
+            }
+        }
+
         if ($parent = $theme->getParent()) {
             return $this->validate($parent);
         }
@@ -140,6 +164,13 @@ class ThemeRepository implements ThemeRepositoryInterface
             $this->disable();
 
             return;
+        }
+
+        foreach ($theme->getDependencies() as $dependency => $version) {
+            $module = $this->modules->find($dependency);
+            if (! $module->enabled()) {
+                $this->modules->enable($module);
+            }
         }
 
         $this->bootProviders($theme);
@@ -212,8 +243,8 @@ class ThemeRepository implements ThemeRepositoryInterface
 
         $this->themes = [];
 
-        foreach ($all as $name => $module) {
-            $this->themes[$name] = $this->loader->fromArray($module);
+        foreach ($all as $name => $theme) {
+            $this->themes[$name] = $this->loader->fromArray($theme);
         }
 
         return true;
@@ -235,8 +266,8 @@ class ThemeRepository implements ThemeRepositoryInterface
             Cache::forever(
                 $cacheKey,
                 collect($this->all())
-                    ->mapWithKeys(fn (Theme $module, string $name): array => [
-                        $name => $module->toArray(),
+                    ->mapWithKeys(fn (Theme $theme, string $name): array => [
+                        $name => $theme->toArray(),
                     ])
                     ->all()
             );
@@ -270,9 +301,9 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected function registerPath(string $path): void
     {
-        $module = $this->loader->fromPath($path);
+        $theme = $this->loader->fromPath($path);
 
-        $this->themes[$module->getName()] = $module;
+        $this->themes[$theme->getName()] = $theme;
     }
 
     protected function getCacheKey(): string

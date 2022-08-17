@@ -2,12 +2,12 @@
 
 namespace LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Pages;
 
+use Exception;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Collection;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
-use LCFramework\Framework\Module\Exception\InvalidModuleEnabled;
 use LCFramework\Framework\Module\Facade\Modules;
 use LCFramework\Framework\Module\Models\Module;
 
@@ -17,15 +17,23 @@ class ListModules extends ListRecords
 
     public function enableModule(Module $record): void
     {
-        Modules::enable($record->name);
+        try {
+            Modules::enable($record->name);
 
-        $record->forceFill(['status' => 'enabled'])->save();
+            $record->forceFill(['status' => 'enabled'])->save();
 
-        Notification::make()
-            ->success()
-            ->title(sprintf('Module "%s" has been successfully enabled', $record->name))
-            ->body('This includes any dependency modules')
-            ->send();
+            Notification::make()
+                ->success()
+                ->title(sprintf('Module "%s" has been successfully enabled', $record->name))
+                ->body('This includes any dependency modules')
+                ->send();
+        } catch (Exception) {
+            Notification::make()
+                ->danger()
+                ->title(sprintf('Module "%s" has failed to be enabled', $record->name))
+                ->body('The module has errors that cannot be automatically resolved')
+                ->send();
+        }
     }
 
     public function disableModule(Module $record): void
@@ -72,15 +80,11 @@ class ListModules extends ListRecords
                 $module->forceFill(['status' => 'enabled'])->save();
 
                 $count++;
-            } catch (InvalidModuleEnabled) {
+            } catch (Exception) {
                 Notification::make()
                     ->danger()
-                    ->title(
-                        sprintf(
-                            'Failed to enable module "%s"',
-                            $module->name
-                        )
-                    )
+                    ->title(sprintf('Module "%s" has failed to be enabled', $module->name))
+                    ->body('The module has errors that cannot be automatically resolved')
                     ->send();
             }
         }
