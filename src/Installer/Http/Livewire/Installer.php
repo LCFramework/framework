@@ -268,8 +268,7 @@ class Installer extends Component implements HasForms
                                         ->hint('This is usually your email address'),
                                     TextInput::make('mail_password')
                                         ->label('Password')
-                                        ->password()
-                                        ->dehydrated(fn ($state) => filled($state)),
+                                        ->password(),
                                     TextInput::make('mail_from_address')
                                         ->label('From address')
                                         ->hint('The sender email address'),
