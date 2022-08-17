@@ -3,10 +3,12 @@
 namespace LCFramework\Framework\Auth\Models;
 
 use Filament\Models\Contracts\HasName;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use LCFramework\Framework\Auth\Contracts\ShouldVerifyEmail;
 use LCFramework\Framework\Auth\Notifications\EmailVerification;
+use LCFramework\Framework\LastChaos\Models\Character;
 use LCFramework\Framework\Transformer\Facade\Transformer;
 
 class User extends Authenticatable implements ShouldVerifyEmail, HasName
@@ -36,7 +38,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
 
     public function getTable(): string
     {
-        return config('lcframework.last_chaos.database.auth').'.bg_user';
+        return config('lcframework.last_chaos.database.auth') . '.bg_user';
     }
 
     public function getFillable(): array
@@ -55,7 +57,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
     public function getHidden(): array
     {
         return Transformer::transform(
-            'auth.user.fillable',
+            'auth.user.hidden',
             [
                 'passwd',
                 'remember_token',
@@ -66,7 +68,7 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
     public function getCasts(): array
     {
         return Transformer::transform(
-            'auth.user.fillable',
+            'auth.user.casts',
             [
                 ...parent::getCasts(),
                 'email_verified_at' => 'datetime',
@@ -77,5 +79,14 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
     public function getAuthPassword(): string
     {
         return $this->passwd;
+    }
+
+    public function characters(): HasMany
+    {
+        return $this->hasMany(
+            Character::class,
+            'a_user_index',
+            'user_code'
+        );
     }
 }
