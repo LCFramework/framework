@@ -11,12 +11,7 @@ class HashManager extends HashManagerBase implements Hasher
 {
     public function getDefaultDriver(): string
     {
-        $version = $this->config->get('lcframework.last_chaos.version');
-
-        return match ($version) {
-            4 => 'sha256',
-            default => 'plainText',
-        };
+        return $this->config->get('lcframework.last_chaos.auth.hash', 'sha256');
     }
 
     public function createSha256Driver(): Sha256HashingDriver
