@@ -37,6 +37,7 @@ class UserResource extends Resource
                 Card::make()
                     ->schema([
                         TextInput::make('user_id')
+                            ->label('Username')
                             ->required()
                             ->maxLength(255),
                         TextInput::make('email')
@@ -109,7 +110,7 @@ class UserResource extends Resource
                 BooleanColumn::make('email_verified_at')
                     ->label('Verified')
                     ->sortable()
-                    ->getStateUsing(fn (User $record): bool => $record->hasVerifiedEmail()),
+                    ->getStateUsing(fn(User $record): bool => $record->hasVerifiedEmail()),
                 TextColumn::make('create_date')
                     ->label('Created at')
                     ->date()
