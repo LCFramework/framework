@@ -32,6 +32,10 @@ class Installer extends Component implements HasForms
 
     public string $exceptionMessage = '';
 
+    protected $listeners = [
+        'openExceptionModal' => 'openExceptionModal'
+    ];
+
     public function mount(): void
     {
         if (LCFramework::installed()) {
@@ -73,7 +77,7 @@ class Installer extends Component implements HasForms
                 ->actions([
                     Action::make('exception_message')
                         ->label('View')
-                        ->emit('open-modal', ['id' => 'exception-modal'])
+                        ->emit('openExceptionModal')
                 ])
                 ->send();
 
@@ -106,6 +110,13 @@ class Installer extends Component implements HasForms
             ->success()
             ->title('Successfully installed')
             ->send();
+    }
+
+    public function openExceptionModal(): void
+    {
+        $this->dispatchBrowserEvent('open-modal', [
+            'id' => 'exception-modal'
+        ]);
     }
 
     protected function getFormSchema(): array
