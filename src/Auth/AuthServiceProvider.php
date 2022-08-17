@@ -32,8 +32,6 @@ class AuthServiceProvider extends EventServiceProvider
     public function register()
     {
         parent::register();
-
-        $this->registerHashing();
     }
 
     public function boot(): void
@@ -41,6 +39,8 @@ class AuthServiceProvider extends EventServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../../routes/auth.php');
 
         $this->registerLivewireComponents();
+
+        $this->extendHashing();
 
         Auth::provider('eloquent', function (Application $app): EloquentUserProvider {
             return new EloquentUserProvider(
@@ -50,7 +50,7 @@ class AuthServiceProvider extends EventServiceProvider
         });
     }
 
-    protected function registerHashing(): void
+    protected function extendHashing(): void
     {
         Hash::extend('sha256', function() {
             return new Sha256HashingDriver();
