@@ -432,7 +432,7 @@ class Installer extends Component implements HasForms
                 ->create([
                     'user_id' => $data['user_username'],
                     'email' => $data['user_email'],
-                    'password' => Hash::make($data['user_password'], [
+                    'passwd' => Hash::make($data['user_password'], [
                         'user_id' => $data['user_username']
                     ]),
                     'email_verified_at',
