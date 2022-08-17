@@ -35,7 +35,7 @@ class Character extends Model
                 'a_job2',
                 'a_level',
                 'a_admin',
-                'a_deletedelay'
+                'a_deletedelay',
             ]
         );
     }
