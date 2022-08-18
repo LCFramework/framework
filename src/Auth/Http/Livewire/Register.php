@@ -8,13 +8,10 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use LCFramework\Framework\Auth\Models\User;
 use LCFramework\Framework\Form\Builder\FormBuilder;
+use LCFramework\Framework\Support\Auth;
 use LCFramework\Framework\Transformer\Facade\Transformer;
 use Livewire\Component;
 
@@ -60,15 +57,7 @@ class Register extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        $user = User::create([
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
+        Auth::register($data);
 
         return redirect('/');
     }
