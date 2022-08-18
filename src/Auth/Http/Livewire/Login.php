@@ -13,6 +13,7 @@ use Filament\Forms\Contracts\HasForms;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\ValidationException;
 use LCFramework\Framework\Form\Builder\FormBuilder;
+use LCFramework\Framework\Support\Auth;
 use LCFramework\Framework\Transformer\Facade\Transformer;
 use Livewire\Component;
 
@@ -56,19 +57,7 @@ class Login extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        if (! auth()->attempt([
-            function ($query) use ($data) {
-                $query->orWhere('email', '=', $data['email'])
-                    ->orWhere('user_id', '=', $data['email']);
-            },
-            'password' => $data['password'],
-        ], $data['remember'])) {
-            throw ValidationException::withMessages([
-                'email' => 'Invalid email address or password',
-            ]);
-        }
-
-        session()->put('auth.password_confirmed_at', time());
+        Auth::login($data);
 
         return redirect('/');
     }
