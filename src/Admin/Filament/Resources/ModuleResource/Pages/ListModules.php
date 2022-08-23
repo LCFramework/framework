@@ -9,6 +9,7 @@ use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
 use LCFramework\Framework\Module\Facade\Modules;
 use LCFramework\Framework\Module\Models\Module;
@@ -95,8 +96,9 @@ class ListModules extends ListRecords
             ->success()
             ->title(
                 sprintf(
-                    '%s modules have been successfully enabled',
-                    number_format($count)
+                    '%s %s have been successfully enabled',
+                    number_format($count),
+                    Str::plural('module', $count)
                 )
             )
             ->body('This includes any dependency modules')
@@ -121,8 +123,9 @@ class ListModules extends ListRecords
             ->success()
             ->title(
                 sprintf(
-                    '%s modules have been successfully disabled',
-                    number_format($count)
+                    '%s %s have been successfully disabled',
+                    number_format($count),
+                    Str::plural('count', $count)
                 )
             )
             ->body('This includes any dependency modules')
@@ -134,7 +137,7 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if (! Modules::delete($module->name)) {
+            if (!Modules::delete($module->name)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -158,8 +161,9 @@ class ListModules extends ListRecords
             ->success()
             ->title(
                 sprintf(
-                    '%s modules have been successfully deleted',
-                    number_format($count)
+                    '%s %s have been successfully deleted',
+                    number_format($count),
+                    Str::plural('module', $count)
                 )
             )
             ->send();
@@ -172,7 +176,7 @@ class ListModules extends ListRecords
         foreach ($data['modules'] as $path) {
             $file = Storage::disk('local')->path($path);
 
-            if (! Modules::install($file)) {
+            if (!Modules::install($file)) {
                 $hasErrors = true;
 
                 continue;
@@ -193,8 +197,9 @@ class ListModules extends ListRecords
             ->success()
             ->title(
                 sprintf(
-                    '%s modules have been successfully installed',
-                    number_format($count)
+                    '%s %s have been successfully installed',
+                    number_format($count),
+                    Str::plural('module', $count)
                 )
             )
             ->send();
@@ -205,13 +210,13 @@ class ListModules extends ListRecords
         return [
             Action::make('enable')
                 ->label('Enable')
-                ->hidden(fn (Module $record): bool => $record->enabled)
+                ->hidden(fn(Module $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableModule'),
             Action::make('disable')
                 ->label('Disable')
-                ->hidden(fn (Module $record): bool => $record->disabled)
+                ->hidden(fn(Module $record): bool => $record->disabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableModule'),
