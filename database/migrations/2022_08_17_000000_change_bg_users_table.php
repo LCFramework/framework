@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -21,42 +20,42 @@ return new class extends Migration
         $builder->table(
             $tableName,
             function (Blueprint $table) use ($builder, $tableName) {
+                $indexes = $this->getTableIndexes($builder, $tableName);
+
                 $table->unsignedInteger('user_code')
                     ->autoIncrement()
                     ->change();
 
                 $table->string('passwd')->change();
 
-                if (! $builder->hasColumn($tableName, 'remember_token')) {
+                if (!$builder->hasColumn($tableName, 'remember_token')) {
                     $table->rememberToken();
                 }
 
-                if (! $builder->hasColumn($tableName, 'active_time')) {
+                if (!$builder->hasColumn($tableName, 'active_time')) {
                     $table->dateTime('active_time')->useCurrent();
                 }
 
-                if (! $builder->hasColumn($tableName, 'create_date')) {
+                if (!$builder->hasColumn($tableName, 'create_date')) {
                     $table->dateTime('create_date')->useCurrent();
                 }
 
-                if (! $builder->hasColumn($tableName, 'update_time')) {
+                if (!$builder->hasColumn($tableName, 'update_time')) {
                     $table->dateTime('update_time')->useCurrent();
                 }
 
-                if (! $builder->hasColumn($tableName, 'email')) {
+                if (!$builder->hasColumn($tableName, 'email')) {
                     $table->string('email')->unique();
                 } else {
                     $table->string('email')->change();
+
+                    if (!isset($indexes['bg_users_unique'])) {
+                        $table->unique('email');
+                    }
                 }
 
-                if (! $builder->hasColumn($tableName, 'email_verified_at')) {
+                if (!$builder->hasColumn($tableName, 'email_verified_at')) {
                     $table->dateTime('email_verified_at')->nullable();
-                }
-
-                $indexes = $this->getTableIndexes($builder, $tableName);
-
-                if (! isset($indexes['bg_users_unique'])) {
-                    $table->unique('email');
                 }
             }
         );
