@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use LCFramework\Framework\Module\Exception\InvalidModuleEnabled;
 use LCFramework\Framework\Module\Exception\ModuleNotFoundException;
+use LCFramework\Framework\Module\Installer\ModuleInstallerInterface;
 use LCFramework\Framework\Module\Loader\ModuleLoaderInterface;
 use LCFramework\Framework\Module\Module;
 use MJS\TopSort\CircularDependencyException;
@@ -21,16 +22,20 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected ModuleLoaderInterface $loader;
 
+    private ModuleInstallerInterface $installer;
+
     protected ?array $modules = null;
 
     protected ?array $ordered = null;
 
     public function __construct(
         Application $app,
-        ModuleLoaderInterface $loader
+        ModuleLoaderInterface $loader,
+        ModuleInstallerInterface $installer
     ) {
         $this->app = $app;
         $this->loader = $loader;
+        $this->installer = $installer;
     }
 
     public function all(): array
@@ -202,6 +207,20 @@ class ModuleRepository implements ModuleRepositoryInterface
         foreach ($this->ordered() as $module) {
             $this->bootProviders($module);
         }
+    }
+
+    public function install(string $path): bool
+    {
+        if(!$this->installer->install($path)) {
+            return false;
+        }
+
+        $this->modules = null;
+        $this->ordered = null;
+
+        $this->load();
+
+        return true;
     }
 
     protected function bootProviders(Module $module): void

@@ -8,6 +8,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
 use LCFramework\Framework\Module\Facade\Modules;
 use LCFramework\Framework\Module\Models\Module;
@@ -133,7 +134,7 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if (! Modules::delete($module->name)) {
+            if (!Modules::delete($module->name)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -166,7 +167,11 @@ class ListModules extends ListRecords
 
     public function installModules(array $data): void
     {
-        dd($data);
+        foreach($data['modules'] as $path) {
+            $file = Storage::disk('local')->path($path);
+
+            Modules::install($file);
+        }
     }
 
     protected function getTableActions(): array
@@ -174,13 +179,13 @@ class ListModules extends ListRecords
         return [
             Action::make('enable')
                 ->label('Enable')
-                ->hidden(fn (Module $record): bool => $record->enabled)
+                ->hidden(fn(Module $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableModule'),
             Action::make('disable')
                 ->label('Disable')
-                ->hidden(fn (Module $record): bool => $record->disabled)
+                ->hidden(fn(Module $record): bool => $record->disabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableModule'),
@@ -202,9 +207,12 @@ class ListModules extends ListRecords
                 ->form([
                     FileUpload::make('modules')
                         ->label('Modules')
+                        ->disk('local')
+                        ->directory('modules-tmp')
+                        ->multiple()
+                        ->minFiles(1)
                         ->acceptedFileTypes([
                             'application/zip',
-                            'application/octet-stream',
                             'application/x-zip-compressed',
                             'multipart/x-zip',
                         ]),

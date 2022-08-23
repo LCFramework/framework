@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.1",
         "ext-pdo_sqlite": "*",
+        "ext-zip": "*",
         "calebporzio/sushi": "^2.4",
         "danharrin/livewire-rate-limiting": "^1.0",
         "doctrine/dbal": "^3.4",
