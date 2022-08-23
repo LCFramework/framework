@@ -3,6 +3,7 @@
 namespace LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Pages;
 
 use Exception;
+use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
@@ -132,7 +133,7 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if (! Modules::delete($module->name)) {
+            if (!Modules::delete($module->name)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -163,18 +164,23 @@ class ListModules extends ListRecords
             ->send();
     }
 
+    public function installModules(array $data): void
+    {
+        dd($data);
+    }
+
     protected function getTableActions(): array
     {
         return [
             Action::make('enable')
                 ->label('Enable')
-                ->hidden(fn (Module $record): bool => $record->enabled)
+                ->hidden(fn(Module $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableModule'),
             Action::make('disable')
                 ->label('Disable')
-                ->hidden(fn (Module $record): bool => $record->disabled)
+                ->hidden(fn(Module $record): bool => $record->disabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableModule'),
@@ -184,6 +190,25 @@ class ListModules extends ListRecords
                 ->icon('heroicon-o-trash')
                 ->requiresConfirmation()
                 ->action('deleteModule'),
+        ];
+    }
+
+    protected function getActions(): array
+    {
+        return [
+            Action::make('install')
+                ->label('Install modules')
+                ->action('installModules')
+                ->form([
+                    FileUpload::make('modules')
+                        ->label('Modules')
+                        ->acceptedFileTypes([
+                            'application/zip',
+                            'application/octet-stream',
+                            'application/x-zip-compressed',
+                            'multipart/x-zip'
+                        ])
+                ])
         ];
     }
 
