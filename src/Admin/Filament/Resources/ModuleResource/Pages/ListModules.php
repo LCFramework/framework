@@ -134,7 +134,7 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if (! Modules::delete($module->name)) {
+            if (!Modules::delete($module->name)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -167,11 +167,36 @@ class ListModules extends ListRecords
 
     public function installModules(array $data): void
     {
+        $hasErrors = false;
+        $count = 0;
         foreach ($data['modules'] as $path) {
             $file = Storage::disk('local')->path($path);
 
-            Modules::install($file);
+            if (!Modules::install($file)) {
+                $hasErrors = true;
+                continue;
+            }
+
+            $count++;
         }
+
+        if ($hasErrors) {
+            Notification::make()
+                ->danger()
+                ->title('One or more modules have failed to install')
+                ->body('LCFramework may not have writable permissions to the module directory or the modules may have errors')
+                ->send();
+        }
+
+        Notification::make()
+            ->success()
+            ->title(
+                sprintf(
+                    '%s modules have been successfully installed',
+                    number_format($count)
+                )
+            )
+            ->send();
     }
 
     protected function getTableActions(): array
@@ -179,13 +204,13 @@ class ListModules extends ListRecords
         return [
             Action::make('enable')
                 ->label('Enable')
-                ->hidden(fn (Module $record): bool => $record->enabled)
+                ->hidden(fn(Module $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableModule'),
             Action::make('disable')
                 ->label('Disable')
-                ->hidden(fn (Module $record): bool => $record->disabled)
+                ->hidden(fn(Module $record): bool => $record->disabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableModule'),
