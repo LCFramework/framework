@@ -62,7 +62,7 @@ class ModuleInstaller implements ModuleInstallerInterface
     protected function getModuleName(ZipArchive $zip, int $index): ?string
     {
         try {
-            $composer = json_decode($zip->getFromIndex($index));
+            $composer = json_decode($zip->getFromIndex($index), true);
 
             return $composer['name'] ?? null;
         } catch (Exception) {
