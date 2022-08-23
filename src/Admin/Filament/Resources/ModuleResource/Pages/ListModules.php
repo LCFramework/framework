@@ -137,7 +137,7 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if (!Modules::delete($module->name)) {
+            if (! Modules::delete($module->name)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -176,7 +176,7 @@ class ListModules extends ListRecords
         foreach ($data['modules'] as $path) {
             $file = Storage::disk('local')->path($path);
 
-            if (!Modules::install($file)) {
+            if (! Modules::install($file)) {
                 $hasErrors = true;
 
                 continue;
@@ -210,13 +210,13 @@ class ListModules extends ListRecords
         return [
             Action::make('enable')
                 ->label('Enable')
-                ->hidden(fn(Module $record): bool => $record->enabled)
+                ->hidden(fn (Module $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableModule'),
             Action::make('disable')
                 ->label('Disable')
-                ->hidden(fn(Module $record): bool => $record->disabled)
+                ->hidden(fn (Module $record): bool => $record->disabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableModule'),
