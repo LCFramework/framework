@@ -52,7 +52,7 @@ return new class extends Migration
                 } else {
                     $table->string('email')->change();
 
-                    if (! isset($indexes['bg_users_unique'])) {
+                    if (! isset($indexes['bg_user_email_unique'])) {
                         $table->unique('email');
                     }
                 }
