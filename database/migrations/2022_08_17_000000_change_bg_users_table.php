@@ -21,6 +21,8 @@ return new class extends Migration
         $builder->table(
             $tableName,
             function (Blueprint $table) use ($builder, $tableName) {
+                $indexes = $this->getTableIndexes($builder, $tableName);
+
                 $table->unsignedInteger('user_code')
                     ->autoIncrement()
                     ->change();
@@ -47,16 +49,14 @@ return new class extends Migration
                     $table->string('email')->unique();
                 } else {
                     $table->string('email')->change();
+
+                    if (! isset($indexes['bg_user_email_unique'])) {
+                        $table->unique('email');
+                    }
                 }
 
                 if (! $builder->hasColumn($tableName, 'email_verified_at')) {
                     $table->dateTime('email_verified_at')->nullable();
-                }
-
-                $indexes = $this->getTableIndexes($builder, $tableName);
-
-                if (! isset($indexes['bg_users_unique'])) {
-                    $table->unique('email');
                 }
             }
         );
