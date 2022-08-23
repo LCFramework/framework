@@ -59,7 +59,7 @@ class ModuleInstaller implements ModuleInstallerInterface
 
         $directory = $path . '/' . $name;
 
-        File::makeDirectory($directory, 0755, true);
+        File::ensureDirectoryExists($directory);
 
         return $directory;
     }
