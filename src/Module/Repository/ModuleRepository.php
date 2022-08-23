@@ -211,7 +211,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     public function install(string $path): bool
     {
-        if(!$this->installer->install($path)) {
+        if (! $this->installer->install($path)) {
             return false;
         }
 

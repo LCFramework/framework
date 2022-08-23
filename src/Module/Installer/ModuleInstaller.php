@@ -8,11 +8,11 @@ class ModuleInstaller implements ModuleInstallerInterface
 {
     public function install(string $path): bool
     {
-        if (!($zip = $this->getPackagedModule($path))) {
+        if (! ($zip = $this->getPackagedModule($path))) {
             return false;
         }
 
-        if (!($index = $this->validate($zip))) {
+        if (! ($index = $this->validate($zip))) {
             return false;
         }
 
@@ -25,7 +25,7 @@ class ModuleInstaller implements ModuleInstallerInterface
 
     protected function validate(ZipArchive $zip): ?int
     {
-        if (!($index = $zip->locateName('composer.json', ZipArchive::FL_NODIR))) {
+        if (! ($index = $zip->locateName('composer.json', ZipArchive::FL_NODIR))) {
             return null;
         }
 
@@ -36,7 +36,7 @@ class ModuleInstaller implements ModuleInstallerInterface
     {
         $zip = new ZipArchive();
 
-        if (!$zip->open($path)) {
+        if (! $zip->open($path)) {
             return null;
         }
 
