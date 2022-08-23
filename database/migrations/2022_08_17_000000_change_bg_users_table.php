@@ -22,6 +22,8 @@ return new class extends Migration {
             function (Blueprint $table) use ($builder, $tableName) {
                 $indexes = $this->getTableIndexes($builder, $tableName);
 
+                logger(var_export($indexes, true));
+
                 $table->unsignedInteger('user_code')
                     ->autoIncrement()
                     ->change();
