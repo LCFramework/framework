@@ -5,21 +5,26 @@ namespace LCFramework\Framework\Module\Installer;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
+use LCFramework\Framework\Module\Facade\Modules;
 use ZipArchive;
 
 class ModuleInstaller implements ModuleInstallerInterface
 {
     public function install(string $path): bool
     {
-        if (! ($zip = $this->getPackagedModule($path))) {
+        if (!($zip = $this->getPackagedModule($path))) {
             return false;
         }
 
-        if (! ($index = $this->findComposerIndex($zip))) {
+        if (!($index = $this->findComposerIndex($zip))) {
             return false;
         }
 
-        if (! ($name = $this->getModuleName($zip, $index))) {
+        if (!($name = $this->getModuleName($zip, $index))) {
+            return false;
+        }
+
+        if (Modules::find($name) !== null) {
             return false;
         }
 
@@ -33,9 +38,10 @@ class ModuleInstaller implements ModuleInstallerInterface
 
     protected function extractModule(
         ZipArchive $zip,
-        string $name,
-        array $paths
-    ): bool {
+        string     $name,
+        array      $paths
+    ): bool
+    {
         try {
             $directory = $this->createDirectory($name, $paths);
 
@@ -51,7 +57,7 @@ class ModuleInstaller implements ModuleInstallerInterface
     {
         $path = Arr::first($paths);
 
-        $directory = $path.'/'.$name;
+        $directory = $path . '/' . $name;
 
         File::makeDirectory($directory, 0755, true);
 
@@ -71,7 +77,7 @@ class ModuleInstaller implements ModuleInstallerInterface
 
     protected function findComposerIndex(ZipArchive $zip): ?int
     {
-        if (! ($index = $zip->locateName('composer.json', ZipArchive::FL_NODIR))) {
+        if (!($index = $zip->locateName('composer.json', ZipArchive::FL_NODIR))) {
             return null;
         }
 
@@ -82,7 +88,7 @@ class ModuleInstaller implements ModuleInstallerInterface
     {
         $zip = new ZipArchive();
 
-        if (! $zip->open($path)) {
+        if (!$zip->open($path)) {
             return null;
         }
 
