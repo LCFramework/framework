@@ -196,7 +196,7 @@ class ListModules extends ListRecords
     protected function getActions(): array
     {
         return [
-            Action::make('install')
+            \Filament\Pages\Actions\Action::make('install')
                 ->label('Install modules')
                 ->action('installModules')
                 ->form([
