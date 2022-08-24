@@ -14,14 +14,13 @@ abstract class ComponentInstaller
     protected function publishAssets(array $providers): void
     {
         try {
-            $this->dumpAutoload();
-
             foreach ($providers as $provider) {
                 if (!method_exists($provider, 'getPublishableTags')) {
                     continue;
                 }
 
                 $tags = (array)$provider::getPublishableTags() ?? [];
+                logger('Tags: ' . var_export($tags, true));
 
                 foreach ($tags as $tag => $force) {
                     Artisan::call('vendor:publish', [
@@ -32,15 +31,6 @@ abstract class ComponentInstaller
                 }
             }
         } catch (Exception) {
-        }
-    }
-
-    protected function dumpAutoload(): void
-    {
-        if (app()->isProduction()) {
-            $this->composer->dumpOptimized();
-        } else {
-            $this->composer->dumpAutoloads();
         }
     }
 
