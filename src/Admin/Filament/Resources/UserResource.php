@@ -71,9 +71,9 @@ class UserResource extends Resource
                             ->saveRelationshipsUsing(function (User $record, $state) {
                                 $record->syncRoles($state);
 
-                                if(
+                                if (
                                     $record->user_code === auth()->id() &&
-                                    !$record->hasPermissionTo('view admin')
+                                    ! $record->hasPermissionTo('view admin')
                                 ) {
                                     $record->assignRole(Role::findById(2));
                                 }
