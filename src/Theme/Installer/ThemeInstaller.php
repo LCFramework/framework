@@ -11,19 +11,19 @@ class ThemeInstaller extends ComponentInstaller implements ThemeInstallerInterfa
 {
     public function install(string $path): bool
     {
-        if (!($zip = $this->getArchive($path))) {
+        if (! ($zip = $this->getArchive($path))) {
             return false;
         }
 
-        if (!($index = $this->findManifestIndex($zip))) {
+        if (! ($index = $this->findManifestIndex($zip))) {
             return false;
         }
 
-        if (!($manifest = $this->getManifest($zip, $index))) {
+        if (! ($manifest = $this->getManifest($zip, $index))) {
             return false;
         }
 
-        if (!$this->validate($manifest)) {
+        if (! $this->validate($manifest)) {
             return false;
         }
 
@@ -38,7 +38,7 @@ class ThemeInstaller extends ComponentInstaller implements ThemeInstallerInterfa
             return false;
         }
 
-        $providers = (array)$manifest['extra']['lcframework']['theme']['providers'] ?? [];
+        $providers = (array) $manifest['extra']['lcframework']['theme']['providers'] ?? [];
 
         $this->publishAssets($providers);
 
@@ -48,15 +48,15 @@ class ThemeInstaller extends ComponentInstaller implements ThemeInstallerInterfa
     protected function validate(array $manifest): bool
     {
         try {
-            if (!isset($manifest['name'])) {
+            if (! isset($manifest['name'])) {
                 return false;
             }
 
-            if (!isset($manifest['extra'])) {
+            if (! isset($manifest['extra'])) {
                 return false;
             }
 
-            if (!isset($manifest['extra']['lcframework'])) {
+            if (! isset($manifest['extra']['lcframework'])) {
                 return false;
             }
 
