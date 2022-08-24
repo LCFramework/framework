@@ -11,19 +11,19 @@ class ModuleInstaller extends ComponentInstaller implements ModuleInstallerInter
 {
     public function install(string $path): bool
     {
-        if (!($zip = $this->getArchive($path))) {
+        if (! ($zip = $this->getArchive($path))) {
             return false;
         }
 
-        if (!($index = $this->findManifestIndex($zip))) {
+        if (! ($index = $this->findManifestIndex($zip))) {
             return false;
         }
 
-        if (!($manifest = $this->getManifest($zip, $index))) {
+        if (! ($manifest = $this->getManifest($zip, $index))) {
             return false;
         }
 
-        if (!$this->validate($manifest)) {
+        if (! $this->validate($manifest)) {
             return false;
         }
 
@@ -38,7 +38,7 @@ class ModuleInstaller extends ComponentInstaller implements ModuleInstallerInter
             return false;
         }
 
-        $providers = (array)$manifest['extra']['lcframework']['module']['providers'] ?? [];
+        $providers = (array) $manifest['extra']['lcframework']['module']['providers'] ?? [];
 
         $this->publishAssets($providers);
 
@@ -48,15 +48,15 @@ class ModuleInstaller extends ComponentInstaller implements ModuleInstallerInter
     protected function validate(array $manifest): bool
     {
         try {
-            if (!isset($manifest['name'])) {
+            if (! isset($manifest['name'])) {
                 return false;
             }
 
-            if (!isset($manifest['extra'])) {
+            if (! isset($manifest['extra'])) {
                 return false;
             }
 
-            if (!isset($manifest['extra']['lcframework'])) {
+            if (! isset($manifest['extra']['lcframework'])) {
                 return false;
             }
 
