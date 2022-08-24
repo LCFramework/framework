@@ -15,8 +15,7 @@ abstract class ComponentInstaller
         string $type,
         string $name,
         array $providers
-    ): void
-    {
+    ): void {
         try {
             foreach ($providers as $provider) {
                 if (! method_exists($provider, 'getPublishableTags')) {
