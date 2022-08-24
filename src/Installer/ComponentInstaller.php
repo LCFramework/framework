@@ -39,9 +39,13 @@ abstract class ComponentInstaller
     protected function dumpAutoload(): void
     {
         if (app()->isProduction()) {
-            exec('composer dump-autoload');
+            exec('composer dump-autoload', $output);
         } else {
-            exec('composer dump-autoload --optimize');
+            exec('composer dump-autoload --optimize', $output);
+        }
+
+        foreach($output as $o) {
+            logger('Composer:' . $o);
         }
     }
 
