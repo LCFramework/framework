@@ -6,7 +6,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables\Columns\TextColumn;
 
-class PermissionsRelationManager extends RelationManager
+class PermissionRelationManager extends RelationManager
 {
     protected static string $relationship = 'permissions';
 

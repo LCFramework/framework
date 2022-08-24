@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use LCFramework\Framework\Admin\Filament\Resources\RoleResource\Pages\CreateRole;
 use LCFramework\Framework\Admin\Filament\Resources\RoleResource\Pages\EditRole;
 use LCFramework\Framework\Admin\Filament\Resources\RoleResource\Pages\ListRoles;
+use LCFramework\Framework\Admin\Filament\Resources\RoleResource\RelationManagers\PermissionRelationManager;
 use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
@@ -94,7 +95,9 @@ class RoleResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            PermissionRelationManager::class
+        ];
     }
 
     public static function getPages(): array
