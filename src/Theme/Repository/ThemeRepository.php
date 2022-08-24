@@ -200,17 +200,17 @@ class ThemeRepository implements ThemeRepositoryInterface
             return false;
         }
 
+        if (app()->isProduction()) {
+            $this->composer->dumpOptimized();
+        } else {
+            $this->composer->dumpAutoloads();
+        }
+
         if (
             ($enabledTheme = $this->enabled()) &&
             $enabledTheme->getName() === $theme->getName()
         ) {
             $this->disable();
-        }
-
-        if (app()->isProduction()) {
-            $this->composer->dumpOptimized();
-        } else {
-            $this->composer->dumpAutoloads();
         }
 
         return true;
