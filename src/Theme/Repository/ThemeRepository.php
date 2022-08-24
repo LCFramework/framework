@@ -4,7 +4,6 @@ namespace LCFramework\Framework\Theme\Repository;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\ProviderRepository;
-use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
