@@ -237,7 +237,7 @@ class ModuleRepository implements ModuleRepositoryInterface
         }
 
         require_once $module->getPath('vendor/autoload.php');
-        $this->installer->publishAssets($module->getProviders());
+        $this->installer->publish($module->getProviders());
 
         return true;
     }
