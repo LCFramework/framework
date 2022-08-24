@@ -169,8 +169,8 @@ class ModuleRepository implements ModuleRepositoryInterface
             return false;
         }
 
-        foreach($module->getProviders() as $provider) {
-            if(!class_exists($provider)) {
+        foreach ($module->getProviders() as $provider) {
+            if (! class_exists($provider)) {
                 return false;
             }
         }
