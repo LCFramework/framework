@@ -4,6 +4,8 @@ namespace LCFramework\Framework\Theme;
 
 use Illuminate\Support\ServiceProvider;
 use LCFramework\Framework\Theme\Facade\Themes;
+use LCFramework\Framework\Theme\Installer\ThemeInstaller;
+use LCFramework\Framework\Theme\Installer\ThemeInstallerInterface;
 use LCFramework\Framework\Theme\Loader\ThemeLoader;
 use LCFramework\Framework\Theme\Loader\ThemeLoaderInterface;
 use LCFramework\Framework\Theme\Repository\ThemeRepository;
@@ -16,6 +18,11 @@ class ThemeServiceProvider extends ServiceProvider
         $this->app->singleton(
             ThemeLoaderInterface::class,
             ThemeLoader::class
+        );
+
+        $this->app->singleton(
+            ThemeInstallerInterface::class,
+            ThemeInstaller::class
         );
 
         $this->app->alias(

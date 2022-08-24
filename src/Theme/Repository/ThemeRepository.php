@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use LCFramework\Framework\Module\Repository\ModuleRepositoryInterface;
 use LCFramework\Framework\Theme\Exception\InvalidThemeException;
 use LCFramework\Framework\Theme\Exception\ThemeNotFoundException;
+use LCFramework\Framework\Theme\Installer\ThemeInstallerInterface;
 use LCFramework\Framework\Theme\Loader\ThemeLoaderInterface;
 use LCFramework\Framework\Theme\Theme;
 
@@ -18,6 +19,8 @@ class ThemeRepository implements ThemeRepositoryInterface
     protected Application $app;
 
     protected ThemeLoaderInterface $loader;
+
+    protected ThemeInstallerInterface $installer;
 
     protected ModuleRepositoryInterface $modules;
 
@@ -28,10 +31,12 @@ class ThemeRepository implements ThemeRepositoryInterface
     public function __construct(
         Application $app,
         ThemeLoaderInterface $loader,
+        ThemeInstallerInterface $installer,
         ModuleRepositoryInterface $modules
     ) {
         $this->app = $app;
         $this->loader = $loader;
+        $this->installer = $installer;
         $this->modules = $modules;
     }
 
@@ -196,6 +201,17 @@ class ThemeRepository implements ThemeRepositoryInterface
         ) {
             $this->disable();
         }
+
+        return true;
+    }
+
+    public function install(string $path): bool
+    {
+        if (! $this->installer->install($path)) {
+            return false;
+        }
+
+        $this->load();
 
         return true;
     }

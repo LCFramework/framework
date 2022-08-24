@@ -8,6 +8,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
@@ -176,19 +177,19 @@ class ListModules extends ListRecords
         foreach ($data['modules'] as $path) {
             $file = Storage::disk('local')->path($path);
 
-            if (!Modules::install($file)) {
+            if (Modules::install($file)) {
+                $count++;
+            } else {
                 $hasErrors = true;
-
-                continue;
             }
 
-            $count++;
+            File::delete($file);
         }
 
         if ($hasErrors) {
             Notification::make()
                 ->danger()
-                ->title('One or more modules have failed to install')
+                ->title('One or more modules has failed to install')
                 ->body('LCFramework may not have writable permissions to the module directory or the modules may have errors')
                 ->send();
         }
@@ -197,7 +198,7 @@ class ListModules extends ListRecords
             ->success()
             ->title(
                 sprintf(
-                    '%s %s have been successfully installed',
+                    '%s %s has been successfully installed',
                     number_format($count),
                     Str::plural('module', $count)
                 )

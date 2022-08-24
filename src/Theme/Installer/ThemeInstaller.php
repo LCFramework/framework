@@ -1,12 +1,12 @@
 <?php
 
-namespace LCFramework\Framework\Module\Installer;
+namespace LCFramework\Framework\Theme\Installer;
 
 use Illuminate\Support\Arr;
 use LCFramework\Framework\Installer\ComponentInstaller;
-use LCFramework\Framework\Module\Facade\Modules;
+use LCFramework\Framework\Theme\Facade\Themes;
 
-class ModuleInstaller extends ComponentInstaller implements ModuleInstallerInterface
+class ThemeInstaller extends ComponentInstaller implements ThemeInstallerInterface
 {
     public function install(string $path): bool
     {
@@ -22,11 +22,11 @@ class ModuleInstaller extends ComponentInstaller implements ModuleInstallerInter
             return false;
         }
 
-        if (Modules::find($name) !== null) {
+        if (Themes::find($name) !== null) {
             return false;
         }
 
-        $paths = config('lcframework.modules.paths');
+        $paths = config('lcframework.themes.paths');
         if (empty($paths)) {
             return false;
         }
