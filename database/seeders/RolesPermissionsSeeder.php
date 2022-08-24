@@ -3,6 +3,7 @@
 namespace LCFramework\Framework\Seeders;
 
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Exceptions\PermissionAlreadyExists;
 use Spatie\Permission\Exceptions\RoleAlreadyExists;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -20,7 +21,7 @@ class RolesPermissionsSeeder extends Seeder
         foreach ($permissions as $permission) {
             try {
                 Permission::create(['name' => $permission]);
-            } catch (RoleAlreadyExists) {
+            } catch (PermissionAlreadyExists) {
                 // Role may already exist if we're installing into an old database
             }
         }
