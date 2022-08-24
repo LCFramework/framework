@@ -24,7 +24,7 @@ class ModuleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-puzzle';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = -9999;
 
     public static function table(Table $table): Table
     {

@@ -23,7 +23,7 @@ class ThemeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-color-swatch';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = -9999;
 
     public static function table(Table $table): Table
     {
