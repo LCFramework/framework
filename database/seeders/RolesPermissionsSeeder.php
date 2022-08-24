@@ -31,14 +31,14 @@ class RolesPermissionsSeeder extends Seeder
         return [
             [
                 'name' => 'User',
-                'permissions' => []
+                'permissions' => [],
             ],
             [
                 'name' => 'Administrator',
                 'permissions' => [
-                    'view admin'
-                ]
-            ]
+                    'view admin',
+                ],
+            ],
         ];
     }
 
