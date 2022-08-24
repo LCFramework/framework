@@ -22,7 +22,7 @@ class ModuleResource extends Resource
 
     protected static ?string $navigationGroup = 'Extend';
 
-    protected static ?string $navigationIcon = 'heroicon-o-puzzle-piece';
+    protected static ?string $navigationIcon = 'heroicon-o-puzzle';
 
     protected static ?int $navigationSort = 0;
 
