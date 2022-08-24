@@ -52,7 +52,7 @@ class UserResource extends Resource
                             ->label('Email address')
                             ->required()
                             ->email()
-                            ->unique()
+                            ->unique(User::class, 'email', fn ($record) => $record)
                             ->maxLength(255),
                         TextInput::make('passwd')
                             ->label('Password')
