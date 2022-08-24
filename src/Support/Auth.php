@@ -12,12 +12,11 @@ class Auth
 {
     public static function login(
         array $credentials,
-        bool  $updatePasswordConfirmed = true
-    ): void
-    {
+        bool $updatePasswordConfirmed = true
+    ): void {
         $username = $credentials['email'] ?? $credentials['username'];
 
-        if (!auth()->attempt([
+        if (! auth()->attempt([
             function ($query) use ($username) {
                 $query->orWhere('email', '=', $username)
                     ->orWhere('user_id', '=', $username);
@@ -36,10 +35,9 @@ class Auth
 
     public static function register(
         array $credentials,
-        bool  $loginAfter = true,
-        bool  $silently = false
-    ): User
-    {
+        bool $loginAfter = true,
+        bool $silently = false
+    ): User {
         $user = User::create([
             'username' => $credentials['username'],
             'email' => $credentials['email'],
@@ -48,7 +46,7 @@ class Auth
 
         $user->assignRole(Role::findById(1));
 
-        if (!$silently) {
+        if (! $silently) {
             event(new Registered($user));
         }
 
