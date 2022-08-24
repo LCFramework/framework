@@ -17,6 +17,7 @@
         "doctrine/dbal": "^3.4",
         "filament/filament": "^2.15",
         "filament/forms": "^2.15",
+        "filament/spatie-laravel-media-library-plugin": "^2.15",
         "illuminate/contracts": "^9.0",
         "marcj/topsort": "^2.0",
         "spatie/laravel-medialibrary": "^10.4",
