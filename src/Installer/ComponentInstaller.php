@@ -25,11 +25,11 @@ abstract class ComponentInstaller
             $this->dumpAutoload();
 
             foreach ($providers as $provider) {
-                if (!method_exists($provider, 'getPublishableTags')) {
+                if (! method_exists($provider, 'getPublishableTags')) {
                     continue;
                 }
 
-                $tags = (array)$provider::getPublishableTags() ?? [];
+                $tags = (array) $provider::getPublishableTags() ?? [];
 
                 foreach ($tags as $tag => $force) {
                     Artisan::call('vendor:publish', [
@@ -54,10 +54,9 @@ abstract class ComponentInstaller
 
     protected function extract(
         ZipArchive $zip,
-        string     $name,
-        string     $path
-    ): bool
-    {
+        string $name,
+        string $path
+    ): bool {
         try {
             $directory = $this->createDirectory($name, $path);
 
@@ -71,7 +70,7 @@ abstract class ComponentInstaller
 
     protected function createDirectory(string $name, string $path): string
     {
-        $directory = $path . '/' . $name;
+        $directory = $path.'/'.$name;
 
         File::ensureDirectoryExists($directory);
 
@@ -89,7 +88,7 @@ abstract class ComponentInstaller
 
     protected function findManifestIndex(ZipArchive $zip): ?int
     {
-        if (!($index = $zip->locateName('composer.json', ZipArchive::FL_NODIR))) {
+        if (! ($index = $zip->locateName('composer.json', ZipArchive::FL_NODIR))) {
             return null;
         }
 
@@ -100,7 +99,7 @@ abstract class ComponentInstaller
     {
         $zip = new ZipArchive();
 
-        if (!$zip->open($path)) {
+        if (! $zip->open($path)) {
             return null;
         }
 
