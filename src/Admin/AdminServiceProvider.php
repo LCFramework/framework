@@ -21,7 +21,7 @@ class AdminServiceProvider extends PluginServiceProvider
         ModuleResource::class,
         ThemeResource::class,
         UserResource::class,
-        RoleResource::class
+        RoleResource::class,
     ];
 
     public function configurePackage(Package $package): void

@@ -35,11 +35,11 @@ class RoleResource extends Resource
                 Card::make()
                     ->schema([
                         Hidden::make('guard')
-                            ->dehydrateStateUsing(fn() => 'web'),
+                            ->dehydrateStateUsing(fn () => 'web'),
                         TextInput::make('name')
                             ->label('Name')
                             ->required()
-                            ->maxLength(255)
+                            ->maxLength(255),
                     ])
                     ->columnSpan([
                         'sm' => 2,
@@ -49,10 +49,10 @@ class RoleResource extends Resource
                     ->schema([
                         Placeholder::make('created_at')
                             ->label('Created at')
-                            ->content(fn(?Role $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                            ->content(fn (?Role $record): string => $record?->created_at?->diffForHumans() ?? '-'),
                         Placeholder::make('updated_at')
                             ->label('Updated at')
-                            ->content(fn(?Role $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                            ->content(fn (?Role $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
                     ])
                     ->columnSpan(1),
             ])
@@ -103,7 +103,6 @@ class RoleResource extends Resource
             'edit' => EditRole::route('/{record}/edit'),
         ];
     }
-
 
     public static function canDelete(Model $record): bool
     {
