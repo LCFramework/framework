@@ -33,10 +33,9 @@ class ModuleServiceProvider extends ServiceProvider
             ModuleRepositoryInterface::class,
             ModuleRepository::class
         );
-    }
 
-    public function boot(): void
-    {
-        Modules::boot();
+        $this->app->beforeResolving('filament', function() {
+            Modules::boot();
+        });
     }
 }

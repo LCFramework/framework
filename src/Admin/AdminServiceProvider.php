@@ -13,6 +13,7 @@ use Spatie\LaravelPackageTools\Package;
 
 class AdminServiceProvider extends PluginServiceProvider
 {
+    public static string $name = 'lcframework-admin';
     protected array $pages = [
         SiteSettings::class,
     ];
@@ -23,11 +24,6 @@ class AdminServiceProvider extends PluginServiceProvider
         UserResource::class,
         RoleResource::class,
     ];
-
-    public function configurePackage(Package $package): void
-    {
-        $package->name('lcframework-admin');
-    }
 
     public function packageBooted(): void
     {
