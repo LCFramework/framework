@@ -11,7 +11,7 @@ abstract class ComponentInstaller
 {
     abstract protected function validate(array $manifest): bool;
 
-    protected function publishAssets(array $providers): void
+    public function publishAssets(array $providers): void
     {
         try {
             foreach ($providers as $provider) {

@@ -216,11 +216,23 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     public function install(string $path): bool
     {
-        if (!$this->installer->install($path)) {
+        if (!($name = $this->installer->install($path))) {
             return false;
         }
 
         $this->load();
+
+        if (!($theme = $this->find($name))) {
+            return false;
+        }
+
+        if (!$this->validate($theme)) {
+            $this->delete($theme);
+            return false;
+        }
+
+        require_once $theme->getPath('vendor/autoload.php');
+        $this->installer->publishAssets($theme->getProviders());
 
         return true;
     }

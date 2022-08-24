@@ -9,40 +9,40 @@ use LCFramework\Framework\Theme\Facade\Themes;
 
 class ThemeInstaller extends ComponentInstaller implements ThemeInstallerInterface
 {
-    public function install(string $path): bool
+    public function install(string $path): ?string
     {
         if (! ($zip = $this->getArchive($path))) {
-            return false;
+            return null;
         }
 
         if (! ($index = $this->findManifestIndex($zip))) {
-            return false;
+            return null;
         }
 
         if (! ($manifest = $this->getManifest($zip, $index))) {
-            return false;
+            return null;
         }
 
         if (! $this->validate($manifest)) {
-            return false;
+            return null;
         }
 
         $name = $manifest['name'];
 
         if (Themes::find($name) !== null) {
-            return false;
+            return null;
         }
 
         $paths = config('lcframework.themes.paths');
         if (empty($paths)) {
-            return false;
+            return null;
         }
 
-        $providers = (array) $manifest['extra']['lcframework']['theme']['providers'] ?? [];
+        if(!$this->extract($zip, $name, Arr::first($paths))) {
+            return null;
+        }
 
-        $this->publishAssets($providers);
-
-        return $this->extract($zip, $name, Arr::first($paths));
+        return $name;
     }
 
     protected function validate(array $manifest): bool

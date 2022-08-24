@@ -9,22 +9,22 @@ use LCFramework\Framework\Module\Facade\Modules;
 
 class ModuleInstaller extends ComponentInstaller implements ModuleInstallerInterface
 {
-    public function install(string $path): bool
+    public function install(string $path): ?string
     {
-        if (! ($zip = $this->getArchive($path))) {
-            return false;
+        if (!($zip = $this->getArchive($path))) {
+            return null;
         }
 
-        if (! ($index = $this->findManifestIndex($zip))) {
-            return false;
+        if (!($index = $this->findManifestIndex($zip))) {
+            return null;
         }
 
-        if (! ($manifest = $this->getManifest($zip, $index))) {
-            return false;
+        if (!($manifest = $this->getManifest($zip, $index))) {
+            return null;
         }
 
-        if (! $this->validate($manifest)) {
-            return false;
+        if (!$this->validate($manifest)) {
+            return null;
         }
 
         $name = $manifest['name'];
@@ -35,28 +35,28 @@ class ModuleInstaller extends ComponentInstaller implements ModuleInstallerInter
 
         $paths = config('lcframework.modules.paths');
         if (empty($paths)) {
-            return false;
+            return null;
         }
 
-        $providers = (array) $manifest['extra']['lcframework']['module']['providers'] ?? [];
+        if (!$this->extract($zip, $name, Arr::first($paths))) {
+            return null;
+        }
 
-        $this->publishAssets($providers);
-
-        return $this->extract($zip, $name, Arr::first($paths));
+        return $name;
     }
 
     protected function validate(array $manifest): bool
     {
         try {
-            if (! isset($manifest['name'])) {
+            if (!isset($manifest['name'])) {
                 return false;
             }
 
-            if (! isset($manifest['extra'])) {
+            if (!isset($manifest['extra'])) {
                 return false;
             }
 
-            if (! isset($manifest['extra']['lcframework'])) {
+            if (!isset($manifest['extra']['lcframework'])) {
                 return false;
             }
 
