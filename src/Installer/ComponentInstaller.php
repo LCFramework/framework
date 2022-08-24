@@ -28,7 +28,7 @@ abstract class ComponentInstaller
                     Artisan::call('vendor:publish', [
                         '--provider' => $provider,
                         '--tag' => $tag,
-                        '--force' => $force
+                        '--force' => $force,
                     ]);
                 }
             }

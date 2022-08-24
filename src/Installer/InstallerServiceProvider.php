@@ -6,7 +6,6 @@ use Illuminate\Contracts\Encryption\Encrypter as EncrypterInterface;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
-use LCFramework\Framework\Installer\Console\Commands\PublishComponent;
 use LCFramework\Framework\Installer\Http\Livewire\Installer;
 use LCFramework\Framework\LCFramework;
 use Livewire\Livewire;
