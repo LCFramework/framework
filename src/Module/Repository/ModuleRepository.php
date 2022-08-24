@@ -235,7 +235,11 @@ class ModuleRepository implements ModuleRepositoryInterface
             $this->app,
             $this->app['files'],
             $this->getManifestPath($module)
-        ))->load($module->getProviders());
+        ))->load(
+            collect($module->getProviders())
+                ->filter(fn(string $provider): bool => class_exists($provider))
+                ->all()
+        );
     }
 
     protected function getManifestPath(Module $module): string
