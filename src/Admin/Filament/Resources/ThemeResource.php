@@ -17,9 +17,9 @@ class ThemeResource extends Resource
 {
     protected static ?string $model = Theme::class;
 
-    protected static ?string $slug = 'administration/themes';
+    protected static ?string $slug = 'appearance/themes';
 
-    protected static ?string $navigationGroup = 'Administration';
+    protected static ?string $navigationGroup = 'Appearance';
 
     protected static ?string $navigationIcon = 'heroicon-o-color-swatch';
 

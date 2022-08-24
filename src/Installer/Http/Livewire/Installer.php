@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
 use LCFramework\Framework\Auth\Models\User;
 use LCFramework\Framework\LCFramework;
+use LCFramework\Framework\Seeders\RolesPermissionsSeeder;
 use LCFramework\Framework\Support\Env;
 use Livewire\Component;
 
@@ -445,6 +446,10 @@ class Installer extends Component implements HasForms
                 '--force' => true,
             ]);
 
+            Artisan::call('db:seed', [
+                '--class' => RolesPermissionsSeeder::class,
+            ]);
+
             return true;
         } catch (Exception $e) {
             $this->exceptionMessage = $e->getMessage();
@@ -469,6 +474,10 @@ class Installer extends Component implements HasForms
                         'email_verified_at' => now(),
                     ]
                 );
+
+            if (! $user->hasRole('Administrator')) {
+                $user->assignRole('Administrator');
+            }
 
             return $user;
         } catch (Exception $e) {

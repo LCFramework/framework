@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use LCFramework\Framework\Auth\Models\User;
+use Spatie\Permission\Models\Role;
 
 class Auth
 {
@@ -42,6 +43,8 @@ class Auth
             'email' => $credentials['email'],
             'password' => Hash::make($credentials['password']),
         ]);
+
+        $user->assignRole(Role::findById(1));
 
         if (! $silently) {
             event(new Registered($user));

@@ -5,9 +5,11 @@ namespace LCFramework\Framework\Admin\Filament\Resources;
 use Closure;
 use DateTimeInterface;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Page;
 use Filament\Resources\Form;
 use Filament\Resources\Pages\CreateRecord;
@@ -25,6 +27,7 @@ use LCFramework\Framework\Admin\Filament\Resources\UserResource\Pages\EditUser;
 use LCFramework\Framework\Admin\Filament\Resources\UserResource\Pages\ListUsers;
 use LCFramework\Framework\Admin\Filament\Resources\UserResource\RelationManagers\CharacterRelationManager;
 use LCFramework\Framework\Auth\Models\User;
+use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -50,7 +53,7 @@ class UserResource extends Resource
                             ->label('Email address')
                             ->required()
                             ->email()
-                            ->unique()
+                            ->unique(User::class, 'email', fn ($record) => $record)
                             ->maxLength(255),
                         TextInput::make('passwd')
                             ->label('Password')
@@ -63,6 +66,18 @@ class UserResource extends Resource
                         TextInput::make('passwd_confirmation')
                             ->label('Confirm password')
                             ->password(),
+                        MultiSelect::make('roles')
+                            ->relationship('roles', 'name')
+                            ->saveRelationshipsUsing(function (User $record, $state) {
+                                $record->syncRoles($state);
+
+                                if (
+                                    $record->user_code === auth()->id() &&
+                                    ! $record->hasPermissionTo('view admin')
+                                ) {
+                                    $record->assignRole(Role::findById(2));
+                                }
+                            }),
                     ])
                     ->columns([
                         'sm' => 2,
@@ -161,6 +176,18 @@ class UserResource extends Resource
             'index' => ListUsers::route('/'),
             'create' => CreateUser::route('/create'),
             'edit' => EditUser::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getNavigationItems(): array
+    {
+        return [
+            ...parent::getNavigationItems(),
+            NavigationItem::make('Your account')
+                ->group(static::getNavigationGroup())
+                ->icon('heroicon-o-user')
+                ->sort(static::getNavigationSort() + 1)
+                ->url(route('filament.resources.users.edit', [auth()->id()])),
         ];
     }
 
