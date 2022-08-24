@@ -5,14 +5,16 @@
         <div class="flex items-center justify-end py-4">
             <ul class="flex items-center space-x-4">
                 @auth
-                    <li>
-                        <a
-                            href="{{route('filament.pages.dashboard')}}"
-                            class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
-                        >
-                            Administration
-                        </a>
-                    </li>
+                    @can('view admin')
+                        <li>
+                            <a
+                                href="{{route('filament.pages.dashboard')}}"
+                                class="font-medium transition hover:text-primary-500 focus:text-primary-700 dark:text-gray-300"
+                            >
+                                Administration
+                            </a>
+                        </li>
+                    @endcan
                     <li>
                         <form
                             action="{{route('logout')}}"
