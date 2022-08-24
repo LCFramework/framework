@@ -42,7 +42,7 @@ class PublishComponent extends Command
         $this->determineWhatShouldBePublished();
 
         if (
-            !($moduleName = $this->option('module')) &&
+            ! ($moduleName = $this->option('module')) &&
             Modules::validate($moduleName)
         ) {
             $module = Modules::findOrFail($moduleName);
@@ -50,7 +50,7 @@ class PublishComponent extends Command
         }
 
         if (
-            !($themeName = $this->option('theme')) &&
+            ! ($themeName = $this->option('theme')) &&
             Themes::validate($themeName)
         ) {
             $theme = Themes::findOrFail($themeName);
@@ -73,7 +73,7 @@ class PublishComponent extends Command
         }
 
         [$this->provider, $this->tags] = [
-            $provider, (array)$tag,
+            $provider, (array) $tag,
         ];
     }
 
@@ -93,7 +93,7 @@ class PublishComponent extends Command
         }
 
         if ($publishing === false) {
-            $this->components->info('No publishable resources for tag [' . $tag . '].');
+            $this->components->info('No publishable resources for tag ['.$tag.'].');
         } else {
             $this->laravel['events']->dispatch(new VendorTagPublished($tag, $pathsToPublish));
 
@@ -114,7 +114,7 @@ class PublishComponent extends Command
             $this->publishFile($from, $to);
 
             return;
-        } else if ($this->files->isDirectory($from)) {
+        } elseif ($this->files->isDirectory($from)) {
             $this->publishDirectory($from, $to);
 
             return;
@@ -125,7 +125,7 @@ class PublishComponent extends Command
 
     protected function publishFile($from, $to): void
     {
-        if ((!$this->option('existing') && (!$this->files->exists($to) || $this->option('force')))
+        if ((! $this->option('existing') && (! $this->files->exists($to) || $this->option('force')))
             || ($this->option('existing') && $this->files->exists($to))) {
             $this->createParentDirectory(dirname($to));
 
@@ -136,12 +136,12 @@ class PublishComponent extends Command
             if ($this->option('existing')) {
                 $this->components->twoColumnDetail(sprintf(
                     'File [%s] does not exist',
-                    str_replace(base_path() . '/', '', $to),
+                    str_replace(base_path().'/', '', $to),
                 ), '<fg=yellow;options=bold>SKIPPED</>');
             } else {
                 $this->components->twoColumnDetail(sprintf(
                     'File [%s] already exists',
-                    str_replace(base_path() . '/', '', realpath($to)),
+                    str_replace(base_path().'/', '', realpath($to)),
                 ), '<fg=yellow;options=bold>SKIPPED</>');
             }
         }
@@ -167,27 +167,27 @@ class PublishComponent extends Command
             if (
                 $file['type'] === 'file'
                 && (
-                    (!$this->option('existing') && (!$manager->fileExists('to://' . $path) || $this->option('force')))
-                    || ($this->option('existing') && $manager->fileExists('to://' . $path))
+                    (! $this->option('existing') && (! $manager->fileExists('to://'.$path) || $this->option('force')))
+                    || ($this->option('existing') && $manager->fileExists('to://'.$path))
                 )
             ) {
-                $manager->write('to://' . $path, $manager->read($file['path']));
+                $manager->write('to://'.$path, $manager->read($file['path']));
             }
         }
     }
 
     protected function createParentDirectory($directory): void
     {
-        if (!$this->files->isDirectory($directory)) {
+        if (! $this->files->isDirectory($directory)) {
             $this->files->makeDirectory($directory, 0755, true);
         }
     }
 
     protected function status($from, $to, $type): void
     {
-        $from = str_replace(base_path() . '/', '', realpath($from));
+        $from = str_replace(base_path().'/', '', realpath($from));
 
-        $to = str_replace(base_path() . '/', '', realpath($to));
+        $to = str_replace(base_path().'/', '', realpath($to));
 
         $this->components->task(sprintf(
             'Copying %s [%s] to [%s]',
