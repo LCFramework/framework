@@ -11,7 +11,7 @@ abstract class ComponentInstaller
 {
     abstract protected function validate(array $manifest): bool;
 
-    public function publishAssets(array $providers): void
+    public function publishAssets(string $type, string $name, array $providers): void
     {
         try {
             foreach ($providers as $provider) {
@@ -20,13 +20,13 @@ abstract class ComponentInstaller
                 }
 
                 $tags = (array)$provider::getPublishableTags() ?? [];
-                logger('Tags: ' . var_export($tags, true));
 
                 foreach ($tags as $tag => $force) {
                     Artisan::call('lcframework:publish', [
                         '--provider' => $provider,
                         '--tag' => is_string($tag) ? $tag : $force,
                         '--force' => is_bool($force) ? $force : true,
+                        '--' . $type => $name
                     ]);
                 }
             }
