@@ -6,6 +6,7 @@ use Illuminate\Contracts\Encryption\Encrypter as EncrypterInterface;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use LCFramework\Framework\Installer\Console\Commands\PublishComponent;
 use LCFramework\Framework\Installer\Http\Livewire\Installer;
 use LCFramework\Framework\LCFramework;
 use Livewire\Livewire;
@@ -43,6 +44,12 @@ class InstallerServiceProvider extends ServiceProvider
             $this->loadRoutesFrom(
                 __DIR__.'/../../routes/installer.php'
             );
+        }
+
+        if($this->app->runningInConsole()) {
+            $this->commands([
+                PublishComponent::class
+            ]);
         }
     }
 
