@@ -6,9 +6,5 @@ interface ModuleInstallerInterface
 {
     public function install(string $path): ?string;
 
-    public function publishAssets(
-        string $type,
-        string $name,
-        array $providers
-    ): void;
+    public function publishAssets(array $providers): void;
 }

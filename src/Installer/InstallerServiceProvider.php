@@ -45,12 +45,6 @@ class InstallerServiceProvider extends ServiceProvider
                 __DIR__.'/../../routes/installer.php'
             );
         }
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                PublishComponent::class,
-            ]);
-        }
     }
 
     protected function generateRandomKey(): string
