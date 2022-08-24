@@ -475,7 +475,7 @@ class Installer extends Component implements HasForms
                     ]
                 );
 
-            if(!$user->hasRole('Administrator')) {
+            if (! $user->hasRole('Administrator')) {
                 $user->assignRole('Administrator');
             }
 
