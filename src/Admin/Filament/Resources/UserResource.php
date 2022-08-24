@@ -169,9 +169,9 @@ class UserResource extends Resource
     {
         return [
             ...parent::getNavigationItems(),
-            NavigationItem::make(static::getNavigationLabel())
+            NavigationItem::make('Your account')
                 ->group(static::getNavigationGroup())
-                ->icon(static::getNavigationIcon())
+                ->icon('heroicon-o-user')
                 ->sort(static::getNavigationSort() + 1)
                 ->url(route('filament.resources.users.edit', [auth()->id()])),
         ];
