@@ -38,7 +38,7 @@ class ThemeInstaller extends ComponentInstaller implements ThemeInstallerInterfa
             return null;
         }
 
-        if(!$this->extract($zip, $name, Arr::first($paths))) {
+        if (! $this->extract($zip, $name, Arr::first($paths))) {
             return null;
         }
 
