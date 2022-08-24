@@ -43,8 +43,8 @@ abstract class ComponentInstaller
             exec('composer dump-autoload --optimize', $output);
         }
 
-        foreach($output as $o) {
-            logger('Composer:' . $o);
+        foreach ($output as $o) {
+            logger('Composer:'.$o);
         }
     }
 
