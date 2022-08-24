@@ -4,6 +4,7 @@ namespace LCFramework\Framework\Theme\Repository;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\ProviderRepository;
+use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -24,6 +25,8 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected ModuleRepositoryInterface $modules;
 
+    protected Composer $composer;
+
     protected ?array $themes = null;
 
     protected ?Theme $enabledTheme = null;
@@ -32,12 +35,14 @@ class ThemeRepository implements ThemeRepositoryInterface
         Application $app,
         ThemeLoaderInterface $loader,
         ThemeInstallerInterface $installer,
-        ModuleRepositoryInterface $modules
+        ModuleRepositoryInterface $modules,
+        Composer $composer
     ) {
         $this->app = $app;
         $this->loader = $loader;
         $this->installer = $installer;
         $this->modules = $modules;
+        $this->composer = $composer;
     }
 
     public function all(): array
@@ -202,9 +207,9 @@ class ThemeRepository implements ThemeRepositoryInterface
         }
 
         if (app()->isProduction()) {
-            exec('composer dump-autoload');
+            $this->composer->dumpOptimized();
         } else {
-            exec('composer dump-autoload --optimize');
+            $this->composer->dumpAutoloads();
         }
 
         if (

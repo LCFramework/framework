@@ -3,12 +3,20 @@
 namespace LCFramework\Framework\Installer;
 
 use Exception;
+use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
 
 abstract class ComponentInstaller
 {
+    protected Composer $composer;
+
+    public function __construct(Composer $composer)
+    {
+        $this->composer = $composer;
+    }
+
     abstract protected function validate(array $manifest): bool;
 
     protected function publishAssets(array $providers): void
@@ -38,13 +46,9 @@ abstract class ComponentInstaller
     protected function dumpAutoload(): void
     {
         if (app()->isProduction()) {
-            exec('composer dump-autoload', $output);
+            $this->composer->dumpOptimized();
         } else {
-            exec('composer dump-autoload --optimize', $output);
-        }
-
-        foreach ($output as $o) {
-            logger('Composer:'.$o);
+            $this->composer->dumpAutoloads();
         }
     }
 
