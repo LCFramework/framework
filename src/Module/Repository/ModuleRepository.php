@@ -237,7 +237,7 @@ class ModuleRepository implements ModuleRepositoryInterface
             $this->getManifestPath($module)
         ))->load(
             collect($module->getProviders())
-                ->filter(fn(string $provider): bool => class_exists($provider))
+                ->filter(fn (string $provider): bool => class_exists($provider))
                 ->all()
         );
     }
