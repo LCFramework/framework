@@ -10,13 +10,6 @@ use ZipArchive;
 
 abstract class ComponentInstaller
 {
-    protected Composer $composer;
-
-    public function __construct(Composer $composer)
-    {
-        $this->composer = $composer;
-    }
-
     abstract protected function validate(array $manifest): bool;
 
     protected function publishAssets(array $providers): void
@@ -46,9 +39,9 @@ abstract class ComponentInstaller
     protected function dumpAutoload(): void
     {
         if (app()->isProduction()) {
-            $this->composer->dumpOptimized();
+            exec('composer dump-autoload');
         } else {
-            $this->composer->dumpAutoloads();
+            exec('composer dump-autoload --optimize');
         }
     }
 
