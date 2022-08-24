@@ -10,15 +10,15 @@ class ModuleInstaller extends ComponentInstaller implements ModuleInstallerInter
 {
     public function install(string $path): bool
     {
-        if (!($zip = $this->getArchive($path))) {
+        if (! ($zip = $this->getArchive($path))) {
             return false;
         }
 
-        if (!($index = $this->findComposerIndex($zip))) {
+        if (! ($index = $this->findComposerIndex($zip))) {
             return false;
         }
 
-        if (!($name = $this->getName($zip, $index))) {
+        if (! ($name = $this->getName($zip, $index))) {
             return false;
         }
 
