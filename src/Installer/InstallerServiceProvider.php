@@ -46,9 +46,9 @@ class InstallerServiceProvider extends ServiceProvider
             );
         }
 
-        if($this->app->runningInConsole()) {
+        if ($this->app->runningInConsole()) {
             $this->commands([
-                PublishComponent::class
+                PublishComponent::class,
             ]);
         }
     }
