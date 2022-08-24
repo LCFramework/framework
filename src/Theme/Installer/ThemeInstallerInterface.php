@@ -6,5 +6,5 @@ interface ThemeInstallerInterface
 {
     public function install(string $path): ?string;
 
-    public function publishAssets(array $providers): void;
+    public function publish(array $providers): void;
 }
