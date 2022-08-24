@@ -2,6 +2,7 @@
 
 namespace LCFramework\Framework\Auth\Models;
 
+use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,10 +14,11 @@ use LCFramework\Framework\Auth\Notifications\EmailVerification;
 use LCFramework\Framework\LastChaos\Models\Character;
 use LCFramework\Framework\LastChaos\Models\UserMeta;
 use LCFramework\Framework\Transformer\Facade\Transformer;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements ShouldVerifyEmail, HasName
+class User extends Authenticatable implements ShouldVerifyEmail, HasName, FilamentUser
 {
-    use Notifiable;
+    use Notifiable, HasRoles;
 
     const CREATED_AT = 'create_date';
 
@@ -27,6 +29,11 @@ class User extends Authenticatable implements ShouldVerifyEmail, HasName
     public function shouldVerifyEmail(): bool
     {
         return config('lcframework.auth.require_email_verification');
+    }
+
+    public function canAccessFilament(): bool
+    {
+        return $this->hasPermissionTo('view admin');
     }
 
     public function getFilamentName(): string

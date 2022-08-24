@@ -34,6 +34,8 @@ class AdminServiceProvider extends PluginServiceProvider
         Filament::serving(function () {
             Filament::registerNavigationGroups([
                 'Users',
+                'Appearance',
+                'Extend',
                 'Administration',
             ]);
 
