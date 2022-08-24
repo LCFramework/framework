@@ -25,8 +25,6 @@ class ThemeRepository implements ThemeRepositoryInterface
 
     protected ModuleRepositoryInterface $modules;
 
-    protected Composer $composer;
-
     protected ?array $themes = null;
 
     protected ?Theme $enabledTheme = null;
@@ -35,14 +33,12 @@ class ThemeRepository implements ThemeRepositoryInterface
         Application $app,
         ThemeLoaderInterface $loader,
         ThemeInstallerInterface $installer,
-        ModuleRepositoryInterface $modules,
-        Composer $composer
+        ModuleRepositoryInterface $modules
     ) {
         $this->app = $app;
         $this->loader = $loader;
         $this->installer = $installer;
         $this->modules = $modules;
-        $this->composer = $composer;
     }
 
     public function all(): array
@@ -201,9 +197,9 @@ class ThemeRepository implements ThemeRepositoryInterface
         }
 
         if (app()->isProduction()) {
-            $this->composer->dumpOptimized();
+            exec('composer dump-autoload');
         } else {
-            $this->composer->dumpAutoloads();
+            exec('composer dump-autoload --optimize');
         }
 
         if (
