@@ -475,6 +475,10 @@ class Installer extends Component implements HasForms
                     ]
                 );
 
+            if(!$user->hasRole('Administrator')) {
+                $user->assignRole('Administrator');
+            }
+
             return $user;
         } catch (Exception $e) {
             $this->exceptionMessage = $e->getMessage();
