@@ -15,15 +15,15 @@ abstract class ComponentInstaller
     {
         try {
             foreach ($providers as $provider) {
-                if (! method_exists($provider, 'getPublishableTags')) {
+                if (!method_exists($provider, 'getPublishableTags')) {
                     continue;
                 }
 
-                $tags = (array) $provider::getPublishableTags() ?? [];
-                logger('Tags: '.var_export($tags, true));
+                $tags = (array)$provider::getPublishableTags() ?? [];
+                logger('Tags: ' . var_export($tags, true));
 
                 foreach ($tags as $tag => $force) {
-                    Artisan::call('vendor:publish', [
+                    Artisan::call('lcframework:publish', [
                         '--provider' => $provider,
                         '--tag' => is_string($tag) ? $tag : $force,
                         '--force' => is_bool($force) ? $force : true,
@@ -36,9 +36,10 @@ abstract class ComponentInstaller
 
     protected function extract(
         ZipArchive $zip,
-        string $name,
-        string $path
-    ): bool {
+        string     $name,
+        string     $path
+    ): bool
+    {
         try {
             $directory = $this->createDirectory($name, $path);
 
@@ -52,7 +53,7 @@ abstract class ComponentInstaller
 
     protected function createDirectory(string $name, string $path): string
     {
-        $directory = $path.'/'.$name;
+        $directory = $path . '/' . $name;
 
         File::ensureDirectoryExists($directory);
 
@@ -70,7 +71,7 @@ abstract class ComponentInstaller
 
     protected function findManifestIndex(ZipArchive $zip): ?int
     {
-        if (! ($index = $zip->locateName('composer.json', ZipArchive::FL_NODIR))) {
+        if (!($index = $zip->locateName('composer.json', ZipArchive::FL_NODIR))) {
             return null;
         }
 
@@ -81,7 +82,7 @@ abstract class ComponentInstaller
     {
         $zip = new ZipArchive();
 
-        if (! $zip->open($path)) {
+        if (!$zip->open($path)) {
             return null;
         }
 

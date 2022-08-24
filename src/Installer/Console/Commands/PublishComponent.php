@@ -18,7 +18,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'lcframework:publish')]
 class PublishComponent extends Command
 {
-    protected $signature = 'lcframework:publish {--module=} {--theme=}';
+    protected $signature = 'lcframework:publish {--force} {--module=} {--theme=}';
 
     protected $description = 'Publish LCFramework assets or assets that belong to a module or theme.';
 
