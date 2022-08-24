@@ -171,11 +171,11 @@ class ListThemes extends ListRecords
         return [
             \Filament\Pages\Actions\Action::make('install')
                 ->label('Install themes')
-                ->disableLabel()
                 ->action('installThemes')
                 ->form([
                     FileUpload::make('themes')
                         ->label('Themes')
+                        ->disableLabel()
                         ->disk('local')
                         ->directory('themes-tmp')
                         ->multiple()

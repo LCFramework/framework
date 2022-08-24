@@ -235,11 +235,11 @@ class ListModules extends ListRecords
         return [
             \Filament\Pages\Actions\Action::make('install')
                 ->label('Install modules')
-                ->disableLabel()
                 ->action('installModules')
                 ->form([
                     FileUpload::make('modules')
                         ->label('Modules')
+                        ->disableLabel()
                         ->disk('local')
                         ->directory('modules-tmp')
                         ->multiple()
