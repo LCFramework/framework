@@ -232,11 +232,7 @@ class ThemeRepository implements ThemeRepositoryInterface
         }
 
         require_once $theme->getPath('vendor/autoload.php');
-        $this->installer->publishAssets(
-            'theme',
-            $theme->getName(),
-            $theme->getProviders()
-        );
+        $this->installer->publishAssets($theme->getProviders());
 
         return true;
     }
