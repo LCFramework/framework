@@ -25,4 +25,6 @@ interface ThemeRepositoryInterface
     public function boot(): void;
 
     public function delete(string|Theme $theme): bool;
+
+    public function install(string $path): bool;
 }

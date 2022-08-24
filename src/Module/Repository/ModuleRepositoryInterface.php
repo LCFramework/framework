@@ -31,4 +31,6 @@ interface ModuleRepositoryInterface
     public function boot(): void;
 
     public function delete(string|Module $module): bool;
+
+    public function install(string $path): bool;
 }

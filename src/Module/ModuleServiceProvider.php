@@ -4,6 +4,8 @@ namespace LCFramework\Framework\Module;
 
 use Illuminate\Support\ServiceProvider;
 use LCFramework\Framework\Module\Facade\Modules;
+use LCFramework\Framework\Module\Installer\ModuleInstaller;
+use LCFramework\Framework\Module\Installer\ModuleInstallerInterface;
 use LCFramework\Framework\Module\Loader\ModuleLoader;
 use LCFramework\Framework\Module\Loader\ModuleLoaderInterface;
 use LCFramework\Framework\Module\Repository\ModuleRepository;
@@ -16,6 +18,11 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->singleton(
             ModuleLoaderInterface::class,
             ModuleLoader::class
+        );
+
+        $this->app->singleton(
+            ModuleInstallerInterface::class,
+            ModuleInstaller::class
         );
 
         $this->app->alias(

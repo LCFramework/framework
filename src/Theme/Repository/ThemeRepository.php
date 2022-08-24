@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use LCFramework\Framework\Module\Repository\ModuleRepositoryInterface;
 use LCFramework\Framework\Theme\Exception\InvalidThemeException;
 use LCFramework\Framework\Theme\Exception\ThemeNotFoundException;
+use LCFramework\Framework\Theme\Installer\ThemeInstallerInterface;
 use LCFramework\Framework\Theme\Loader\ThemeLoaderInterface;
 use LCFramework\Framework\Theme\Theme;
 
@@ -18,6 +19,8 @@ class ThemeRepository implements ThemeRepositoryInterface
     protected Application $app;
 
     protected ThemeLoaderInterface $loader;
+
+    protected ThemeInstallerInterface $installer;
 
     protected ModuleRepositoryInterface $modules;
 
@@ -28,10 +31,12 @@ class ThemeRepository implements ThemeRepositoryInterface
     public function __construct(
         Application $app,
         ThemeLoaderInterface $loader,
+        ThemeInstallerInterface $installer,
         ModuleRepositoryInterface $modules
     ) {
         $this->app = $app;
         $this->loader = $loader;
+        $this->installer = $installer;
         $this->modules = $modules;
     }
 
@@ -120,6 +125,10 @@ class ThemeRepository implements ThemeRepositoryInterface
             return false;
         }
 
+        if (! File::exists($theme->getPath('vendor/autoload.php'))) {
+            return false;
+        }
+
         foreach ($theme->getDependencies() as $dependency => $version) {
             if (! ($dependencyModule = $this->modules->find($dependency))) {
                 return false;
@@ -166,6 +175,8 @@ class ThemeRepository implements ThemeRepositoryInterface
             return;
         }
 
+        require_once $theme->getPath('vendor/autoload.php');
+
         foreach ($theme->getDependencies() as $dependency => $version) {
             $module = $this->modules->find($dependency);
             if (! $module->enabled()) {
@@ -195,7 +206,33 @@ class ThemeRepository implements ThemeRepositoryInterface
             $enabledTheme->getName() === $theme->getName()
         ) {
             $this->disable();
+        } else {
+            $this->clearCache();
         }
+
+        return true;
+    }
+
+    public function install(string $path): bool
+    {
+        if (! ($name = $this->installer->install($path))) {
+            return false;
+        }
+
+        $this->load();
+
+        if (! ($theme = $this->find($name))) {
+            return false;
+        }
+
+        if (! $this->validate($theme)) {
+            $this->delete($theme);
+
+            return false;
+        }
+
+        require_once $theme->getPath('vendor/autoload.php');
+        $this->installer->publishAssets($theme->getProviders());
 
         return true;
     }
@@ -206,7 +243,11 @@ class ThemeRepository implements ThemeRepositoryInterface
             $this->app,
             $this->app['files'],
             $this->getManifestPath($theme)
-        ))->load($theme->getProviders());
+        ))->load(
+            collect($theme->getProviders())
+                ->filter(fn (string $provider): bool => class_exists($provider))
+                ->all()
+        );
     }
 
     protected function getManifestPath(Theme $theme): string

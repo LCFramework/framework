@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use LCFramework\Framework\Module\Exception\InvalidModuleEnabled;
 use LCFramework\Framework\Module\Exception\ModuleNotFoundException;
+use LCFramework\Framework\Module\Installer\ModuleInstallerInterface;
 use LCFramework\Framework\Module\Loader\ModuleLoaderInterface;
 use LCFramework\Framework\Module\Module;
 use MJS\TopSort\CircularDependencyException;
@@ -21,16 +22,20 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected ModuleLoaderInterface $loader;
 
+    private ModuleInstallerInterface $installer;
+
     protected ?array $modules = null;
 
     protected ?array $ordered = null;
 
     public function __construct(
         Application $app,
-        ModuleLoaderInterface $loader
+        ModuleLoaderInterface $loader,
+        ModuleInstallerInterface $installer
     ) {
         $this->app = $app;
         $this->loader = $loader;
+        $this->installer = $installer;
     }
 
     public function all(): array
@@ -164,6 +169,10 @@ class ModuleRepository implements ModuleRepositoryInterface
             return false;
         }
 
+        if (! File::exists($module->getPath('vendor/autoload.php'))) {
+            return false;
+        }
+
         foreach ($module->getDependencies() as $dependency => $version) {
             if (! ($dependencyModule = $this->find($dependency))) {
                 return false;
@@ -200,8 +209,37 @@ class ModuleRepository implements ModuleRepositoryInterface
         }
 
         foreach ($this->ordered() as $module) {
+            require_once $module->getPath('vendor/autoload.php');
+
             $this->bootProviders($module);
         }
+    }
+
+    public function install(string $path): bool
+    {
+        if (! ($name = $this->installer->install($path))) {
+            return false;
+        }
+
+        $this->modules = null;
+        $this->ordered = null;
+
+        $this->load();
+
+        if (! ($module = $this->find($name))) {
+            return false;
+        }
+
+        if (! $this->validate($module)) {
+            $this->delete($module);
+
+            return false;
+        }
+
+        require_once $module->getPath('vendor/autoload.php');
+        $this->installer->publishAssets($module->getProviders());
+
+        return true;
     }
 
     protected function bootProviders(Module $module): void
@@ -210,7 +248,11 @@ class ModuleRepository implements ModuleRepositoryInterface
             $this->app,
             $this->app['files'],
             $this->getManifestPath($module)
-        ))->load($module->getProviders());
+        ))->load(
+            collect($module->getProviders())
+                ->filter(fn (string $provider): bool => class_exists($provider))
+                ->all()
+        );
     }
 
     protected function getManifestPath(Module $module): string

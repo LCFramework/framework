@@ -3,10 +3,14 @@
 namespace LCFramework\Framework\Admin\Filament\Resources\ThemeResource\Pages;
 
 use Exception;
+use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use LCFramework\Framework\Admin\Filament\Resources\ThemeResource;
 use LCFramework\Framework\Theme\Facade\Themes;
 use LCFramework\Framework\Theme\Models\Theme;
@@ -102,6 +106,42 @@ class ListThemes extends ListRecords
             ->send();
     }
 
+    public function installThemes(array $data): void
+    {
+        $hasErrors = false;
+        $count = 0;
+        foreach ($data['themes'] as $path) {
+            $file = Storage::disk('local')->path($path);
+
+            if (Themes::install($file)) {
+                $count++;
+            } else {
+                $hasErrors = true;
+            }
+
+            File::delete($file);
+        }
+
+        if ($hasErrors) {
+            Notification::make()
+                ->danger()
+                ->title('One or more themes has failed to install')
+                ->body('LCFramework may not have writable permissions to the theme directory or the themes may have errors')
+                ->send();
+        }
+
+        Notification::make()
+            ->success()
+            ->title(
+                sprintf(
+                    '%s %s has been successfully installed',
+                    number_format($count),
+                    Str::plural('theme', $count)
+                )
+            )
+            ->send();
+    }
+
     protected function getTableActions(): array
     {
         return [
@@ -123,6 +163,29 @@ class ListThemes extends ListRecords
                 ->icon('heroicon-o-trash')
                 ->requiresConfirmation()
                 ->action('deleteTheme'),
+        ];
+    }
+
+    protected function getActions(): array
+    {
+        return [
+            \Filament\Pages\Actions\Action::make('install')
+                ->label('Install themes')
+                ->action('installThemes')
+                ->form([
+                    FileUpload::make('themes')
+                        ->label('Themes')
+                        ->disableLabel()
+                        ->disk('local')
+                        ->directory('themes-tmp')
+                        ->multiple()
+                        ->minFiles(1)
+                        ->acceptedFileTypes([
+                            'application/zip',
+                            'application/x-zip-compressed',
+                            'multipart/x-zip',
+                        ]),
+                ]),
         ];
     }
 

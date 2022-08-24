@@ -3,10 +3,14 @@
 namespace LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Pages;
 
 use Exception;
+use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
 use LCFramework\Framework\Module\Facade\Modules;
 use LCFramework\Framework\Module\Models\Module;
@@ -93,8 +97,9 @@ class ListModules extends ListRecords
             ->success()
             ->title(
                 sprintf(
-                    '%s modules have been successfully enabled',
-                    number_format($count)
+                    '%s %s have been successfully enabled',
+                    number_format($count),
+                    Str::plural('module', $count)
                 )
             )
             ->body('This includes any dependency modules')
@@ -119,8 +124,9 @@ class ListModules extends ListRecords
             ->success()
             ->title(
                 sprintf(
-                    '%s modules have been successfully disabled',
-                    number_format($count)
+                    '%s %s have been successfully disabled',
+                    number_format($count),
+                    Str::plural('count', $count)
                 )
             )
             ->body('This includes any dependency modules')
@@ -156,8 +162,45 @@ class ListModules extends ListRecords
             ->success()
             ->title(
                 sprintf(
-                    '%s modules have been successfully deleted',
-                    number_format($count)
+                    '%s %s have been successfully deleted',
+                    number_format($count),
+                    Str::plural('module', $count)
+                )
+            )
+            ->send();
+    }
+
+    public function installModules(array $data): void
+    {
+        $hasErrors = false;
+        $count = 0;
+        foreach ($data['modules'] as $path) {
+            $file = Storage::disk('local')->path($path);
+
+            if (Modules::install($file)) {
+                $count++;
+            } else {
+                $hasErrors = true;
+            }
+
+            File::delete($file);
+        }
+
+        if ($hasErrors) {
+            Notification::make()
+                ->danger()
+                ->title('One or more modules has failed to install')
+                ->body('LCFramework may not have writable permissions to the module directory or the modules may have errors')
+                ->send();
+        }
+
+        Notification::make()
+            ->success()
+            ->title(
+                sprintf(
+                    '%s %s has been successfully installed',
+                    number_format($count),
+                    Str::plural('module', $count)
                 )
             )
             ->send();
@@ -184,6 +227,29 @@ class ListModules extends ListRecords
                 ->icon('heroicon-o-trash')
                 ->requiresConfirmation()
                 ->action('deleteModule'),
+        ];
+    }
+
+    protected function getActions(): array
+    {
+        return [
+            \Filament\Pages\Actions\Action::make('install')
+                ->label('Install modules')
+                ->action('installModules')
+                ->form([
+                    FileUpload::make('modules')
+                        ->label('Modules')
+                        ->disableLabel()
+                        ->disk('local')
+                        ->directory('modules-tmp')
+                        ->multiple()
+                        ->minFiles(1)
+                        ->acceptedFileTypes([
+                            'application/zip',
+                            'application/x-zip-compressed',
+                            'multipart/x-zip',
+                        ]),
+                ]),
         ];
     }
 
