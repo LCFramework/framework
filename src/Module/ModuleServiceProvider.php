@@ -34,7 +34,7 @@ class ModuleServiceProvider extends ServiceProvider
             ModuleRepository::class
         );
 
-        $this->app->beforeResolving('filament', function() {
+        $this->app->beforeResolving('filament', function () {
             Modules::boot();
         });
     }

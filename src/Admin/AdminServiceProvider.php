@@ -9,11 +9,11 @@ use LCFramework\Framework\Admin\Filament\Resources\ModuleResource;
 use LCFramework\Framework\Admin\Filament\Resources\RoleResource;
 use LCFramework\Framework\Admin\Filament\Resources\ThemeResource;
 use LCFramework\Framework\Admin\Filament\Resources\UserResource;
-use Spatie\LaravelPackageTools\Package;
 
 class AdminServiceProvider extends PluginServiceProvider
 {
     public static string $name = 'lcframework-admin';
+
     protected array $pages = [
         SiteSettings::class,
     ];
