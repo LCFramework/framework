@@ -125,6 +125,12 @@ class ThemeRepository implements ThemeRepositoryInterface
             return false;
         }
 
+        foreach($theme->getProviders() as $provider) {
+            if(!class_exists($provider)) {
+                return false;
+            }
+        }
+
         foreach ($theme->getDependencies() as $dependency => $version) {
             if (! ($dependencyModule = $this->modules->find($dependency))) {
                 return false;

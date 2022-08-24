@@ -169,6 +169,12 @@ class ModuleRepository implements ModuleRepositoryInterface
             return false;
         }
 
+        foreach($module->getProviders() as $provider) {
+            if(!class_exists($provider)) {
+                return false;
+            }
+        }
+
         foreach ($module->getDependencies() as $dependency => $version) {
             if (! ($dependencyModule = $this->find($dependency))) {
                 return false;
