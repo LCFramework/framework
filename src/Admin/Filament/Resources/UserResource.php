@@ -27,6 +27,7 @@ use LCFramework\Framework\Admin\Filament\Resources\UserResource\Pages\EditUser;
 use LCFramework\Framework\Admin\Filament\Resources\UserResource\Pages\ListUsers;
 use LCFramework\Framework\Admin\Filament\Resources\UserResource\RelationManagers\CharacterRelationManager;
 use LCFramework\Framework\Auth\Models\User;
+use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -69,6 +70,13 @@ class UserResource extends Resource
                             ->relationship('roles', 'name')
                             ->saveRelationshipsUsing(function (User $record, $state) {
                                 $record->syncRoles($state);
+
+                                if(
+                                    $record->user_code === auth()->id() &&
+                                    !$record->hasPermissionTo('view admin')
+                                ) {
+                                    $record->assignRole(Role::findById(2));
+                                }
                             }),
                     ])
                     ->columns([
