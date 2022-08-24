@@ -3,7 +3,6 @@
 namespace LCFramework\Framework\Installer;
 
 use Exception;
-use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
