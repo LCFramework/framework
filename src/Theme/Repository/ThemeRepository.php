@@ -130,8 +130,8 @@ class ThemeRepository implements ThemeRepositoryInterface
             return false;
         }
 
-        foreach($theme->getProviders() as $provider) {
-            if(!class_exists($provider)) {
+        foreach ($theme->getProviders() as $provider) {
+            if (! class_exists($provider)) {
                 return false;
             }
         }
