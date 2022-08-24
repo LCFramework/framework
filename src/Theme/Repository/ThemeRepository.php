@@ -211,6 +211,8 @@ class ThemeRepository implements ThemeRepositoryInterface
             $enabledTheme->getName() === $theme->getName()
         ) {
             $this->disable();
+        } else {
+            $this->clearCache();
         }
 
         return true;
