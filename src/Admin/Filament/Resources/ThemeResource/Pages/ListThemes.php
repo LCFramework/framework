@@ -6,7 +6,6 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -19,9 +18,9 @@ class ListThemes extends ListRecords
 {
     protected static string $resource = ThemeResource::class;
 
-    public function enableTheme(Theme $record)
+    public function enableTheme(Theme $record): void
     {
-        if (! Themes::enable($record->name, $reason)) {
+        if (!Themes::enable($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Theme "%s" has failed to be enabled', $record->name))
@@ -36,14 +35,16 @@ class ListThemes extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Theme "%s" has been successfully enabled', $record->name))
-            ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
+            ->body(fn() => $record->parent !== null ? 'This includes the parent theme' : null)
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.appearance/themes.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.appearance/themes.index');
     }
 
-    public function disableTheme(Theme $record): RedirectResponse
+    public function disableTheme(Theme $record): void
     {
         Themes::disable();
 
@@ -52,16 +53,18 @@ class ListThemes extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Theme "%s" has been successfully disabled', $record->name))
-            ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
+            ->body(fn() => $record->parent !== null ? 'This includes the parent theme' : null)
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.appearance/themes.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.appearance/themes.index');
     }
 
-    public function deleteTheme(Theme $record)
+    public function deleteTheme(Theme $record): void
     {
-        if (! Themes::delete($record->name, $reason)) {
+        if (!Themes::delete($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Theme "%s" has been unsuccessfully deleted', $record->name))
@@ -76,17 +79,19 @@ class ListThemes extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Theme "%s" has been successfully deleted', $record->name))
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.appearance/themes.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.appearance/themes.index');
     }
 
-    public function deleteBulk(Collection $records): RedirectResponse
+    public function deleteBulk(Collection $records): void
     {
         $count = 0;
         foreach ($records as $theme) {
-            if (! Themes::delete($theme->name, $reason)) {
+            if (!Themes::delete($theme->name, $reason)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -114,10 +119,12 @@ class ListThemes extends ListRecords
                     number_format($count)
                 )
             )
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.appearance/themes.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.appearance/themes.index');
     }
 
     public function installThemes(array $data): void
@@ -153,6 +160,11 @@ class ListThemes extends ListRecords
                     Str::plural('theme', $count)
                 )
             )
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.appearance/themes.index'))
+            ])
             ->send();
     }
 
@@ -161,13 +173,13 @@ class ListThemes extends ListRecords
         return [
             Action::make('enable')
                 ->label('Enable')
-                ->hidden(fn (Theme $record): bool => $record->enabled)
+                ->hidden(fn(Theme $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableTheme'),
             Action::make('disable')
                 ->label('Disable')
-                ->hidden(fn (Theme $record): bool => ! $record->enabled)
+                ->hidden(fn(Theme $record): bool => !$record->enabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableTheme'),

@@ -19,7 +19,7 @@ class ListModules extends ListRecords
 {
     protected static string $resource = ModuleResource::class;
 
-    public function enableModule(Module $record)
+    public function enableModule(Module $record): void
     {
         if (! Modules::enable($record->name, $reason)) {
             Notification::make()
@@ -37,13 +37,15 @@ class ListModules extends ListRecords
             ->success()
             ->title(sprintf('Module "%s" has been successfully enabled', $record->name))
             ->body('This includes any dependency modules')
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.extend/modules.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.extend/modules.index');
     }
 
-    public function disableModule(Module $record): RedirectResponse
+    public function disableModule(Module $record): void
     {
         Modules::disable($record->name);
 
@@ -53,13 +55,15 @@ class ListModules extends ListRecords
             ->success()
             ->title(sprintf('Module "%s" has been successfully disabled', $record->name))
             ->body('This includes any dependent modules')
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.extend/modules.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.extend/modules.index');
     }
 
-    public function deleteModule(Module $record)
+    public function deleteModule(Module $record): void
     {
         if (! Modules::delete($record->name, $reason)) {
             Notification::make()
@@ -76,13 +80,15 @@ class ListModules extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Module "%s" has been successfully deleted', $record->name))
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.extend/modules.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.extend/modules.index');
     }
 
-    public function enableBulk(Collection $records)
+    public function enableBulk(Collection $records): void
     {
         $count = 0;
         foreach ($records as $module) {
@@ -115,13 +121,15 @@ class ListModules extends ListRecords
                 )
             )
             ->body('This includes any dependency modules')
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.extend/modules.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.extend/modules.index');
     }
 
-    public function disableBulk(Collection $records): RedirectResponse
+    public function disableBulk(Collection $records): void
     {
         $count = 0;
         foreach ($records as $module) {
@@ -145,14 +153,15 @@ class ListModules extends ListRecords
                 )
             )
             ->body('This includes any dependency modules')
-            ->body('This includes any dependent modules')
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.extend/modules.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.extend/modules.index');
     }
 
-    public function deleteBulk(Collection $records): RedirectResponse
+    public function deleteBulk(Collection $records): void
     {
         $count = 0;
         foreach ($records as $module) {
@@ -185,10 +194,12 @@ class ListModules extends ListRecords
                     Str::plural('module', $count)
                 )
             )
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.extend/modules.index'))
+            ])
             ->send();
-
-        return redirect()
-            ->route('filament.resources.extend/modules.index');
     }
 
     public function installModules(array $data): void
@@ -224,6 +235,11 @@ class ListModules extends ListRecords
                     Str::plural('module', $count)
                 )
             )
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('refresh')
+                    ->button()
+                    ->url(route('filament.resources.extend/modules.index'))
+            ])
             ->send();
     }
 
