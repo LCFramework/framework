@@ -22,7 +22,7 @@ class ListThemes extends ListRecords
     {
         $reason = null;
 
-        if (!Themes::enable($record->name, $reason)) {
+        if (! Themes::enable($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Theme "%s" has failed to be enabled', $record->name))
@@ -37,11 +37,11 @@ class ListThemes extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Theme "%s" has been successfully enabled', $record->name))
-            ->body(fn() => $record->parent !== null ? 'This includes the parent theme' : null)
+            ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.appearance/themes.index'))
+                    ->url(route('filament.resources.appearance/themes.index')),
             ])
             ->send();
     }
@@ -55,11 +55,11 @@ class ListThemes extends ListRecords
         Notification::make()
             ->success()
             ->title(sprintf('Theme "%s" has been successfully disabled', $record->name))
-            ->body(fn() => $record->parent !== null ? 'This includes the parent theme' : null)
+            ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.appearance/themes.index'))
+                    ->url(route('filament.resources.appearance/themes.index')),
             ])
             ->send();
     }
@@ -68,7 +68,7 @@ class ListThemes extends ListRecords
     {
         $reason = null;
 
-        if (!Themes::delete($record->name, $reason)) {
+        if (! Themes::delete($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Theme "%s" has been unsuccessfully deleted', $record->name))
@@ -86,7 +86,7 @@ class ListThemes extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.appearance/themes.index'))
+                    ->url(route('filament.resources.appearance/themes.index')),
             ])
             ->send();
     }
@@ -97,7 +97,7 @@ class ListThemes extends ListRecords
         foreach ($records as $theme) {
             $reason = null;
 
-            if (!Themes::delete($theme->name, $reason)) {
+            if (! Themes::delete($theme->name, $reason)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -128,7 +128,7 @@ class ListThemes extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.appearance/themes.index'))
+                    ->url(route('filament.resources.appearance/themes.index')),
             ])
             ->send();
     }
@@ -171,7 +171,7 @@ class ListThemes extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.appearance/themes.index'))
+                    ->url(route('filament.resources.appearance/themes.index')),
             ])
             ->send();
     }
@@ -181,13 +181,13 @@ class ListThemes extends ListRecords
         return [
             Action::make('enable')
                 ->label('Enable')
-                ->hidden(fn(Theme $record): bool => $record->enabled)
+                ->hidden(fn (Theme $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableTheme'),
             Action::make('disable')
                 ->label('Disable')
-                ->hidden(fn(Theme $record): bool => !$record->enabled)
+                ->hidden(fn (Theme $record): bool => ! $record->enabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableTheme'),
