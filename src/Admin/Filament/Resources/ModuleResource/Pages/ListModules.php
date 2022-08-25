@@ -6,7 +6,6 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -42,7 +41,7 @@ class ListModules extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.extend/modules.index'))
+                    ->url(route('filament.resources.extend/modules.index')),
             ])
             ->send();
     }
@@ -60,7 +59,7 @@ class ListModules extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.extend/modules.index'))
+                    ->url(route('filament.resources.extend/modules.index')),
             ])
             ->send();
     }
@@ -87,7 +86,7 @@ class ListModules extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.extend/modules.index'))
+                    ->url(route('filament.resources.extend/modules.index')),
             ])
             ->send();
     }
@@ -130,7 +129,7 @@ class ListModules extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.extend/modules.index'))
+                    ->url(route('filament.resources.extend/modules.index')),
             ])
             ->send();
     }
@@ -162,7 +161,7 @@ class ListModules extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.extend/modules.index'))
+                    ->url(route('filament.resources.extend/modules.index')),
             ])
             ->send();
     }
@@ -205,7 +204,7 @@ class ListModules extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.extend/modules.index'))
+                    ->url(route('filament.resources.extend/modules.index')),
             ])
             ->send();
     }
@@ -248,7 +247,7 @@ class ListModules extends ListRecords
             ->actions([
                 \Filament\Notifications\Actions\Action::make('refresh')
                     ->button()
-                    ->url(route('filament.resources.extend/modules.index'))
+                    ->url(route('filament.resources.extend/modules.index')),
             ])
             ->send();
     }
