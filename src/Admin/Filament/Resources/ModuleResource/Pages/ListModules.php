@@ -2,7 +2,6 @@
 
 namespace LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Pages;
 
-use Exception;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
@@ -21,7 +20,7 @@ class ListModules extends ListRecords
 
     public function enableModule(Module $record): void
     {
-        if(!Modules::enable($record->name, $reason)) {
+        if (! Modules::enable($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Module "%s" has failed to be enabled', $record->name))
@@ -79,7 +78,7 @@ class ListModules extends ListRecords
                 return;
             }
 
-            if(!Modules::enable($module->name, $reason)) {
+            if (! Modules::enable($module->name, $reason)) {
                 Notification::make()
                     ->danger()
                     ->title(sprintf('Module "%s" has failed to be enabled', $module->name))
