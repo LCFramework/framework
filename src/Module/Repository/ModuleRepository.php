@@ -2,6 +2,7 @@
 
 namespace LCFramework\Framework\Module\Repository;
 
+use Filament\Notifications\Notification;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\ProviderRepository;
 use Illuminate\Support\Facades\Cache;
@@ -212,13 +213,26 @@ class ModuleRepository implements ModuleRepositoryInterface
     {
         $invalidModules = [];
         foreach ($this->ordered() as $module) {
-            if (!$this->validate($module)) {
-                $invalidModules[] = $module->getName();
+            if (!$this->validate($module, $reason)) {
+                $invalidModules[$module->getName()] = $reason;
             }
         }
 
-        foreach ($invalidModules as $name) {
+        $isAdmin = (
+            ($user = auth()->user()) &&
+            $user->hasPermissionTo('view admin')
+        );
+
+        foreach ($invalidModules as $name => $reason) {
             $this->disable($name);
+
+            if($isAdmin) {
+                Notification::make()
+                    ->danger()
+                    ->title('Theme disabled')
+                    ->body($reason)
+                    ->send();
+            }
         }
 
         foreach ($this->ordered() as $module) {
@@ -230,7 +244,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     public function install(string $path, ?string &$reason = null): bool
     {
-        if (!($name = $this->installer->install($path))) {
+        if (!($name = $this->installer->install($path, $reason))) {
             return false;
         }
 
@@ -239,9 +253,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
         $this->load();
 
-        if (!($module = $this->find($name))) {
-            return false;
-        }
+        $module = $this->find($name);
 
         if (!$this->validate($module, $reason)) {
             $this->delete($module);
@@ -371,6 +383,8 @@ class ModuleRepository implements ModuleRepositoryInterface
         $this->setStatus($module, 'deleted');
 
         settings_forget('lcframework.modules.' . $module->getName());
+
+        $reason = null;
 
         return true;
     }

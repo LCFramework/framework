@@ -12,7 +12,7 @@ interface ThemeRepositoryInterface
 
     public function disabled(): array;
 
-    public function enable(string|Theme $theme): void;
+    public function enable(string|Theme $theme, ?string &$reason = null): bool;
 
     public function disable(): void;
 
@@ -20,11 +20,11 @@ interface ThemeRepositoryInterface
 
     public function findOrFail(string $name): Theme;
 
-    public function validate(string|Theme $theme): bool;
+    public function validate(string|Theme $theme, ?string &$reason = null): bool;
 
     public function boot(): void;
 
-    public function delete(string|Theme $theme): bool;
+    public function delete(string|Theme $theme, ?string &$reason = null): bool;
 
-    public function install(string $path): bool;
+    public function install(string $path, ?string &$reason = null): bool;
 }

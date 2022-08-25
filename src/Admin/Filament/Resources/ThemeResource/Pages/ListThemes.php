@@ -21,28 +21,28 @@ class ListThemes extends ListRecords
 
     public function enableTheme(Theme $record): void
     {
-        try {
-            Themes::enable($record->name);
-
-            $record->forceFill(['enabled' => true])->save();
-
-            Notification::make()
-                ->success()
-                ->title(sprintf('Theme "%s" has been successfully enabled', $record->name))
-                ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
-                ->send();
-        } catch (Exception) {
+        if(!Themes::enable($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Theme "%s" has failed to be enabled', $record->name))
-                ->body('The theme has errors that cannot be automatically resolved')
+                ->body($reason)
                 ->send();
+
+            return;
         }
+
+        $record->forceFill(['enabled' => true])->save();
+
+        Notification::make()
+            ->success()
+            ->title(sprintf('Theme "%s" has been successfully enabled', $record->name))
+            ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
+            ->send();
     }
 
     public function disableTheme(Theme $record): void
     {
-        Themes::disable($record->name);
+        Themes::disable();
 
         $record->forceFill(['enabled' => false])->save();
 
@@ -55,27 +55,29 @@ class ListThemes extends ListRecords
 
     public function deleteTheme(Theme $record): void
     {
-        if (Themes::delete($record->name)) {
-            $record->delete();
-
-            Notification::make()
-                ->success()
-                ->title(sprintf('Theme "%s" has been successfully deleted', $record->name))
-                ->send();
-        } else {
+        if(!Themes::delete($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Theme "%s" has been unsuccessfully deleted', $record->name))
-                ->body('LCFramework may not have writable permissions to the theme directory')
+                ->body($reason)
                 ->send();
+
+            return;
         }
+
+        $record->delete();
+
+        Notification::make()
+            ->success()
+            ->title(sprintf('Theme "%s" has been successfully deleted', $record->name))
+            ->send();
     }
 
     public function deleteBulk(Collection $records): void
     {
         $count = 0;
         foreach ($records as $theme) {
-            if (! Themes::delete($theme->name)) {
+            if (! Themes::delete($theme->name, $reason)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -84,7 +86,7 @@ class ListThemes extends ListRecords
                             $theme->name
                         )
                     )
-                    ->body('LCFramework may not have writable permissions to the theme directory')
+                    ->body($reason)
                     ->send();
 
                 continue;
@@ -108,26 +110,26 @@ class ListThemes extends ListRecords
 
     public function installThemes(array $data): void
     {
-        $hasErrors = false;
         $count = 0;
         foreach ($data['themes'] as $path) {
             $file = Storage::disk('local')->path($path);
 
-            if (Themes::install($file)) {
+            if (Themes::install($file, $reason)) {
                 $count++;
             } else {
-                $hasErrors = true;
+                Notification::make()
+                    ->danger()
+                    ->title(
+                        sprintf(
+                            'Failed to install module "%s"',
+                            basename($path)
+                        )
+                    )
+                    ->body($reason)
+                    ->send();
             }
 
             File::delete($file);
-        }
-
-        if ($hasErrors) {
-            Notification::make()
-                ->danger()
-                ->title('One or more themes has failed to install')
-                ->body('LCFramework may not have writable permissions to the theme directory or the themes may have errors')
-                ->send();
         }
 
         Notification::make()
@@ -178,6 +180,7 @@ class ListThemes extends ListRecords
                         ->disableLabel()
                         ->disk('local')
                         ->directory('themes-tmp')
+                        ->preserveFilenames()
                         ->multiple()
                         ->minFiles(1)
                         ->acceptedFileTypes([

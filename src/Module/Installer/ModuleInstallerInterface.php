@@ -2,9 +2,8 @@
 
 namespace LCFramework\Framework\Module\Installer;
 
-interface ModuleInstallerInterface
-{
-    public function install(string $path): ?string;
+use LCFramework\Framework\Installer\Component\ComponentInstallerInterface;
 
-    public function publish(array $providers): void;
+interface ModuleInstallerInterface extends ComponentInstallerInterface
+{
 }

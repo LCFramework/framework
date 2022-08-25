@@ -1,15 +1,17 @@
 <?php
 
-namespace LCFramework\Framework\Installer;
+namespace LCFramework\Framework\Installer\Component;
 
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
 
-abstract class ComponentInstaller
+abstract class ComponentInstaller implements ComponentInstallerInterface
 {
     abstract protected function validate(array $manifest): bool;
+
+    abstract public function install(string $path, ?string &$reason = null): ?string;
 
     public function publish(array $providers): void
     {

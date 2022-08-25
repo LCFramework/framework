@@ -2,9 +2,8 @@
 
 namespace LCFramework\Framework\Theme\Installer;
 
-interface ThemeInstallerInterface
-{
-    public function install(string $path): ?string;
+use LCFramework\Framework\Installer\Component\ComponentInstallerInterface;
 
-    public function publish(array $providers): void;
+interface ThemeInstallerInterface extends ComponentInstallerInterface
+{
 }

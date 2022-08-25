@@ -26,7 +26,7 @@ interface ModuleRepositoryInterface
 
     public function findOrFail(string $name): Module;
 
-    public function validate(string|Module $module): bool;
+    public function validate(string|Module $module, ?string &$reason = null): bool;
 
     public function boot(): void;
 

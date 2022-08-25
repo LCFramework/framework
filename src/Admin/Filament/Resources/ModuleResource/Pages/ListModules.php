@@ -2,7 +2,6 @@
 
 namespace LCFramework\Framework\Admin\Filament\Resources\ModuleResource\Pages;
 
-use Exception;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
@@ -21,7 +20,7 @@ class ListModules extends ListRecords
 
     public function enableModule(Module $record): void
     {
-        if(!Modules::enable($record->name, $reason)) {
+        if (!Modules::enable($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Module "%s" has failed to be enabled', $record->name))
@@ -55,20 +54,22 @@ class ListModules extends ListRecords
 
     public function deleteModule(Module $record): void
     {
-        if (Modules::delete($record->name)) {
-            $record->delete();
-
-            Notification::make()
-                ->success()
-                ->title(sprintf('Module "%s" has been successfully deleted', $record->name))
-                ->send();
-        } else {
+        if (!Modules::delete($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Module "%s" has been unsuccessfully deleted', $record->name))
-                ->body('LCFramework may not have writable permissions to the module directory')
+                ->body($reason)
                 ->send();
+
+            return;
         }
+
+        $record->delete();
+
+        Notification::make()
+            ->success()
+            ->title(sprintf('Module "%s" has been successfully deleted', $record->name))
+            ->send();
     }
 
     public function enableBulk(Collection $records): void
@@ -79,7 +80,7 @@ class ListModules extends ListRecords
                 return;
             }
 
-            if(!Modules::enable($module->name, $reason)) {
+            if (!Modules::enable($module->name, $reason)) {
                 Notification::make()
                     ->danger()
                     ->title(sprintf('Module "%s" has failed to be enabled', $module->name))
@@ -139,7 +140,7 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if (! Modules::delete($module->name, $reason)) {
+            if (!Modules::delete($module->name, $reason)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -182,7 +183,12 @@ class ListModules extends ListRecords
             } else {
                 Notification::make()
                     ->danger()
-                    ->title('One or more modules has failed to install')
+                    ->title(
+                        sprintf(
+                            'Failed to install module "%s"',
+                            basename($path)
+                        )
+                    )
                     ->body($reason)
                     ->send();
             }
@@ -207,13 +213,13 @@ class ListModules extends ListRecords
         return [
             Action::make('enable')
                 ->label('Enable')
-                ->hidden(fn (Module $record): bool => $record->enabled)
+                ->hidden(fn(Module $record): bool => $record->enabled)
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
                 ->action('enableModule'),
             Action::make('disable')
                 ->label('Disable')
-                ->hidden(fn (Module $record): bool => $record->disabled)
+                ->hidden(fn(Module $record): bool => $record->disabled)
                 ->icon('heroicon-o-x')
                 ->requiresConfirmation()
                 ->action('disableModule'),
@@ -238,6 +244,7 @@ class ListModules extends ListRecords
                         ->disableLabel()
                         ->disk('local')
                         ->directory('modules-tmp')
+                        ->preserveFilenames()
                         ->multiple()
                         ->minFiles(1)
                         ->acceptedFileTypes([
