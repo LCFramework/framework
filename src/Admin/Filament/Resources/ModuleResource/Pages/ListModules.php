@@ -22,7 +22,8 @@ class ListModules extends ListRecords
     {
         return [
             ...parent::getListeners(),
-            'modulesUpdated' => '$refresh'
+            'modulesUpdated' => '$refresh',
+            'modulesUpdated2' => 'render'
         ];
     }
 
@@ -47,6 +48,9 @@ class ListModules extends ListRecords
             ->send();
 
         $this->emit('modulesUpdated');
+        $this->emit('modulesUpdated2');
+
+        logger('Emitted');
     }
 
     public function disableModule(Module $record): void
