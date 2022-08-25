@@ -18,6 +18,14 @@ class ListModules extends ListRecords
 {
     protected static string $resource = ModuleResource::class;
 
+    protected function getListeners(): array
+    {
+        return [
+            ...parent::getListeners(),
+            'modulesUpdated' => '$refresh'
+        ];
+    }
+
     public function enableModule(Module $record): void
     {
         if (!Modules::enable($record->name, $reason)) {
@@ -37,6 +45,8 @@ class ListModules extends ListRecords
             ->title(sprintf('Module "%s" has been successfully enabled', $record->name))
             ->body('This includes any dependency modules')
             ->send();
+
+        $this->emit('modulesUpdated');
     }
 
     public function disableModule(Module $record): void
