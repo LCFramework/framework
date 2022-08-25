@@ -2,7 +2,6 @@
 
 namespace LCFramework\Framework\Admin\Filament\Resources\ThemeResource\Pages;
 
-use Exception;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
@@ -21,7 +20,7 @@ class ListThemes extends ListRecords
 
     public function enableTheme(Theme $record): void
     {
-        if(!Themes::enable($record->name, $reason)) {
+        if (! Themes::enable($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Theme "%s" has failed to be enabled', $record->name))
@@ -55,7 +54,7 @@ class ListThemes extends ListRecords
 
     public function deleteTheme(Theme $record): void
     {
-        if(!Themes::delete($record->name, $reason)) {
+        if (! Themes::delete($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Theme "%s" has been unsuccessfully deleted', $record->name))
