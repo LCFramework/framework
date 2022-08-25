@@ -6,6 +6,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +19,7 @@ class ListThemes extends ListRecords
 {
     protected static string $resource = ThemeResource::class;
 
-    public function enableTheme(Theme $record): void
+    public function enableTheme(Theme $record)
     {
         if (! Themes::enable($record->name, $reason)) {
             Notification::make()
@@ -37,9 +38,12 @@ class ListThemes extends ListRecords
             ->title(sprintf('Theme "%s" has been successfully enabled', $record->name))
             ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
             ->send();
+
+        return redirect()
+            ->route('filament.resources.appearance/themes.index');
     }
 
-    public function disableTheme(Theme $record): void
+    public function disableTheme(Theme $record): RedirectResponse
     {
         Themes::disable();
 
@@ -50,9 +54,12 @@ class ListThemes extends ListRecords
             ->title(sprintf('Theme "%s" has been successfully disabled', $record->name))
             ->body(fn () => $record->parent !== null ? 'This includes the parent theme' : null)
             ->send();
+
+        return redirect()
+            ->route('filament.resources.appearance/themes.index');
     }
 
-    public function deleteTheme(Theme $record): void
+    public function deleteTheme(Theme $record)
     {
         if (! Themes::delete($record->name, $reason)) {
             Notification::make()
@@ -70,9 +77,12 @@ class ListThemes extends ListRecords
             ->success()
             ->title(sprintf('Theme "%s" has been successfully deleted', $record->name))
             ->send();
+
+        return redirect()
+            ->route('filament.resources.appearance/themes.index');
     }
 
-    public function deleteBulk(Collection $records): void
+    public function deleteBulk(Collection $records): RedirectResponse
     {
         $count = 0;
         foreach ($records as $theme) {
@@ -105,6 +115,9 @@ class ListThemes extends ListRecords
                 )
             )
             ->send();
+
+        return redirect()
+            ->route('filament.resources.appearance/themes.index');
     }
 
     public function installThemes(array $data): void

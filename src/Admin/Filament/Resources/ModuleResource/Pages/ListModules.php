@@ -6,6 +6,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -18,16 +19,7 @@ class ListModules extends ListRecords
 {
     protected static string $resource = ModuleResource::class;
 
-    protected function getListeners(): array
-    {
-        return [
-            ...parent::getListeners(),
-            'modulesUpdated' => '$refresh',
-            'modulesUpdated2' => 'render',
-        ];
-    }
-
-    public function enableModule(Module $record): void
+    public function enableModule(Module $record)
     {
         if (! Modules::enable($record->name, $reason)) {
             Notification::make()
@@ -47,13 +39,11 @@ class ListModules extends ListRecords
             ->body('This includes any dependency modules')
             ->send();
 
-        $this->emit('modulesUpdated');
-        $this->emit('modulesUpdated2');
-
-        logger('Emitted');
+        return redirect()
+            ->route('filament.resources.extend/modules.index');
     }
 
-    public function disableModule(Module $record): void
+    public function disableModule(Module $record): RedirectResponse
     {
         Modules::disable($record->name);
 
@@ -64,9 +54,12 @@ class ListModules extends ListRecords
             ->title(sprintf('Module "%s" has been successfully disabled', $record->name))
             ->body('This includes any dependent modules')
             ->send();
+
+        return redirect()
+            ->route('filament.resources.extend/modules.index');
     }
 
-    public function deleteModule(Module $record): void
+    public function deleteModule(Module $record)
     {
         if (! Modules::delete($record->name, $reason)) {
             Notification::make()
@@ -84,9 +77,12 @@ class ListModules extends ListRecords
             ->success()
             ->title(sprintf('Module "%s" has been successfully deleted', $record->name))
             ->send();
+
+        return redirect()
+            ->route('filament.resources.extend/modules.index');
     }
 
-    public function enableBulk(Collection $records): void
+    public function enableBulk(Collection $records)
     {
         $count = 0;
         foreach ($records as $module) {
@@ -120,9 +116,12 @@ class ListModules extends ListRecords
             )
             ->body('This includes any dependency modules')
             ->send();
+
+        return redirect()
+            ->route('filament.resources.extend/modules.index');
     }
 
-    public function disableBulk(Collection $records): void
+    public function disableBulk(Collection $records): RedirectResponse
     {
         $count = 0;
         foreach ($records as $module) {
@@ -148,9 +147,12 @@ class ListModules extends ListRecords
             ->body('This includes any dependency modules')
             ->body('This includes any dependent modules')
             ->send();
+
+        return redirect()
+            ->route('filament.resources.extend/modules.index');
     }
 
-    public function deleteBulk(Collection $records): void
+    public function deleteBulk(Collection $records): RedirectResponse
     {
         $count = 0;
         foreach ($records as $module) {
@@ -184,6 +186,9 @@ class ListModules extends ListRecords
                 )
             )
             ->send();
+
+        return redirect()
+            ->route('filament.resources.extend/modules.index');
     }
 
     public function installModules(array $data): void
