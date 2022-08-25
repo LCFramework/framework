@@ -29,11 +29,10 @@ class ModuleRepository implements ModuleRepositoryInterface
     protected ?array $ordered = null;
 
     public function __construct(
-        Application              $app,
-        ModuleLoaderInterface    $loader,
+        Application $app,
+        ModuleLoaderInterface $loader,
         ModuleInstallerInterface $installer
-    )
-    {
+    ) {
         $this->app = $app;
         $this->loader = $loader;
         $this->installer = $installer;
@@ -45,7 +44,7 @@ class ModuleRepository implements ModuleRepositoryInterface
             return $this->modules;
         }
 
-        if (!$this->loadCache()) {
+        if (! $this->loadCache()) {
             $this->load();
         }
 
@@ -58,7 +57,7 @@ class ModuleRepository implements ModuleRepositoryInterface
             return $this->ordered;
         }
 
-        if (!$this->loadCache()) {
+        if (! $this->loadCache()) {
             $this->load();
         }
 
@@ -68,31 +67,31 @@ class ModuleRepository implements ModuleRepositoryInterface
     public function enabled(): array
     {
         return collect($this->all())
-            ->filter(fn(Module $module): bool => $module->enabled())
+            ->filter(fn (Module $module): bool => $module->enabled())
             ->all();
     }
 
     public function disabled(): array
     {
         return collect($this->all())
-            ->filter(fn(Module $module): bool => $module->disabled())
+            ->filter(fn (Module $module): bool => $module->disabled())
             ->all();
     }
 
     public function status(string $status): array
     {
         return collect($this->all())
-            ->filter(fn(Module $module): bool => $module->getStatus() === $status)
+            ->filter(fn (Module $module): bool => $module->getStatus() === $status)
             ->all();
     }
 
     public function enable(string|Module $module, ?string &$reason = null): bool
     {
-        if (!($module instanceof Module)) {
+        if (! ($module instanceof Module)) {
             $module = $this->find($module);
         }
 
-        if (!$this->validate($module, $reason)) {
+        if (! $this->validate($module, $reason)) {
             return false;
         }
 
@@ -111,7 +110,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     public function disable(string|Module $module): void
     {
-        if (!($module instanceof Module)) {
+        if (! ($module instanceof Module)) {
             $module = $this->findOrFail($module);
         }
 
@@ -133,14 +132,14 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     public function setStatus(string|Module $module, string $status): void
     {
-        if (!($module instanceof Module)) {
+        if (! ($module instanceof Module)) {
             $module = $this->findOrFail($module);
         }
 
         $module->setStatus($status);
 
         settings_put(
-            'lcframework.modules.' . $module->getName(),
+            'lcframework.modules.'.$module->getName(),
             $status
         );
 
@@ -164,23 +163,26 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     public function validate(string|null|Module $module, ?string &$reason = null): bool
     {
-        if ($module !== null && !($module instanceof Module)) {
+        if ($module !== null && ! ($module instanceof Module)) {
             $module = $this->find($module);
         }
 
         if ($module === null) {
             $reason = 'Module cannot be found';
+
             return false;
         }
 
-        if (!File::exists($module->getPath('vendor/autoload.php'))) {
+        if (! File::exists($module->getPath('vendor/autoload.php'))) {
             $reason = 'Module does not have an autoloader configured.';
+
             return false;
         }
 
         foreach ($module->getDependencies() as $dependency => $version) {
-            if (!($dependencyModule = $this->find($dependency))) {
+            if (! ($dependencyModule = $this->find($dependency))) {
                 $reason = sprintf('Cannot find dependency "%s"', $dependency);
+
                 return false;
             }
 
@@ -196,10 +198,11 @@ class ModuleRepository implements ModuleRepositoryInterface
                     $version,
                     $dependencyVersion
                 );
+
                 return false;
             }
 
-            if (!$this->validate($dependency, $reason)) {
+            if (! $this->validate($dependency, $reason)) {
                 return false;
             }
         }
@@ -213,7 +216,7 @@ class ModuleRepository implements ModuleRepositoryInterface
     {
         $invalidModules = [];
         foreach ($this->ordered() as $module) {
-            if (!$this->validate($module, $reason)) {
+            if (! $this->validate($module, $reason)) {
                 $invalidModules[$module->getName()] = $reason;
             }
         }
@@ -226,7 +229,7 @@ class ModuleRepository implements ModuleRepositoryInterface
         foreach ($invalidModules as $name => $reason) {
             $this->disable($name);
 
-            if($isAdmin) {
+            if ($isAdmin) {
                 Notification::make()
                     ->danger()
                     ->title('Theme disabled')
@@ -244,7 +247,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     public function install(string $path, ?string &$reason = null): bool
     {
-        if (!($name = $this->installer->install($path, $reason))) {
+        if (! ($name = $this->installer->install($path, $reason))) {
             return false;
         }
 
@@ -255,7 +258,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
         $module = $this->find($name);
 
-        if (!$this->validate($module, $reason)) {
+        if (! $this->validate($module, $reason)) {
             $this->delete($module);
 
             return false;
@@ -275,7 +278,7 @@ class ModuleRepository implements ModuleRepositoryInterface
             $this->getManifestPath($module)
         ))->load(
             collect($module->getProviders())
-                ->filter(fn(string $provider): bool => class_exists($provider))
+                ->filter(fn (string $provider): bool => class_exists($provider))
                 ->all()
         );
     }
@@ -287,21 +290,21 @@ class ModuleRepository implements ModuleRepositoryInterface
         if (env('VAPOR_MAINTENANCE_MODE') === null) {
             return Str::replaceLast(
                 'config.php',
-                $name . '_module.php',
+                $name.'_module.php',
                 $this->app->getCachedConfigPath()
             );
         }
 
         return Str::replaceLast(
             'services.php',
-            $name . '_module.php',
+            $name.'_module.php',
             $this->app->getCachedServicesPath()
         );
     }
 
     protected function loadCache(): bool
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return false;
         }
 
@@ -349,7 +352,7 @@ class ModuleRepository implements ModuleRepositoryInterface
                 Cache::forever(
                     $allCacheKey,
                     collect($this->all())
-                        ->mapWithKeys(fn(Module $module, string $name): array => [
+                        ->mapWithKeys(fn (Module $module, string $name): array => [
                             $name => $module->toArray(),
                         ])
                         ->all()
@@ -362,12 +365,12 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     public function delete(string|Module $module, ?string &$reason = null): bool
     {
-        if (!($module instanceof Module)) {
+        if (! ($module instanceof Module)) {
             $module = $this->find($module);
         }
 
-        if ($module === null || !File::exists($module->getPath())) {
-            settings_forget('lcframework.modules.' . $module->getName());
+        if ($module === null || ! File::exists($module->getPath())) {
+            settings_forget('lcframework.modules.'.$module->getName());
             $this->clearCache();
 
             $reason = null;
@@ -375,14 +378,15 @@ class ModuleRepository implements ModuleRepositoryInterface
             return true;
         }
 
-        if (!File::deleteDirectory($module->getPath())) {
+        if (! File::deleteDirectory($module->getPath())) {
             $reason = 'Invalid permissions';
+
             return false;
         }
 
         $this->setStatus($module, 'deleted');
 
-        settings_forget('lcframework.modules.' . $module->getName());
+        settings_forget('lcframework.modules.'.$module->getName());
 
         $reason = null;
 
@@ -391,7 +395,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected function clearCache(): void
     {
-        if (!$this->isCacheEnabled()) {
+        if (! $this->isCacheEnabled()) {
             return;
         }
 
@@ -420,7 +424,7 @@ class ModuleRepository implements ModuleRepositoryInterface
             Cache::forever(
                 $orderedCacheKey,
                 collect($this->ordered())
-                    ->map(fn(Module $module): string => $module->getName())
+                    ->map(fn (Module $module): string => $module->getName())
                     ->all()
             );
         }
@@ -457,7 +461,7 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected function discover(string $path): array
     {
-        $search = rtrim($path, '/\\') . '/' . 'composer.json';
+        $search = rtrim($path, '/\\').'/'.'composer.json';
 
         return str_replace('composer.json', '', File::find($search));
     }
@@ -478,16 +482,16 @@ class ModuleRepository implements ModuleRepositoryInterface
 
     protected function getCacheKeys(): array
     {
-        return (array)config('lcframework.modules.cache.keys');
+        return (array) config('lcframework.modules.cache.keys');
     }
 
     protected function isCacheEnabled(): bool
     {
-        return (bool)config('lcframework.modules.cache.enabled', true);
+        return (bool) config('lcframework.modules.cache.enabled', true);
     }
 
     protected function getPaths(): array
     {
-        return (array)config('lcframework.modules.paths');
+        return (array) config('lcframework.modules.paths');
     }
 }
