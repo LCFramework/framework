@@ -16,7 +16,7 @@ interface ModuleRepositoryInterface
 
     public function status(string $status): array;
 
-    public function enable(string|Module $module): void;
+    public function enable(string|Module $module, ?string &$reason = null): bool;
 
     public function disable(string|Module $module): void;
 
@@ -30,7 +30,7 @@ interface ModuleRepositoryInterface
 
     public function boot(): void;
 
-    public function delete(string|Module $module): bool;
+    public function delete(string|Module $module, ?string &$reason = null): bool;
 
-    public function install(string $path): bool;
+    public function install(string $path, ?string &$reason = null): bool;
 }

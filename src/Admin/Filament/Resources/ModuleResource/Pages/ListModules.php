@@ -21,23 +21,23 @@ class ListModules extends ListRecords
 
     public function enableModule(Module $record): void
     {
-        try {
-            Modules::enable($record->name);
-
-            $record->forceFill(['status' => 'enabled'])->save();
-
-            Notification::make()
-                ->success()
-                ->title(sprintf('Module "%s" has been successfully enabled', $record->name))
-                ->body('This includes any dependency modules')
-                ->send();
-        } catch (Exception) {
+        if(!Modules::enable($record->name, $reason)) {
             Notification::make()
                 ->danger()
                 ->title(sprintf('Module "%s" has failed to be enabled', $record->name))
-                ->body('The module has errors that cannot be automatically resolved')
+                ->body($reason)
                 ->send();
+
+            return;
         }
+
+        $record->forceFill(['status' => 'enabled'])->save();
+
+        Notification::make()
+            ->success()
+            ->title(sprintf('Module "%s" has been successfully enabled', $record->name))
+            ->body('This includes any dependency modules')
+            ->send();
     }
 
     public function disableModule(Module $record): void
@@ -79,18 +79,19 @@ class ListModules extends ListRecords
                 return;
             }
 
-            try {
-                Modules::enable($module->name);
-                $module->forceFill(['status' => 'enabled'])->save();
-
-                $count++;
-            } catch (Exception) {
+            if(!Modules::enable($module->name, $reason)) {
                 Notification::make()
                     ->danger()
                     ->title(sprintf('Module "%s" has failed to be enabled', $module->name))
-                    ->body('The module has errors that cannot be automatically resolved')
+                    ->body($reason)
                     ->send();
+
+                continue;
             }
+
+            $module->forceFill(['status' => 'enabled'])->save();
+
+            $count++;
         }
 
         Notification::make()
@@ -138,7 +139,7 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
-            if (! Modules::delete($module->name)) {
+            if (! Modules::delete($module->name, $reason)) {
                 Notification::make()
                     ->danger()
                     ->title(
@@ -147,7 +148,7 @@ class ListModules extends ListRecords
                             $module->name
                         )
                     )
-                    ->body('LCFramework may not have writable permissions to the module directory')
+                    ->body($reason)
                     ->send();
 
                 continue;
@@ -172,26 +173,21 @@ class ListModules extends ListRecords
 
     public function installModules(array $data): void
     {
-        $hasErrors = false;
         $count = 0;
         foreach ($data['modules'] as $path) {
             $file = Storage::disk('local')->path($path);
 
-            if (Modules::install($file)) {
+            if (Modules::install($file, $reason)) {
                 $count++;
             } else {
-                $hasErrors = true;
+                Notification::make()
+                    ->danger()
+                    ->title('One or more modules has failed to install')
+                    ->body($reason)
+                    ->send();
             }
 
             File::delete($file);
-        }
-
-        if ($hasErrors) {
-            Notification::make()
-                ->danger()
-                ->title('One or more modules has failed to install')
-                ->body('LCFramework may not have writable permissions to the module directory or the modules may have errors')
-                ->send();
         }
 
         Notification::make()
