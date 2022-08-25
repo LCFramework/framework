@@ -23,7 +23,7 @@ class ListModules extends ListRecords
         return [
             ...parent::getListeners(),
             'modulesUpdated' => '$refresh',
-            'modulesUpdated2' => 'render'
+            'modulesUpdated2' => 'render',
         ];
     }
 
