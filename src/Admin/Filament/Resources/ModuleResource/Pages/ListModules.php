@@ -21,6 +21,8 @@ class ListModules extends ListRecords
 
     public function enableModule(Module $record): void
     {
+        $reason = null;
+
         if (! Modules::enable($record->name, $reason)) {
             Notification::make()
                 ->danger()
@@ -65,6 +67,8 @@ class ListModules extends ListRecords
 
     public function deleteModule(Module $record): void
     {
+        $reason = null;
+
         if (! Modules::delete($record->name, $reason)) {
             Notification::make()
                 ->danger()
@@ -95,6 +99,8 @@ class ListModules extends ListRecords
             if ($module->enabled) {
                 return;
             }
+
+            $reason = null;
 
             if (! Modules::enable($module->name, $reason)) {
                 Notification::make()
@@ -165,6 +171,8 @@ class ListModules extends ListRecords
     {
         $count = 0;
         foreach ($records as $module) {
+            $reason = null;
+
             if (! Modules::delete($module->name, $reason)) {
                 Notification::make()
                     ->danger()
@@ -207,6 +215,8 @@ class ListModules extends ListRecords
         $count = 0;
         foreach ($data['modules'] as $path) {
             $file = Storage::disk('local')->path($path);
+
+            $reason = null;
 
             if (Modules::install($file, $reason)) {
                 $count++;

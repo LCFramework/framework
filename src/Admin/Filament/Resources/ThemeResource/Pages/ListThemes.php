@@ -20,6 +20,8 @@ class ListThemes extends ListRecords
 
     public function enableTheme(Theme $record): void
     {
+        $reason = null;
+
         if (!Themes::enable($record->name, $reason)) {
             Notification::make()
                 ->danger()
@@ -64,6 +66,8 @@ class ListThemes extends ListRecords
 
     public function deleteTheme(Theme $record): void
     {
+        $reason = null;
+
         if (!Themes::delete($record->name, $reason)) {
             Notification::make()
                 ->danger()
@@ -91,6 +95,8 @@ class ListThemes extends ListRecords
     {
         $count = 0;
         foreach ($records as $theme) {
+            $reason = null;
+
             if (!Themes::delete($theme->name, $reason)) {
                 Notification::make()
                     ->danger()
@@ -132,6 +138,8 @@ class ListThemes extends ListRecords
         $count = 0;
         foreach ($data['themes'] as $path) {
             $file = Storage::disk('local')->path($path);
+
+            $reason = null;
 
             if (Themes::install($file, $reason)) {
                 $count++;
