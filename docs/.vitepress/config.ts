@@ -71,6 +71,8 @@ const sidebarGuide = [
 ];
 
 export default defineConfig({
+    base: '/framework/',
+
     lang: 'en-US',
     title: 'LCFramework',
     description: 'A framework for LastChaos private servers.',
