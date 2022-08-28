@@ -1,6 +1,7 @@
 {
     "name": "lcframework/framework",
     "description": "The framework to the LastChaos CMS.",
+    "version": "0.0.1",
     "keywords": [
         "lcframework",
         "laravel",
