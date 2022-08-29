@@ -2,7 +2,7 @@
 layout: home
 
 title: LCFramework
-titleTemplate: Vite & Vue Powered Static Site Generator
+titleTemplate: A minimal LastChaos web framework
 
 hero:
     name: LCFramework

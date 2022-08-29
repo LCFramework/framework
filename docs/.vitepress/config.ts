@@ -39,7 +39,7 @@ const sidebarGuide = [
             { text: 'Getting Started', link: '/docs/modules/getting-started' },
             { text: 'Building Modules', link: '/docs/modules/building-modules' },
             { text: 'Transforming Data', link: '/docs/modules/transforming-data' },
-            { text: 'Persistent Data', link: '' }
+            { text: 'Persistent Data', link: '/docs/modules/persistent-data' }
         ]
     },
     {
